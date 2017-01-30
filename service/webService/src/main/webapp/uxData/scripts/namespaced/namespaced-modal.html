@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="modal-header dialog-header-confirm">
+    <h4 class="modal-title" ng-hide="vm.duplicateMapEmpty"><span class="fa fa-check-square-o"></span> Duplicates
+        were found. Choose, which values will be deleted to resolve them.</h4>
+    <h4 class="modal-title" ng-show="vm.duplicateMapEmpty"><span class="fa fa-check-square-o"></span> Duplicates
+        are resolved. You may continue now.</h4>
+</div>
+
+<div class="modal-body delete-duplicate-modal-body">
+    <div ng-repeat="(index, data) in vm.namespacedDuplicateMap" class="text-center">
+
+        <div id="duplicateValue_{{data.key}}" class="panel panel-default delete-duplicate-panel-default">
+            <div class="panel-heading delete-duplicate-value-header  delete-duplicates-red-border">
+                <h3 ng-bind="' Value: ' + data.key"></h3>
+            </div>
+            <div class="panel-body delete-duplicate-value-body">
+                <div class="row delete-duplicate-row">
+                    <span class="delete-duplicate-label col-lg-9">Existing NS: <b ng-bind="data.value"></b></span>
+
+                    <div class="col-lg-3 pull-right">
+                        <progress-button id="deleteFromExisting_{{data.key}}"
+                                look="'btn-warning'"
+                                progress-condition="$rootScope.isSaving"
+                                on-click="vm.delFromExistent(data.value, data.key)"
+                                title="'Delete value'">
+                        </progress-button>
+                    </div>
+                </div>
+
+                <div class="row">
+                        <span class="delete-duplicate-label col-lg-9">
+                            New NS: <b ng-bind="vm.namespaceCandidates.name"></b>
+                        </span>
+
+                    <div class="col-lg-3 pull-right">
+                        <button class="btn btn-primary" id="deleteFromCandidate_{{data.key}}"
+                                ng-click="vm.delFromCandidate(vm.namespaceCandidates.name, data.key)">Delete value
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button"
+                id="continueButton"
+                class="btn btn-primary"
+                ng-disabled="!vm.duplicateMapEmpty"
+                ng-click="vm.continueFromDuplicatesModal()">Continue
+        </button>
+    </div>
+</div>

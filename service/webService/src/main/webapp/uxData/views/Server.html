@@ -1,0 +1,57 @@
+<div class="form-group">
+
+    <fieldset ng-disabled="isDisabled()">
+        <div class="row"
+             ng-show=showWhitelistedOption>
+            <div class="col-md-2 text">
+                <label>Non-Whitelisted
+                    <input
+                    type="checkbox"
+                    ng-model="values.isNonWhitelisted">
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text" ng-show="!onlySimpleMode"><label> Edit mode </label>
+                <select class="form-control" ng-model="editMode"
+                        ng-init="editMode = (editMode === undefined) ? 'simple' : editMode">
+                    <option value="simple">Simple</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-7 text" ng-if="!isSimple()">
+                <label ng-show="showLabels">Url</label>
+                <input
+                        ng-model="values.url"
+                        class="form-control server_url_input"
+                        name="url"
+                        required
+                        type="text"
+                        placeholder="Full url : 'protocol://host[:port][/urn]'"
+                        ng-change="validateServer()"/>
+
+                <h6 ng-show="isCurrentPathDirty && !isCurrentPathValid" class="error-label">Valid service url is
+                    required. Valid service url must match pattern: protocol://host[:port][/urn]</h6>
+            </div>
+
+            <div class="col-md-2 text" ng-if="isSimple()">
+                <label ng-show="showLabels">Path</label>
+                <select
+                        class="form-control server_path_input monospaces"
+                        name="path"
+                        ng-model="$parent._currentPath"
+                        ng-init="$parent._currentPath = {NAME: currentPath}"
+                        ng-options="opt.VALUE group by opt.GROUP for opt in getListOfPaths() track by opt.NAME"
+                        options-disabled="!opt.ACTIVE for opt in getListOfPaths()"
+                        ng-change="pathChanged()"
+                        required>
+                </select>
+                <h6 ng-if="isCurrentPathDirty && currentPath =='' " class="error-label required-warning">Service path is
+                    required</h6>
+            </div>
+
+        </div>
+        <div class='general-rule-error' align='left'>{{validationData.generalErrorMsg}}</div>
+
+    </fieldset>
+</div>

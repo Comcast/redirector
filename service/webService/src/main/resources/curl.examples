@@ -1,0 +1,8 @@
+//post item
+curl -v -X POST -d "<if><contains><param>mac</param><values><value>B4:F2:E8:05:02:CC</value></values></contains><return>xfailwhale</return></if>" -H "Content-Type: application/xml" http://localhost:9090/redirectorDataService2/data/Redirector/1
+
+//get created item
+curl -v -X GET -H "Content-Type: application/xml" http://localhost:9090/redirectorDataService2/data/Redirector/1
+
+//delete item
+curl -v -X DELETE -H "Content-Type: application/xml" http://localhost:9090/redirectorDataService2/data/Redirector/1

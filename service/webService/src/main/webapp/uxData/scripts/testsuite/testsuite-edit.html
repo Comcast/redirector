@@ -1,0 +1,374 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="container form-group">
+    <h1>Add new rule test case
+        <small ng-bind="$root.currentApplication"></small>
+    </h1>
+    <form name="add_testcase" role="form" novalidate>
+        <div class="panel panel-default">
+        <div class="panel-body">
+
+
+            <h3 ng-bind="vm.currentTestCase.testName"></h3>
+
+            <div class="text">
+                <label>Test case name:</label>
+                <input  id="testCaseName"
+                        name="testCaseName"
+                        class="form-control"
+                        type="text"
+                        ng-disabled="vm.isEditing"
+                        ng-model="vm.currentTestCase.testName"
+                        ui-validate="{invalid: 'vm.validation.isNameValid($value)'}"
+                        aria-describedby="errorBlock"
+                        placeholder="Input testcase name"
+                        />
+            </div>
+            <div class="form-group has-error" ng-show="add_testcase.testCaseName.$error.invalid && !add_testcase.testCaseName.$pristine">
+                <label id="errorBlock" class="error-block control-label">Invalid test case name. It should contain only
+                    only word characters, i.e. letters, numbers and _</label>
+            </div>
+
+            <br/>
+
+            <div class="parameters">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h5>Parameters</h5>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row header">
+                            <div class="col-xs-5">
+                                Name:
+                            </div>
+                            <div class="col-xs-5">
+                                Value:
+                            </div>
+                        </div>
+                        <div class="row to-add">
+                            <div class="col-xs-5 text">
+                                <input id="parameterName"
+                                       name="parameterName"
+                                       ui-validate="{invalid: 'vm.validation.isParameterNameValid($value)',
+                                       duplicate: 'vm.isParameterUnique($value)'}"
+                                       class="form-control"
+                                       ng-model="vm.currentParam.name"
+                                       aria-describedby="errorBlockParameterName"
+                                       placeholder="Input testcase parameter name"
+                                       type="text"/>
+                                <div class="form-group text has-error"
+                                     ng-show="((add_testcase.parameterName.$error.invalid || add_testcase.parameterName.$error.duplicate) && !add_testcase.parameterName.$pristine)">
+                                    <label id="errorBlockParameterName" class="error-block control-label">
+                                        {{(add_testcase.parameterName.$error.invalid && !add_testcase.parameterName.$pristine) ? "Invalid test case parameter name. It should contain only only word characters, i.e. letters, numbers and _" : ""}}
+                                        {{(add_testcase.parameterName.$error.duplicate && !add_testcase.parameterName.$pristine) ? "Duplicate parameter name" : ""}}</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-5 text">
+                                <span class="input-group">
+                                <input id="parameterValue"
+                                       name="parameterValue"
+                                       ui-validate="{invalid: 'vm.validation.isParameterValueValid($value)',
+                                       duplicate: 'vm.isValueUnique($value)'}"
+                                       class="form-control"
+                                       ng-model="vm.uiModelHolder.valueToAddToCurrentParam"
+                                       aria-describedby="errorBlockParameterValue"
+                                       placeholder="Input testcase parameter value"
+                                       type="text"/>
+
+                                    <span class="input-group-btn">
+                                        <button id="addParameterValue"
+                                                class="btn btn-primary"
+                                                ng-click="vm.addValue(vm.uiModelHolder.valueToAddToCurrentParam)"
+                                                ng-disabled="(add_testcase.parameterValue.$error.invalid || add_testcase.parameterValue.$error.duplicate)">Add</button>
+                                    </span>
+
+                                </span>
+                                <div class="form-group text has-error" ng-show="(add_testcase.parameterValue.$error.invalid || add_testcase.parameterValue.$error.duplicate) && !add_testcase.parameterValue.$pristine">
+                                    <label id="errorBlockParameterValue" class="error-block control-label">
+                                        {{(add_testcase.parameterValue.$error.invalid && !add_testcase.parameterValue.$pristine) ? "Invalid test case parameter value. It should not have any spaces in the middle of the value" : ""}}
+                                        {{(add_testcase.parameterValue.$error.duplicate && !add_testcase.parameterValue.$pristine) ? "Duplicate parameter value" : ""}}</label>
+                                    </label>
+                                </div>
+
+                                <div ng-repeat="value in vm.currentParam.values track by $index">
+
+                                    <br/>
+                                    <span class="input-group">
+                                    <input
+                                            class="form-control"
+                                            ng-model="vm.currentParam.values[$index]"
+                                            type="text"/>
+                                     <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="vm.deleteValue(vm.currentParam.values[$index])">-</button>
+                                    </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 text">
+                                <div id="appParameter" class="btn btn-primary"
+                                     ng-click="vm.addParameter()"
+                                     ng-disabled="(add_testcase.parameterName.$error.duplicate) || (add_testcase.parameterName.$error.invalid) || (vm.currentParam.values.length <= 0)">Add parameter</div>
+                            </div>
+
+
+                        </div>
+                        <br/>
+
+                        <div ng-repeat="param in vm.currentTestCase.parameters.parameter track by $index" class="row">
+                            <br />
+                            <div class="col-xs-5">
+                                <input
+                                        class="form-control"
+                                       ng-model="param.name" readonly class="name" type="text"/>
+                            </div>
+                            <div class="col-xs-5">
+                                <input class="form-control"
+                                       ng-model="param.values" readonly class="value" type="text"/>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="btn btn-default" ng-click="vm.deleteParameter(vm.currentTestCase.parameters.parameter[$index].name)">Delete</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="expected panel panel-default">
+                <div class="panel-heading">
+                    <h5>Expected</h5>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                    <div class="col-xs-6">
+                        <label>
+                            Rule name:
+                        </label>
+                        <input id="rule"
+                               name="rule"
+                               ui-validate="{invalid: 'vm.validation.isRuleNameValid($value)'}"
+                               aria-describedby="errorBlockRule"
+                               class="form-control"
+                               ng-model="vm.currentTestCase.expected.rule"
+                               placeholder="Input expected rule name"/>
+
+                        <div class="form-group has-error"
+                             ng-show="add_testcase.rule.$error.invalid && !add_testcase.rule.$pristine">
+                            <label id="errorBlockRule" class="error-block control-label">Invalid rule name. It
+                                should contain only
+                                word characters, i.e. letters, numbers and _</label>
+                        </div>
+                    </div>
+                        <div class="col-xs-6">
+                            <label>
+                                Applied URL Rule name to add:
+                            </label>
+
+                            <input id="urlrule"
+                                   name="urlrule"
+                                   ui-validate="{invalid: 'vm.validation.isRuleNameValid($value)'}"
+                                   aria-describedby="errorBlockURLRule"
+                                   class="form-control"
+                                   ng-model="vm.urlRule"
+                                   placeholder="Input expected URL rule name"/>
+                            <button class="btn btn-primary toast-bottom-full-width"
+                                    id="addUrlRule"
+                                    name="addUrlRule"
+                                    ng-disabled="vm.urlRule == undefined || vm.urlRule == ''"
+                                    ng-click="vm.currentTestCase.expected.appliedUrlRules.push(vm.urlRule); vm.urlRule='';">Add rule name</button>
+                            <div class="form-group has-error"
+                                 ng-show="add_testcase.urlrule.$error.invalid && !add_testcase.urlrule.$pristine">
+                                <label id="errorBlockUrlRule" class="error-block control-label">Invalid url rule name.
+                                    It
+                                    should contain only
+                                    word characters, i.e. letters, numbers and _</label>
+                            </div>
+
+                            <label>
+                                Applied URL Rule names:
+                            </label>
+
+                            <p class="input-group" ng-repeat="rule in vm.currentTestCase.expected.appliedUrlRules track by $index">
+
+                                <input id="urlrule_{{$index}}"
+                                       name="urlrule_{{$index}}"
+                                       disabled="true"
+                                       ui-validate="{invalid: 'vm.validation.isRuleNameValid($value)'}"
+                                       class="form-control"
+                                       ng-model="vm.currentTestCase.expected.appliedUrlRules[$index]"
+                                       placeholder="Input expected URL rule name"/>
+
+                                <span class="input-group-btn">
+                                        <button name="removeUrlRule_{{$index}}"
+                                                id="removeUrlRule_{{$index}}"
+                                                type="button"
+                                                class="btn btn-default"
+                                                ng-click="vm.currentTestCase.expected.appliedUrlRules.splice($index, 1)">
+                                            Remove
+                                        </button>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="address">
+                        <div class="row text">
+                            <div class="col-xs-3 edit-proto">
+                                <label>
+                                    Protocol:
+                                </label>
+                                <input id="protocol"
+                                       name="protocol"
+                                       ui-validate="{invalid: 'vm.validation.isProtocolValid($value)'}"
+                                       class="form-control"
+                                       aria-describedby="errorBlockProtocol"
+                                       typeahead="protocol for protocol in vm.typeaheadData.protocols | filter:$viewValue | limitTo:8"
+                                       placeholder="Input expected protocol"
+                                       ng-model="vm.currentTestCase.expected.protocol" type="text"/>
+                                <div class="form-group has-error" ng-show="add_testcase.protocol.$error.invalid && !add_testcase.protocol.$pristine">
+                                    <label id="errorBlockProtocol" class="error-block control-label">Invalid protocol. It should contain word characters only</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 edit-ipVersion">
+                                <label>
+                                    IpVersion:
+                                </label>
+                                <select id="ipVersion"
+                                        class="form-control"
+                                        ng-model="vm.currentTestCase.expected.ipVersion"
+                                        type="text"
+                                        placeholder="Choose expected ip version type">
+                                    <option value=""></option>
+                                    <option value="4">ipv4</option>
+                                    <option value="6">ipv6</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 edit-port">
+                                <label>
+                                    Port:
+                                </label>
+                                <input id="port"
+                                       name="port"
+                                       ui-validate="{invalid: 'vm.validation.isPortValid($value)'}"
+                                       aria-describedby="errorBlockPort"
+                                       class="form-control"
+                                       ng-model="vm.currentTestCase.expected.port"
+                                       placeholder="Input expected port"
+                                       type="text"/>
+                                <div class="form-group has-error" ng-show="add_testcase.port.$error.invalid && !add_testcase.port.$pristine">
+                                    <label id="errorBlockPort" class="error-block control-label">Invalid port. It needs to be a number</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 edit-urn">
+                                <label>
+                                    Urn:
+                                </label>
+                                <input id="urn"
+                                       name="urn"
+                                       ui-validate="{invalid: 'vm.validation.isUrnValid($value)'}"
+                                       aria-describedby="errorBlockUrn"
+                                       class="form-control"
+                                       typeahead="urn for urn in vm.typeaheadData.urns | filter:$viewValue | limitTo:8"
+                                       ng-model="vm.currentTestCase.expected.urn"
+                                       placeholder="Input expected urn"
+                                       type="text"/>
+                                <div class="form-group has-error" ng-show="add_testcase.urn.$error.invalid && !add_testcase.urn.$pristine">
+                                    <label id="errorBlockUrn" class="error-block control-label">Invalid urn. It need to consist of word characters and numbers only</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stack-and-mode text">
+                        <div class="row">
+                            <div class="col-xs-3 edit-stack">
+                                <label>
+                                    Stack:
+                                </label>
+                                <input id="stack"
+                                       name="stack"
+                                       ui-validate="{invalid: 'vm.validation.isStackValid($value)'}"
+                                       aria-describedby="errorBlockStack"
+                                       class="form-control"
+                                       typeahead="stack for stack in vm.typeaheadData.stacks | filter:$viewValue | limitTo:8"
+                                       placeholder="Input expected stack"
+                                       ng-model="vm.currentTestCase.expected.xreStack"
+                                       type="text"/>
+                                <div class="form-group has-error" ng-show="add_testcase.stack.$error.invalid && !add_testcase.stack.$pristine">
+                                    <label id="errorBlockStack" class="error-block control-label">Invalid stack. It needs to be in the stack format (/*/*)</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 edit-flavor">
+                                <label>
+                                    Flavor:
+                                </label>
+                                <input id="flavor"
+                                       name="flavor"
+                                       ui-validate="{invalid: 'vm.validation.isFlavorValid($value)'}"
+                                       aria-describedby="errorBlockFlavor"
+                                       class="form-control"
+                                       typeahead="flavor for flavor in vm.typeaheadData.flavors | filter:$viewValue | limitTo:8"
+                                       placeholder="Input expected flavor"
+                                       ng-model="vm.currentTestCase.expected.flavor"
+                                       type="text"/>
+                                <div class="form-group has-error" ng-show="add_testcase.flavor.$error.invalid && !add_testcase.flavor.$pristine">
+                                    <label id="errorBlockFlavor" class="error-block control-label">Invalid flavor. It should have no middle spaces</label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 edit-response-type">
+                                <label>
+                                    Response type:
+                                </label>
+                                <select id="responceType"
+                                        class="form-control"
+                                        ng-model="vm.currentTestCase.expected.responseType"
+                                        type="text"
+                                        placeholder="Choose expected response type">
+                                    <option value=""></option>
+                                    <option value="PATH_RULE">PATH_RULE</option>
+                                    <option value="DISTRIBUTION_RULE">DISTRIBUTION_RULE</option>
+                                    <option value="DEFAULT_SERVER">DEFAULT_SERVER</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </div>
+
+            <progress-button id="saveEntity"
+                             look="'btn-primary'"
+                             disabled="!vm.validation.validateTestCaseInstantly(vm.currentTestCase).result ||
+                                !vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeTestSuite)"
+                             progress-condition="parent.isSaving"
+                             on-click="vm.saveTestCase(vm.currentTestCase)"
+                             title="'Save'">
+            </progress-button>
+            <progress-button id="cancelEditEntity"
+                             look="'btn-default'"
+                             disabled="false"
+                             progress-condition="parent.isSaving"
+                             on-click="vm.cancelSaving(vm.currentTestCase)"
+                             title="'Cancel'">
+            </progress-button>
+        </div>
+        </div>
+    </form>
+    <div class="rule">
+
+    </div>
+</div>

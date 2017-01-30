@@ -1,0 +1,287 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app
+        xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+        version="2.4">
+    <display-name>Redirector Web Application</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring-datastore.xml
+            classpath:spring-services.xml
+            classpath:applicationContext.xml
+        </param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>prod</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>com.comcast.redirector.satnamespace</param-name>
+        <param-value>x1:appds:redirector:</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UrlRewriteFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>Redirector Data Service</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>
+                com.comcast.redirector.api.redirector;
+                com.comcast.redirector.api.redirectorOffline;
+                com.comcast.redirector.api.decider;
+                com.comcast.redirector.api.exceptionmapper;
+                com.comcast.cima.oauth2.http.jersey.filter
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.SimpleAccessLoggingFilter
+                com.comcast.redirector.api.filter.SimpleVersionAvailabilityFilter
+                org.glassfish.jersey.media.multipart.MultiPartFeature;
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector Data Service</servlet-name>
+        <url-pattern>/data/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector Statistics Service</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.stats</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>com.comcast.redirector.api.filter.AccessLoggingFilter;</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector Statistics Service</servlet-name>
+        <url-pattern>/stats/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.SimpleAccessLoggingFilter
+                com.comcast.redirector.api.filter.SimpleVersionAvailabilityFilter
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/pages</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector UI</servlet-name>
+        <url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector DEV UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.SimpleAccessLoggingFilter
+                com.comcast.redirector.api.filter.SimpleVersionAvailabilityFilter
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/dev</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector DEV UI</servlet-name>
+        <url-pattern>/dev/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector Offline DEV UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.SimpleAccessLoggingFilter
+                com.comcast.redirector.api.filter.SimpleVersionAvailabilityFilter
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/devRedirectorOffline</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector Offline DEV UI</servlet-name>
+        <url-pattern>/devRedirectorOffline/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector Offline UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.SimpleAccessLoggingFilter
+                com.comcast.redirector.api.filter.SimpleVersionAvailabilityFilter
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/prodRedirectorOffline</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector Offline UI</servlet-name>
+        <url-pattern>/adminOffline/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Decider DEV UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.AccessLoggingFilter;
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/devDecider</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Decider DEV UI</servlet-name>
+        <url-pattern>/devDecider/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Redirector Info Service</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.serviceinfo</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Redirector Info Service</servlet-name>
+        <url-pattern>/info/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>Decider UI</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.comcast.redirector.api.webclient</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                com.comcast.redirector.api.filter.AccessLoggingFilter;
+                org.glassfish.jersey.server.mvc.jsp.JspMvcFeature
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.mvc.templateBasePath.jsp</param-name>
+            <param-value>/WEB-INF/pagesDecider</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Decider UI</servlet-name>
+        <url-pattern>/decider/*</url-pattern>
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+    <servlet>
+        <servlet-name>Default</servlet-name>
+        <servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>useFileMappedBuffer</param-name>
+            <param-value>false</param-value>
+        </init-param>
+
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Default</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

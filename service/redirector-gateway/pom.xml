@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>com.comcast.apps.redirector.framework</groupId>
+      <artifactId>service</artifactId>
+      <version>3.0.1</version>
+      <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>redirector-gateway</artifactId>
+    <packaging>jar</packaging>
+    <version>3.0.1</version>
+    <name>Redirector Gateway</name>
+    <url>http://maven.apache.org</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <surefire-plugin-version>2.18.1</surefire-plugin-version>
+        <servlet-api.version>3.1</servlet-api.version>
+        <servlet-api.version>3.1</servlet-api.version>
+        <jersey.version>2.8</jersey.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.comcast.apps.redirector.framework</groupId>
+            <artifactId>redirector-common</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.comcast.apps.redirector.framework</groupId>
+            <artifactId>redirector-core</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-moxy</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.java</groupId>
+            <artifactId>junit-dataprovider</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>ccp-deployables-releases</id>
+            <name>CCP Deployables Releases</name>
+            <url>${repositoryUrl}</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>ccp-deployables-snapshots</id>
+            <name>CCP Deployables Snapshots</name>
+            <url>${snapshotRepositoryUrl}</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <sourceDirectory>${pom.basedir}/src</sourceDirectory>
+        <testSourceDirectory>${pom.basedir}/test</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>${pom.basedir}/test</directory>
+            </testResource>
+        </testResources>
+        <resources>
+            <resource>
+                <directory>${pom.basedir}/src</directory>
+                <!--filtering>true</filtering-->
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>service-version-info</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <echo file="${project.build.outputDirectory}/dataservice.version.properties" append="true">
+                                    ProjectName=${project.name}
+                                    ProjectVersion=${project.version}
+                                    git.build.time=${git.build.time}
+                                    ${line.separator}
+                                </echo>
+                                <exec dir="${basedir}" executable="bash" osfamily="unix" output="${project.build.outputDirectory}/dataservice.version.properties" failonerror="false" append="true">
+                                    <arg line="-c &quot;git log -1 | sed -e 's/^commit /git.commit.id=/' -e 's/Date: */git.commit.time=/' |grep ^git &quot;" />
+                                </exec>
+                                <exec dir="${basedir}" executable="bash" osfamily="unix" output="${project.build.outputDirectory}/dataservice.version.properties" failonerror="false" append="true">
+                                    <arg line="-c &quot;git branch | grep '^*' | sed -e 's/^\* /git.branch=/' &quot;" />
+                                </exec>
+                                <exec dir="${basedir}" executable="cmd" osfamily="windows" output="${project.build.outputDirectory}/dataservice.version.properties" failonerror="false" append="true">
+                                    <arg line="-c &quot;git log -1 | sed -e 's/^commit /git.commit.id=/' -e 's/Date: */git.commit.time=/' |grep ^git &quot;" />
+                                </exec>
+                                <exec dir="${basedir}" executable="cmd" osfamily="windows" output="${project.build.outputDirectory}/dataservice.version.properties" failonerror="false" append="true">
+                                    <arg line="-c &quot;git branch | grep '^*' | sed -e 's/^\* /git.branch=/' &quot;" />
+                                </exec>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+                            <overwrite>true</overwrite>
+                            <outputDirectory>${basedir}/target/exported-resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${pom.basedir}/src</directory>
+                                    <filtering>true</filtering>
+                                    <excludes>
+                                        <exclude>**/*.java</exclude>
+                                        <exclude>**/*.properties</exclude>
+                                        <exclude>**/*.class</exclude>
+                                        <exclude>**/*.keystore</exclude>
+                                        <exclude>**/*.passwd</exclude>
+                                        <exclude>**/*.access</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>distribution.xml</descriptor>
+                    </descriptors>
+                </configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>distribution.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IntegrationTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>1.0-alpha-5</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>apache</id>
+            <name>apache default</name>
+            <url>http://ftp.cica.es/mirrors/maven2/</url>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <name>java.net</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+        <repository>
+            <id>codehaus</id>
+            <name>Codehaus</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>maven2</id>
+            <name>Maven Central</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <name>JBoss</name>
+            <url>http://repository.jboss.org/maven2</url>
+        </repository>
+    </repositories>
+</project>

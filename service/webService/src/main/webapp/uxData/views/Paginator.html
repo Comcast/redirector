@@ -1,0 +1,29 @@
+<div>
+    <label ng-show="showSettings">
+        Items per page:
+        <select style="height: 34px;" ng-model="paginationSettings.perPage"
+                class="btn btn-default">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+        </select>
+    </label>
+
+    <div class="btn-group">
+        <button class="btn btn-default fa fa-angle-left"
+                ng-hide="paginationSettings.page == 0 || paginationSettings.numPages == 1"
+                style="height: 34px; width: 34px; margin-top: -1px;"
+                ng-click="prevPage()"></button>
+        <button ng-hide="paginationSettings.numPages == 1" ng-repeat="n in [] | range: paginationSettings.numPages"
+                ng-class="{'btn-primary': n == paginationSettings.page}"
+                class="btn btn-default " ng-click="toPageId(n)">{{n + 1}}
+        </button>
+
+        <button class="btn btn-default fa fa-angle-right"
+                style="height: 34px; width: 34px; margin-top: -1px;"
+                ng-hide="paginationSettings.page + 1 >= paginationSettings.numPages || paginationSettings.numPages == 1"
+                ng-click="nextPage()"></button>
+    </div>
+</div>

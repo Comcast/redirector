@@ -1,0 +1,106 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <div>
+        <h1>Decider Rules Management</h1>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h5 ng-hide="vm.editMode">Add New Rule</h5>
+            <div ng-show="vm.editMode">Editing <span ng-bind="vm.ruleName"></span></div>
+        </div>
+        <div class="panel-body">
+            <form name="rulesForm" role="form" novalidate class="form-inline">
+
+                <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.ruleNameError)}">
+                    <label for="ruleName">Rule Name:</label>
+                    <input type="text"
+                           class="form-control"
+                           id="ruleName"
+                           ng-model="vm.ruleName"
+                           ng-change="vm.validateRuleName()"
+                           ng-disabled="vm.editMode == true"
+                           name="ruleName"
+                           placeholder="Rule name">
+
+                    <h6 ng-show="vm.hasError(vm.ruleNameError)" class="error-label"><span ng-bind="vm.ruleNameError"></span></h6>
+                </div>
+
+                <div class="form-group-padding-narrow">
+                    <h4>Rule conditions:</h4>
+                    <button type="button" id="addCondition" ng-click="vm.addExpression('')" class="btn btn-primary btn-sm">Add condition</button>
+                    <button type="button" id="addOrCondition" ng-click="vm.addExpression('OR')" class="btn btn-primary btn-sm">Add OR condition</button>
+                    <button type="button" id="addXorCondition" ng-click="vm.addExpression('XOR')" class="btn btn-primary btn-sm">Add XOR condition</button>
+                </div>
+
+                <div ng-repeat="expr in vm.rawExpressions track by $id(expr)">
+
+                    <span ng-bind="$index + 1"></span>
+
+                    <expression
+                            data=expr
+                            validation-data=vm.exprValidationData[$index]
+                            allow-negation="true"
+                            on-expression-changed="vm.updateExpressions($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Name-Changed="vm.onExprNameChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Operator-Changed="vm.onExprOperatorChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Changed="vm.onExprValueChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Added="vm.onExprValueAdded($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Removed="vm.onExprValueRemoved($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Type-Changed="vm.onExprValueTypeChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Negation-Changed="vm.updateExpressions($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)">
+                    </expression>
+
+                    <button id="removeExpression" type="button" class="btn btn-default btn-sm" ng-click="vm.removeExpression($index)">
+                        Remove expression
+                    </button>
+                </div>
+
+                <!--=========================================== Return server ===========================================-->
+                <h4>Partner parameters:</h4>
+                <label for="rulePartner">Partner Name:</label>
+                <div class="inline-table">
+                    <select
+                            id="rulePartner"
+                            class="form-control"
+                            name="partner"
+                            ng-model="vm.selectedPartner"
+                            ng-options="partner for partner in vm.partners"
+                            ng-change="vm.validatePartner()"
+                            required>
+                    </select>
+                    <h6 ng-show="vm.hasError(vm.partnerErrorMsg)" class="error-label"><span ng-bind="vm.partnerErrorMsg"></span></h6>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group-padding-narrow">
+                            <progress-button id="saveEntity"
+                                             look="'btn-success'"
+                                             disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeDeciderRules)"
+                                             on-click="vm.saveRule()"
+                                             progress-condition="vm.isSaving"
+                                             title="'Save'">
+                            </progress-button>
+                            <button type="button" class="btn btn-default" ng-click="vm.cancelEditRule()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

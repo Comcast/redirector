@@ -1,0 +1,41 @@
+{
+  "version": 0,
+  "snapshotList": [
+    {
+      "path": "/BR/BRC9/1.52.rc-SNAPSHOT/xreGuide",
+      "hosts": [
+        {
+          "ipv4": "ccpapp-po-c534-p.po.ccp.cable3ff33.comcast.com",
+          "ipv6": null
+        }
+      ]
+    },
+    {
+      "path": "/BR/BRC9/1.44/xreGuide",
+      "hosts": [
+        {
+          "ipv4": "ccpapp-po-c534-p.po.ccp.cable3ff33.comcast.com",
+          "ipv6": null
+        }
+      ]
+    },
+    {
+      "path": "/BR1/BRC9/1.44/xreGuide",
+      "hosts": [
+        {
+          "ipv4": "ccpapp-po-c534-p.po.ccp.cable3ff33.comcast.com",
+          "ipv6": null
+        }
+      ]
+    },
+    {
+      "path": "/BR/BRC9/1.41/xreGuide",
+      "hosts": [
+        {
+          "ipv4": "ccpapp-po-c534-p.po.ccp.cable3ff33.comcast.com",
+          "ipv6": null
+        }
+      ]
+    }
+  ]
+}

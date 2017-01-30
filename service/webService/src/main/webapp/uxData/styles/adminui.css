@@ -1,0 +1,360 @@
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.form-group-padding, .container-padding {
+    padding: 10px
+}
+
+.form-group-padding-sm {
+    padding: 10px 5px
+}
+
+.container-padding-sm-v {
+    padding: 5px 10px
+}
+
+.form-group-padding-narrow {
+    padding: 10px 0px
+}
+
+.time-label {
+    width: 190px
+}
+
+.btn-plusminus {
+    width: 30px
+}
+
+.xml-view {
+    border: none;
+    resize: none;
+    width: 500px
+}
+
+.td-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.login-form {
+    width: 400px;
+    margin: 200px auto
+}
+
+.ip-volume-cell {
+    width: 260px;
+}
+
+.ip-volume-ip-cell {
+    width: 120px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+#center-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.error-label {
+    color: red
+}
+
+.required-warning {
+    width: 200px;
+}
+
+.op-shift {
+    margin-left: 5px;
+}
+
+.alerts-container {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+}
+
+.alert.top-right {
+    position: relative !important;
+    margin: 8px !important;
+}
+
+.table-fixed-header {
+    width: 100%;
+}
+
+.table-fixed-header.thead, table-fixed-header.tbody, table-fixed-header.tr, table-fixed-header.td, table-fixed-header.th {
+    display: block;
+}
+
+.table-fixed-header.tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.table-fixed-header.thead table-fixed-header.th {
+    height: 30px;
+
+    /*text-align: left;*/
+}
+
+.table-fixed-header.tbody {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.table-fixed-header.thead {
+    /* fallback */
+}
+
+.table-fixed-header.tbody td, table-fixed-header.thead th {
+    width: 19.2%;
+    float: left;
+}
+
+.inline-table {
+    display: inline-table;
+}
+
+.top-right-absolute {
+    position: absolute;
+    right: 0px;
+}
+
+.top7_5 {
+    padding-top: 7.5px;
+}
+
+.fileUpload {
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.height111 {
+    height: 35px;
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.fontSize18px {
+    font-size: 18px;
+}
+
+.fontSize18px {
+    font-size: 18px;
+}
+
+.wide-input {
+    width: 300px !important;
+}
+
+.has-margin {
+    margin-top: 20px;
+}
+
+.action-separator {
+    display: inline-block;
+    width: 20px;
+}
+
+.nowrap {
+    white-space: nowrap
+}
+
+.pending, .pending > td {
+    background-color: #E8EDCC !important
+}
+
+.fontSize14px {
+    font-size: 14px;
+}
+
+.height35px {
+    height: 35px;
+}
+
+.width56p {
+    width: 56%;
+}
+
+.inlineblock {
+    display: inline-block;
+}
+
+.gap-left-10 {
+    margin-left: 10px;
+}
+
+.pending-status-icon-view {
+    font-size: 20px
+}
+
+.pending-status-icon {
+    width: 30px;
+    margin-top: 30px
+}
+
+tr.distribution-row > td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.server-form {
+    padding-left: 10px;
+    padding-bottom: 10px
+}
+
+.panel-group > .panel > .panel-heading > .panel-title > .pull-right > i:hover {
+    opacity: 0.6;
+    text-decoration: none;
+    transition: all 0.1s ease-in-out 0s;
+}
+
+.panel-group > .panel > .panel-heading > .panel-title > .pull-right > a {
+    display: inline-block;
+    height: 16px;
+    margin-left: 5px;
+}
+
+.dropdown-menu > .custom {
+    clear: both;
+    color: #333;
+    display: block;
+    font-weight: 400;
+    line-height: 1.42857;
+    padding: 3px 20px;
+    white-space: nowrap;
+    width: 240px;
+}
+
+.template-input-size {
+    min-width : 150px;
+}
+
+.panel.focus {
+    border-color: #66AFE9 !important;
+    border-width: 2px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6) !important;
+    outline: 0 none !important;
+}
+
+.panel.focusError {
+    border-color: #e9460b !important;
+    border-width: 2px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(255, 0, 23, 0.60) !important;
+    outline: 0 none !important;
+}
+
+.monospaces {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.xlabel {
+    font-size:110%;
+}
+
+.ui-match {
+    background-color: transparent !important;
+    font-weight: bold !important;
+}
+
+.dont-break-out {
+
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+
+}
+
+    /* add bootstrap submenu */
+
+    .dropdown-submenu {
+        position:relative;
+    }
+    .dropdown-submenu>.dropdown-menu {
+        top:0;
+        left:100%;
+        margin-top:-6px;
+        margin-left:-1px;
+        -webkit-border-radius:0 6px 6px 6px;
+        -moz-border-radius:0 6px 6px 6px;
+        border-radius:0 6px 6px 6px;
+    }
+    .dropdown-submenu:hover>.dropdown-menu {
+        display:block;
+    }
+    .dropdown-submenu>a:after {
+        display:block;
+        content:" ";
+        float:right;
+        width:0;
+        height:0;
+        border-color:transparent;
+        border-style:solid;
+        border-width:5px 0 5px 5px;
+        border-left-color:#cccccc;
+        margin-top:5px;
+        margin-right:-10px;
+    }
+    .dropdown-submenu:hover>a:after {
+        border-left-color:#ffffff;
+    }
+    .dropdown-submenu.pull-left {
+        float:none;
+    }
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left:-100%;
+        margin-left:10px;
+        -webkit-border-radius:6px 0 6px 6px;
+        -moz-border-radius:6px 0 6px 6px;
+        border-radius:6px 0 6px 6px;
+    }
+
+p.editable-click {
+    border-bottom:none;
+}
+
+p.editable-empty {
+    color: #888888;
+}
+p.editable-empty:hover {
+    color: #303030;
+}

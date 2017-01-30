@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+    <div class="panel-body diff-distr-panel-body">
+        <table class="table changes-diff-view-table">
+            <thead>
+            <tr ng-show="vm.isUpdateStatus()">
+                <th ng-bind="vm.baseHeadTitle"></th>
+                <th ng-bind="vm.changedHeadTitle"></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="changes-diff-view-column" ng-show="!vm.isAddStatus()">
+                        <div class="panel panel-default diff-distr-panel">
+                            <div class="panel-body diff-distr-column-panel">
+                                <div class="diff-distr-column-row" ng-repeat="baseDistribution in vm.baseNormalizedDistributions"
+                                     ng-bind-html="vm.getDiffs(vm.getDistributionViewText(vm.baseNormalizedDistributions[$index], ($index + 1)),
+                                      vm.getDistributionViewText(vm.changedNormalizedDistributions[$index], ($index + 1)), vm.SIDES.LEFT)">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="changes-diff-view-column" ng-hide="vm.isDeleteStatus() || !vm.hasDiffChanges()">
+                        <div class="panel panel-default diff-distr-panel">
+                            <div class="panel-body diff-distr-column-panel">
+                                <div class="diff-distr-column-row" ng-repeat="baseDistribution in vm.baseNormalizedDistributions"
+                                     ng-bind-html="vm.getDiffs(vm.getDistributionViewText(vm.baseNormalizedDistributions[$index], ($index + 1)),
+                                      vm.getDistributionViewText(vm.changedNormalizedDistributions[$index], ($index + 1)), vm.SIDES.RIGHT)">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer diff-distr-footer-body"
+         ng-class="{'diff-distr-footer-body-extended' : (!vm.isValidTotalPercentage(vm.SIDES.LEFT)
+                                                         || !vm.isValidTotalPercentage(vm.SIDES.RIGHT)
+                                                         || vm.isSomeBasePercentOutOfRange
+                                                         || vm.isSomeChangedPercentOutOfRange)}">
+        <div class="col-lg-6" ng-show="!vm.isAddStatus()">Total:
+            <strong ng-class="{'error-label' : (!vm.isValidTotalPercentage(vm.SIDES.LEFT) || vm.isSomeBasePercentOutOfRange)}">
+                {{(!vm.isSomeBasePercentOutOfRange) ? (vm.calculateTotalPercentage(vm.SIDES.LEFT).toFixed(2) + '%') : ('some percent(s) out of range!')}}
+            </strong>
+        </div>
+        <div class="col-lg-6" ng-hide="vm.isDeleteStatus() || !vm.hasDiffChanges()">Total:
+            <strong ng-class="{'error-label' : (!vm.isValidTotalPercentage(vm.SIDES.RIGHT) || vm.isSomeChangedPercentOutOfRange)}">
+                {{(!vm.isSomeChangedPercentOutOfRange) ? (vm.calculateTotalPercentage(vm.SIDES.RIGHT).toFixed(2) + '%') : ('some percent(s) out of range!')}}
+            </strong>
+            <div class="error-label" ng-show="!vm.isValidTotalPercentage(vm.SIDES.RIGHT) || vm.isSomeChangedPercentOutOfRange">
+                <strong>
+                    {{(!vm.isSomeChangedPercentOutOfRange) ? 'Changes can not be approved as total percentage exceeds 99.99' : 'Changes can not be approved.'}}
+                </strong>
+            </div>
+        </div>
+    </div>
+</div>

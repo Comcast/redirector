@@ -1,0 +1,99 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="modal-header dialog-header-confirm">
+    <h4 class="modal-title" ng-bind="vm.title"></h4>
+</div>
+<div class="modal-body" tabindex="-1">
+    <form class="form-horizontal" role="form" name="add_form">
+        <div class="modal-header clearfix">
+            <h4 class="pull-left" ng-bind="vm.title + ':'"></h4>
+            <input class="form-control pull-right edit-partners-input-name"
+                   id="inputId"
+                   name="inputId"
+                   placeholder="Partner Id"
+                   ng-model="vm.partnerName"
+                   type="text"
+                   ng-disabled="vm.editMode"
+                   required>
+            </input>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="inputPropertyName" class="col-sm-2 control-label">Name</label>
+
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputPropertyName" name="inputPropertyName" placeholder="Property name"
+                           ng-model="vm.propertyName" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPropertyValue" class="col-sm-2 control-label">Value</label>
+
+                <div class="col-sm-10">
+                    <input class="form-control" id="inputPropertyValue" name="inputPropertyValue" placeholder="Property value"
+                           ng-model="vm.propertyValue" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button id="addProperty" type="submit" class="btn btn-primary" ng-click="vm.addProperty(); add_form.inputPropertyName.$setPristine(); add_form.inputPropertyValue.$setPristine();"
+                            ng-disabled="add_form.$pristine || add_form.$invalid">Add property
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" ng-show="vm.isPropertiesListEmpty()">
+                    <div class="jumbotron">
+                        <p class="text-center">Hasn't any properties</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" ng-hide="vm.isPropertiesListEmpty()">
+                <table ng-table="vm.tableParams" class="table" show-filter="true">
+                    <colgroup>
+                        <col width="42%">
+                        <col width="42%">
+                        <col width="16%">
+                    </colgroup>
+                    <tr ng-repeat="property in $data" id="property_{{property.propertyId}}">
+                        <td class="property-key" data-title="'Property Name'" sortable="'propertyId'" filter="{ 'propertyId': 'text' }"
+                            ng-bind="property.propertyId"></td>
+                        <td class="property-value" data-title="'Property Value'" sortable="'propertyValue'"
+                            filter="{ 'propertyValue': 'text' }"
+                            ng-bind="property.propertyValue"></td>
+                        <td data-title="'Remove'">
+                            <button type="button" class="btn btn-default property-remove"
+                                    ng-disabled="$rootScope.isSaving"
+                                    ng-click="vm.deleteProperty(property.propertyId)">
+                                <span class="fa"> Remove</span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$close()">Cancel</button>
+                <progress-button id="saveEntity"
+                                 look="'btn-primary'"
+                                 disabled="add_form.inputId.$invalid || vm.isPropertiesListEmpty() || !vm.authService.isAuthorized(vm.USER_PERMISSIONS().writePartners)"
+                                 progress-condition="$rootScope.isSaving"
+                                 on-click="vm.savePartner()"
+                                 title="'Save'">
+                </progress-button>
+            </div>
+        </div>
+    </form>
+</div>

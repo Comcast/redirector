@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+    <bean id="pendingWriteServiceFactory" class="com.comcast.redirector.api.redirector.service.pending.factory.PendingEntityWriteServiceFactory">
+    </bean>
+
+    <bean id="fileSystemBackupFiles" class="com.comcast.redirector.core.backup.filesystem.FileSystemBackupFiles">
+        <constructor-arg name="basePath" type="java.lang.String" value="${redirector.snapshotBasePath}"/>
+    </bean>
+
+    <bean id="fileSystemBackupManagerFactory" class="com.comcast.redirector.core.backup.filesystem.FileSystemBackupManagerFactory">
+        <constructor-arg name="fileSystemBackupFiles" ref="fileSystemBackupFiles"/>
+    </bean>
+
+    <bean id="changesStatusService" class="com.comcast.redirector.api.redirector.service.pending.ChangesStatusService">
+        <property name="pendingChangeDAO" ref="pendingChangeDAO"/>
+        <property name="pendingChangeType" value="PENDING_CHANGES_STATUS"/>
+    </bean>
+
+    <bean id="pendingFlavorRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="RULE" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+    <bean id="pendingTemplateFlavorRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="TEMPLATE_RULE" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+
+    <bean id="pendingUrlRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="URL_RULE" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+    <bean id="pendingTemplateUrlRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="TEMPLATE_URL_RULE" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+
+    <bean id="pendingServerWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.Server" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="SERVER" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+    <bean id="pendingUrlParamsWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.url.rule.UrlRule" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="URL_PARAMS" />
+        <constructor-arg ref="changesStatusService"/>
+    </bean>
+
+    <bean id="pendingDistributionWriteService" class="com.comcast.redirector.api.redirector.service.pending.PendingDistributionWriteService">
+        <property name="pendingChangesService" ref="changesStatusService"/>
+    </bean>
+
+    <bean id="nextDistributionEntityViewService" class="com.comcast.redirector.api.redirector.service.pending.entityview.NextDistributionEntityViewService">
+        <property name="changesStatusService" ref="changesStatusService"/>
+    </bean>
+
+    <bean id="nextWhitelistedEntityViewService" class="com.comcast.redirector.api.redirector.service.pending.entityview.NextWhitelistedEntityViewService">
+        <property name="changesStatusService" ref="changesStatusService"/>
+    </bean>
+
+    <bean id="whiteListStackUpdateService" class="com.comcast.redirector.api.redirector.service.WhiteListStackUpdateService">
+    </bean>
+
+    <bean id="stackCommentsService" class="com.comcast.redirector.api.redirector.service.StackCommentsService">
+    </bean>
+
+    <bean id="pendingWhitelistedWriteService" class="com.comcast.redirector.api.redirector.service.pending.PendingWhitelistedWriteService">
+        <property name="pendingChangesService" ref="changesStatusService"/>
+        <property name="nextWhitelistedEntityViewService" ref="nextWhitelistedEntityViewService"/>
+        <property name="whiteListStackUpdateService" ref="whiteListStackUpdateService"/>
+    </bean>
+
+    <bean id="changesBatchWriteService" class="com.comcast.redirector.api.redirector.service.pending.ChangesBatchWriteService">
+        <property name="pendingChangesService" ref="changesStatusService"/>
+        <property name="nextDistributionEntityViewService" ref="nextDistributionEntityViewService"/>
+        <property name="nextWhitelistedEntityViewService" ref="nextWhitelistedEntityViewService"/>
+    </bean>
+
+    <bean id="whiteListService" class="com.comcast.redirector.api.redirector.service.WhiteListService">
+        <property name="pendingWhitelistedWriteService" ref="pendingWhitelistedWriteService"/>
+    </bean>
+
+    <bean id="distributionService" class="com.comcast.redirector.api.redirector.service.ruleengine.DistributionService">
+        <property name="changesStatusService" ref="changesStatusService"/>
+    </bean>
+
+    <bean id="changesBatchWriteServiceOffline" class="com.comcast.redirector.api.redirectorOffline.service.pending.ChangesBatchWriteServiceOffline">
+        <property name="pendingChangesService" ref="changesStatusService"/>
+        <property name="nextDistributionEntityViewService" ref="nextDistributionEntityViewService"/>
+        <property name="nextWhitelistedEntityViewService" ref="nextWhitelistedEntityViewService"/>
+    </bean>
+
+    <bean id="pendingCoreBackupFlavorRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="RULE" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <!-- =========================================================================================================== -->
+
+    <bean id="coreBackupChangesStatusService" class="com.comcast.redirector.api.redirector.service.pending.ChangesStatusService">
+        <property name="pendingChangeDAO" ref="coreBackupPendingChangeDAO"/>
+        <property name="pendingChangeType" value="CORE_BACKUP_PENDING_CHANGES_STATUS"/>
+    </bean>
+
+    <bean id="coreBackupNextDistributionEntityViewService" class="com.comcast.redirector.api.redirector.service.pending.entityview.NextDistributionEntityViewService">
+        <property name="changesStatusService" ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupNextWhitelistedEntityViewService" class="com.comcast.redirector.api.redirector.service.pending.entityview.NextWhitelistedEntityViewService">
+        <property name="changesStatusService" ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingFlavorRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="RULE" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingTemplateFlavorRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="TEMPLATE_RULE" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingUrlRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="URL_RULE" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingTemplateUrlRuleWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.IfExpression" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="TEMPLATE_URL_RULE" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+
+    <bean id="coreBackupPendingServerWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.Server" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="SERVER" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingUrlParamsWriteService" factory-bean="pendingWriteServiceFactory" factory-method="getWriteService">
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.url.rule.UrlRule" />
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="URL_PARAMS" />
+        <constructor-arg ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingDistributionWriteService" class="com.comcast.redirector.api.redirector.service.pending.PendingDistributionWriteService">
+        <property name="pendingChangesService" ref="coreBackupChangesStatusService"/>
+    </bean>
+
+    <bean id="coreBackupPendingWhitelistedWriteService" class="com.comcast.redirector.api.redirector.service.pending.PendingWhitelistedWriteService">
+        <property name="pendingChangesService" ref="coreBackupChangesStatusService"/>
+        <property name="nextWhitelistedEntityViewService" ref="coreBackupNextWhitelistedEntityViewService"/>
+        <property name="whiteListStackUpdateService" ref="whiteListStackUpdateService"/>
+    </bean>
+
+    <bean id="coreBackupChangesBatchWriteService" class="com.comcast.redirector.api.redirector.service.pending.ChangesBatchWriteService">
+        <property name="pendingChangesService" ref="coreBackupChangesStatusService"/>
+        <property name="nextDistributionEntityViewService" ref="coreBackupNextDistributionEntityViewService"/>
+        <property name="nextWhitelistedEntityViewService" ref="coreBackupNextWhitelistedEntityViewService"/>
+    </bean>
+
+
+    <bean id="redirectorConfigService" class="com.comcast.redirector.api.redirector.service.ruleengine.RedirectorConfigService" />
+</beans>

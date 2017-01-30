@@ -1,0 +1,135 @@
+<div class="form-group well well-sm" style="margin: 0px !important;">
+    <div>
+        <div style="display: inline-table">
+            <input type="text"
+                   ng-model="expr.left.expName"
+                   ng-hide="expr.left.expOperator=='percent' || expr.left.expOperator=='random'"
+                   class="form-control"
+                   ng-change="nameChanged('left')"
+                   ng-disabled="data.disabled"
+                   placeholder="Parameter name"
+                   style="width: 300px;"
+                   required="!(expr.left.expOperator=='percent' || expr.left.expOperator=='random')"/>
+            <select
+                    name='operators'
+                    ng-model='expr.left.expOperator'
+                    ng-options='operator.value as operator.name for operator in operators'
+                    ng-selected='0'
+                    ng-change='operatorChanged("left")'
+                    ng-disabled="data.disabled"
+                    class="form-control op-shift">
+            </select>
+            <div class="required-warning">
+                <h6 ng-show="!isNameValid('left')" class="error-label">{{validationData.left.nameErrorMsg}}</h6>
+            </div>
+        </div>
+
+        <div style="display: inline-table">
+            <div ng-repeat="value in expr.left.expValues track by $index">
+
+                <input type="text"
+                       ng-show="namespaces.namespace.left.length == 0"
+                       ng-model="expr.left.expValues[$index]"
+                       class="form-control"
+                       ng-change="valueChanged('left', '{{$index}}', true)"
+                       ng-disabled="data.disabled"
+                       placeholder="Parameter value"
+                       ng-show="namespaces.namespace.left.length == 0"
+                       style="width: 300px;">
+                <select
+                        class="form-control"
+                        ng-model="namespace['left'][$index]"
+                        ng-change="namespacedValueChanged('left', '{{$index}}', true)"
+                        ng-options="operator._name for operator in getFilteredNamespecedList('left') track by operator._name"
+                        options-disabled="!operator.ACTIVE for operator in getFilteredNamespecedList('left')"
+                        ng-disabled="data.disabled"
+                        style="width: 300px;"
+                        ng-hide ="namespaces.namespace.left.length == 0"
+                        required>
+                </select>
+
+                <button type="button" ng-show="expr.left.isContainsSelected && $index == 0"
+                        ng-click="addNewValue('left')"
+                        class="btn btn-default btn-sm btn-plusminus"
+                        ng-disabled="data.disabled">+</button>
+
+                <button type="button" ng-show="expr.left.isContainsSelected && $index > 0"
+                        ng-click="removeValue($index, 'left')"
+                        class="btn btn-default btn-sm btn-plusminus"
+                        ng-disabled="data.disabled">-</button>
+                <h6 ng-show="!validateValue('left', '{{$index}}')" class="error-label">{{validationData.left.valueErrorMsg[$index]}}</h6>
+            </div>
+        </div>
+        <h6 ng-show="hasGeneralError('left')" class="error-label">{{validationData.left.generalErrorMsg}}</h6>
+    </div>
+
+    <div ng-show='expr.isBinary'>
+        {{expr.Type}}
+    </div>
+
+
+    <div ng-show="expr.isBinary">
+        <div style="display: inline-table">
+            <input type="text"
+                   ng-model="expr.right.expName"
+                   ng-hide="expr.right.expOperator=='percent'"
+                   class="form-control"
+                   ng-change="nameChanged('right')"
+                   ng-disabled="data.disabled"
+                   style="width: 300px;"
+                   placeholder="Parameter name"
+                   required>
+            <select
+                    name='operators'
+                    ng-model='expr.right.expOperator'
+                    ng-options='operator.value as operator.name for operator in operators'
+                    ng-selected='0'
+                    ng-change='operatorChanged("right")'
+                    ng-disabled="data.disabled"
+                    placeholder="Parameter name"
+                    class="form-control op-shift">
+            </select>
+            <div class="required-warning">
+                <h6 ng-show="!isNameValid('right')" class="error-label">{{validationData.right.nameErrorMsg}}</h6>
+            </div>
+        </div>
+
+        <div style="display: inline-table">
+            <div ng-repeat="value in expr.right.expValues track by $index">
+
+                <input ng-show="namespaces.namespace.right.length == 0"
+                       type="text"
+                       ng-model="expr.right.expValues[$index]"
+                       class="form-control"
+                       ng-change="valueChanged('right', '{{$index}}', true)"
+                       ng-disabled="data.disabled"
+                       placeholder="Parameter value"
+                       ng-show="namespaces.namespace.right.length == 0"
+                       style="width: 300px;"
+                       required="!expr.right.expOperator=='isEmpty'">
+                <select
+                        class="form-control"
+                        ng-model="namespace['right'][$index]"
+                        ng-change="namespacedValueChanged('right', '{{$index}}', true)"
+                        ng-disabled="data.disabled"
+                        ng-options="operator._name for operator in getFilteredNamespecedList('right') track by operator._name"
+                        options-disabled="!operator.ACTIVE for operator in getFilteredNamespecedList('right')"
+                        style="width: 300px;"
+                        ng-hide ="namespaces.namespace.right.length == 0">
+                </select>
+
+                <button type="button" ng-show="expr.right.isContainsSelected && $index == 0"
+                        ng-click="addNewValue('right')"
+                        class="btn btn-default btn-sm btn-plusminus">+</button>
+
+                <button type="button" ng-show="expr.right.isContainsSelected && $index > 0"
+                        ng-click="removeValue($index, 'right')"
+                        class="btn btn-default btn-sm btn-plusminus">-</button>
+                <div>
+                    <h6 ng-show="!validateValue('right', '{{$index}}', expr.right.expOperator==='isEmpty')" class="error-label">{{validationData.right.valueErrorMsg[$index]}}</h6>
+                </div>
+            </div>
+        </div>
+        <h6 ng-show="hasGeneralError('right')" class="error-label">{{validationData.right.generalErrorMsg}}</h6>
+    </div>
+</div>

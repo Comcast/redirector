@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+    <form ng-class="{'in' : vm.defaultServerToggle}" name="defaultServerForm" role="form" novalidate class="form-inline server-form"
+          ng-class="{'pending' : vm.serverHolder.defaultServer.hasChanges}">
+        <div class="container">
+            <div class="row default-server-row">
+                <div class="pending-status-icon default-server-pending-status-icon pull-left col-xs-1">
+                    <pending-changes-icon changeType=vm.serverHolder.defaultServer.changeType></pending-changes-icon>
+                </div>
+                <div class="col-xs-4">
+                    <h4 class="pull-right">Default server path:</h4>
+                </div>
+                <div class="col-xs-4">
+                    <serverold show-labels="false"
+                               only-simple-mode="true"
+                               show-labels="false"
+                               values=vm.serverHolder.defaultServer
+                               paths=vm.nonSelectedPaths
+                               disabled=false
+                               show-stacks=false
+                               show-whitelisted-count=true
+                               edit-mode="vm.serverHolder.defaultServer.editMode"
+                               on-changed="vm.changeDefaultServer()"></serverold>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

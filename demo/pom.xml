@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.comcast.apps.redirector.framework</groupId>
+        <artifactId>redirector-framework</artifactId>
+        <version>3.0.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>redirector-demo</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.1</version>
+    <name>Redirector Demo</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.comcast.apps.redirector.framework</groupId>
+            <artifactId>redirector-webService</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.comcast.apps.redirector.framework</groupId>
+            <artifactId>redirector-gateway</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>Redirector Docker demo</finalName>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <verbose>true</verbose>
+                    <dockerHost>${docker.host}</dockerHost>
+                    <!-- There is a pull request that will automate retrieving certPath - https://github.com/fabric8io/docker-maven-plugin/pull/437 -->
+                    <certPath>${cert.path}</certPath>
+                    <images>
+                        <image>
+                            <name>appds/redirector-zookeeper</name>
+                            <alias>zookeeper</alias>
+                            <build>
+                                <dockerFileDir>zookeeper</dockerFileDir>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>2181:2181</port>
+                                </ports>
+                            </run>
+                        </image>
+                        <image>
+                            <name>appds/redirector-admin-ux</name>
+                            <alias>admin-ux</alias>
+                            <build>
+                                <from>jetty</from>
+                                <ports>
+                                    <port>8080</port>
+                                </ports>
+                                <runCmds>
+                                    <run>mkdir -p /run/jetty /tmp/jetty</run>
+                                    <run>chmod -R 1777 /tmp</run>
+                                    <run>chown -R jetty:jetty /var/lib/jetty /run/jetty /tmp/jetty</run>
+                                </runCmds>
+                                <assembly>
+                                    <mode>dir</mode>
+                                    <basedir>/var/lib/jetty</basedir>
+                                    <inline xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2">
+                                        <id>redirector-admin-ux</id>
+                                        <dependencySets>
+                                            <dependencySet>
+                                                <includes>
+                                                    <include>com.comcast.apps.redirector.framework:redirector-webService:war</include>
+                                                </includes>
+                                                <outputDirectory>./webapps</outputDirectory>
+                                                <outputFileNameMapping>redirectorWebService.war</outputFileNameMapping>
+                                            </dependencySet>
+                                        </dependencySets>
+                                        <files>
+                                            <file>
+                                                <source>src/main/docker/admin-ux/resources/service.properties</source>
+                                                <outputDirectory>./resources</outputDirectory>
+                                            </file>
+                                        </files>
+                                    </inline>
+                                    <user>jetty:jetty</user>
+                                </assembly>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>10540:8080</port>
+                                </ports>
+                                <links>
+                                    <link>zookeeper:zookeeper</link>
+                                </links>
+                            </run>
+                        </image>
+                        <image>
+                            <name>appds/redirector-gateway</name>
+                            <alias>redirector-gateway</alias>
+                            <build>
+                                <from>java:8u92-jdk-alpine</from>
+                                <ports>
+                                    <port>10601</port>
+                                </ports>
+                                <runCmds>
+                                    <run>apk add --no-cache bash</run>
+                                </runCmds>
+                                <assembly>
+                                    <mode>dir</mode>
+                                    <basedir>/opt/redirector</basedir>
+                                    <inline xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2">
+                                        <id>redirector-gateway</id>
+                                        <dependencySets>
+                                            <dependencySet>
+                                                <excludes>
+                                                    <exclude>com.comcast.apps.redirector.framework:redirector-webService</exclude>
+                                                </excludes>
+                                                <outputDirectory>./jars</outputDirectory>
+                                            </dependencySet>
+                                        </dependencySets>
+                                        <files>
+                                            <file>
+                                                <source>src/main/docker/gateway/conf/redirector.properties</source>
+                                                <outputDirectory>./conf</outputDirectory>
+                                            </file>
+                                        </files>
+                                    </inline>
+                                </assembly>
+                                <entryPoint>java -Xms768m -Xmx768m \
+                                    -Dxre.include.site=redirector.properties \
+                                    -Djava.rmi.server.hostname=redirector-gateway \
+                                    -Dcom.sun.management.jmxremote.localConnectorAddress=redirector-gateway \
+                                    -Dcom.sun.management.jmxremote=true \
+                                    -Dcom.sun.management.jmxremote.port=3334 \
+                                    -Dcom.sun.management.jmxremote.local.only=false \
+                                    -Dcom.sun.management.jmxremote.authenticate=false \
+                                    -Dcom.sun.management.jmxremote.ssl=false \
+                                    -cp /opt/redirector/conf:/opt/redirector/jars/* com.comcast.redirector.RedirectorMain
+                                </entryPoint>
+                            </build>
+                            <run>
+                                <ports>
+                                    <port>10601:10601</port>
+                                </ports>
+                                <links>
+                                    <link>zookeeper:zookeeper</link>
+                                    <link>admin-ux:admin-ux</link>
+                                </links>
+                                <hostname>
+                                    redirector-gateway
+                                </hostname>
+                            </run>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

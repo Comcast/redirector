@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="report">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/report.css"/>
+</head>
+<body>
+<div id="report" ng-controller="reportController">
+
+    <div class="container">
+        <div class="form-group row">
+            <div class="col-lg-4">
+                <h2>E2E test summary: <span class="status" ng-class="{failed: generalResult === TEST_STATUS.FAILED}" ng-bind="generalResult"></span></h2>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <div class="container">
+        <div class="form-group row">
+            <div class="col-lg-4">
+                <h4>Detailed report</h4>
+            </div>
+            <div class="col-lg-4">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="testType">TestType</label>
+                        <select ng-model="currentTest" class="form-control" id="testType"
+                                ng-options="testType for testType in testTypes" ng-change="submitTheForm()"></select>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-4" ng-show="(currentTest === TEST_TYPE.MAIN_TEST) && !isEmptyReportList()">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="application">Application</label>
+                        <select ng-model="application" class="form-control" id="application"
+                                ng-options="app for app in applications" ng-change="submitTheForm()"></select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" ng-show="isEmptyReportList()">
+        <div class="col-lg-10">
+            <div class="jumbotron">
+                <h2>
+                    <p class="text-center">
+                        Empty Report List
+                    </p>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="row" ng-if="currentTest === TEST_TYPE.MAIN_TEST">
+            <div class="col-lg-12 report" ng-repeat="item in reportItems track by $index">
+                <div class="col-lg-4 name">
+                    <span class="name" ng-bind="item.testCase.name" ng-click="hideOrShow($index)"></span>
+                </div>
+                <div class="col-lg-1">
+                    <span class="status" ng-class="{failed:isFailed($index)}" ng-bind="item.status"
+                          ng-click="hideOrShow($index)"></span>
+                </div>
+                <div class="col-lg-6 logs" ng-click="hideOrShow($index)">
+                    <div class="logs" ng-repeat="log in item.logs track by $index">
+                        <span ng-bind="log"></span>
+                    </div>
+                    <div class="logs">
+                        <span>url rules applied: {{arrayToString(item.actual.appliedUrlRules) || 'none'}}</span>
+                    </div>
+                </div>
+                <div class="body-report" ng-hide="!hide[$index]">
+                    <table class="table">
+                        <colgroup>
+                            <col style="width:20%">
+                            <col style="width:40%">
+                            <col style="width:40%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Actual</th>
+                            <th>Expected</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-class="{danger:isNotEquals(item.actual.protocol, item.testCase.expected.protocol)}">
+                            <td class="td-right"><span class="label label-default "> Protocol: </span></td>
+                            <td><span ng-bind="item.actual.protocol"></span></td>
+                            <td><span ng-bind="item.testCase.expected.protocol"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.port, item.testCase.expected.port)}">
+                            <td class="td-right"><span class="label label-default ">Port:</span></td>
+                            <td><span ng-bind="item.actual.port"></span></td>
+                            <td><span ng-bind="item.testCase.expected.port"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.ipVersion, item.testCase.expected.ipVersion)}">
+                            <td class="td-right"><span class="label label-default ">IpVersion:</span></td>
+                            <td><span ng-bind="item.actual.ipVersion"></span></td>
+                            <td><span ng-bind="item.testCase.expected.ipVersion"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.urn, item.testCase.expected.urn)}">
+                            <td class="td-right"><span class="label label-default ">URN:</span></td>
+                            <td><span ng-bind="item.actual.urn"></span></td>
+                            <td><span ng-bind="item.testCase.expected.urn"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.xreStack, item.testCase.expected.xreStack)}">
+                            <td class="td-right"><span class="label label-default ">xreStack:</span></td>
+                            <td><span ng-bind="item.actual.xreStack"></span></td>
+                            <td><span ng-bind="item.testCase.expected.xreStack"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.flavor, item.testCase.expected.flavor)}">
+                            <td class="td-right"><span class="label label-default ">Flavor:</span></td>
+                            <td><span ng-bind="item.actual.flavor"></span></td>
+                            <td><span ng-bind="item.testCase.expected.flavor"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.rule, item.testCase.expected.rule)}">
+                            <td class="td-right"><span class="label label-default ">Rule</span></td>
+                            <td><span ng-bind="item.actual.rule"></span></td>
+                            <td><span ng-bind="item.testCase.expected.rule"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:!appliedUrlRulesMatch(item.actual.appliedUrlRules, item.testCase.expected.appliedUrlRules)}">
+                            <td class="td-right"><span class="label label-default ">URL Rule:</span></td>
+                            <td><span ng-bind="arrayToString(item.actual.appliedUrlRules)"></span></td>
+                            <td><span ng-bind="arrayToString(item.testCase.expected.appliedUrlRules)"></span></td>
+                        </tr>
+                        <tr ng-class="{danger:isNotEquals(item.actual.responseType, item.testCase.expected.responseType)}">
+                            <td class="td-right"><span class="label label-default ">Response Type:</span></td>
+                            <td><span ng-bind="item.actual.responseType"></span></td>
+                            <td><span ng-bind="item.testCase.expected.responseType"></span></td>
+                        </tr>
+                        <tr ng-show="flavorRulesUnderTest[$index]">
+                            <td class="td-right"><span class="label label-default ">Rule under test:</span></td>
+                            <td colspan="2"><pre ng-bind="flavorRulesUnderTest[$index]"></pre></td>
+                        </tr>
+                        <tr ng-show="distributionRulesUnderTest[$index]">
+                            <td class="td-right"><span class="label label-default ">Rule under test:</span></td>
+                            <td colspan="2"><pre ng-bind="distributionRulesUnderTest[$index]"></pre></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div ng-if="currentTest === TEST_TYPE.EXTRA_TEST" ng-repeat="item in reportItems track by $index">
+            <div class="row">
+                <div class="col-lg-12 report">
+                    <div class="col-lg-4 name">
+                        <span class="name" ng-bind="item.name" ng-click="hideOrShow($index)"></span>
+                    </div>
+                    <div class="col-lg-1">
+                    <span class="status" ng-class="{failed:isFailed($index)}" ng-bind="item.status"
+                          ng-click="hideOrShow($index)"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="body-report" ng-hide="!hide[$index]">
+                        <pre style="height: 600px; overflow: scroll;" ng-bind="item.details"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+
+</body>
+</html>

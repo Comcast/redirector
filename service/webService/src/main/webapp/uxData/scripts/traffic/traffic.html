@@ -1,0 +1,234 @@
+<div>
+    <div class="panel panel-warning panel-horizontal">
+        <div class="panel-heading">
+            <h5>Traffic Shaping</h5>
+        </div>
+        <form name="trafficForm">
+            <div class="panel-body">
+                <div class="row vertical-align">
+                    <div class="col-md-3">
+                        <div class="form-group" ng-class="{ 'has-error': trafficForm.connectionThreshold.$invalid}">
+                            <label>Connection threshold per host: </label>
+                            <input type="text"
+                                   convert-number
+                                   class="form-control"
+                                   name="connectionThreshold"
+                                   ng-model="vm.trafficInputParams.connectionThreshold"
+                                   placeholder="Connection threshold of a single host">
+                            <h6 ng-show="trafficForm.connectionThreshold.$invalid" class="error-label"><span> Value is not correct</span>
+                            </h6>
+
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': trafficForm.totalNumberConnections.$invalid }">
+                        <div class="col-md-3">
+                            <label>Total actual number of connections:</label>
+                            <input type="text"
+                                   convert-number
+                                   class="form-control"
+                                   name="totalNumberConnections"
+                                   ng-model="vm.trafficInputParams.totalNumberConnections"
+                                   placeholder="Total actual number of connections">
+                            <h6 ng-show="trafficForm.totalNumberConnections.$invalid" class="error-label"><span> Value is not correct</span>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Panel with input fields-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">Traffic Addition / Adjusted Weight calculation input params (optional):</div>
+                    <div class="panel-body">
+                        <div class="row vertical-align">
+                            <div class="col-md-3">
+                                <label for="calculateMode" align="center">Calculate:</label>
+                                <select class="form-control template-input-size"
+                                        name="trafficInputParams"
+                                        id="calculateMode"
+                                        ng-model="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode"
+                                        ng-options="value.value as value.name for value in vm.adjustedTrafficCalculationModes">
+                                    <option value=""/>
+                                </select>
+                            </div>
+                        </div>
+
+                        <ul class="list-group">
+
+                            <li class="list-group-item input-params-table input-params-row-blue">
+                                <adjusted-input-param
+                                    adjusted-params="vm.trafficInputParams.adjustedTrafficInputParams.defaultServer"
+                                    mode="vm.trafficInputParams.adjustedTrafficInputParams"/>
+                            </li>
+
+                            <li class="list-group-item"
+                                ng-class="{'input-params-row-blue' : $index%2 != 0, 'input-params-row-yellow' : $index%2 == 0}"
+                                ng-repeat="distribution in vm.trafficInputParams.adjustedTrafficInputParams.distributions track by $index">
+                                <adjusted-input-param adjusted-params="distribution" mode="vm.trafficInputParams.adjustedTrafficInputParams"/>
+                            </li>
+
+                        </ul>
+
+                <!--Results vertical-->
+                <div class="panel panel-info" ng-if="vm.horizontalTableOrientation">
+                    <div class="panel-heading clearfix">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div>
+                                    <b>Total count of all hosts under whitelisted-stacks for a given flavor</b>
+                                </div>
+                            </div>
+
+                    </div>
+                    </div>
+                    <form role="form" name="verticalForm">
+                        <div class="panel-body">
+                            <div ng-show="vm.trafficInputParams.loading">
+                                <div class="jumbotron">
+                                    <p class="text-center"> Loading... </p>
+                                </div>
+                            </div>
+                            <table class="table" show-filter="false">
+                                <colgroup>
+                                    <col width="33%">
+                                </colgroup>
+
+                                <tbody>
+                                    <tr>
+                                        <td align="center"><b>Flavor</b></td>
+                                        <td align="center"><b>{{vm.traffic.defaultServer.title}}</b></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" align="center"><b>{{distribution.title}}</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Expected possible number of connections</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.numberConnections | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.numberConnections | numeraljs" align="center"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Total connection limit</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.totalConnectionLimit | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.totalConnectionLimit | numeraljs" align="center"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Possible connections/host</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.connectionsHostRatio | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.connectionsHostRatio | numeraljs" align="center"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Possible connections/adjusted weighted host</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.adjustedWeightedHostPossibleTraffic | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.adjustedWeightedHostPossibleTraffic | numeraljs" align="center">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Possible connections/default weighted host</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.defaultWeightedHostPossibleTraffic | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.defaultWeightedHostPossibleTraffic | numeraljs" align="center">-</td>
+                                    </tr>
+                                    <tr ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode !== 'ADJUSTED_WEIGHT'">
+                                        <td align="left"><b>% Traffic Addition</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.adjustedThresholdHumanReadable" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.adjustedThresholdHumanReadable" align="center">-</td>
+                                    </tr>
+                                    <tr ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode == 'ADJUSTED_WEIGHT'">
+                                        <td align="left"><b>Adjusted weight required</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.adjustedWeight" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.adjustedWeight" align="center"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Adjusted weighted hosts traffic</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.adjustedWeightedHostsTraffic | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.adjustedWeightedHostsTraffic | numeraljs" align="center">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><b>Default weighted hosts traffic</b></td>
+                                        <td ng-bind="vm.traffic.defaultServer.defaultWeightedHostsTraffic | numeraljs" align="center"></td>
+                                        <td ng-repeat="distribution in vm.traffic.distributions" ng-bind="distribution.defaultWeightedHostsTraffic | numeraljs" align="center">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Results horizontal-->
+                <div class="panel panel-info" ng-if="!vm.horizontalTableOrientation">
+                    <div class="panel-heading clearfix">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div>
+                                    <b>Total count of all hosts under whitelisted-stacks for a given flavor</b>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <form role="form" name="horizontalForm">
+                        <div class="panel-body">
+                            <div ng-show="vm.trafficInputParams.loading">
+                                <div class="jumbotron">
+                                    <p class="text-center"> Loading... </p>
+                                </div>
+                            </div>
+                            <table class="table" show-filter="false">
+                                <colgroup>
+                                    <col width="18%">
+                                </colgroup>
+
+                                <tr>
+                                    <td align="center" valign="bottom"><b>Flavors</b></td>
+                                    <td align="center"><b>Expected possible number of connections</b></td>
+                                    <td align="center"><b>Total connection limit</b></td>
+                                    <td align="center"><b>Possible connections/host</b></td>
+                                    <td align="center"><b>Possible connections/adjusted weighted host</b></td>
+                                    <td align="center"><b>Possible connections/default weighted host</b></td>
+                                    <td align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode !== 'ADJUSTED_WEIGHT'"><b>% Traffic Addition</b></td>
+                                    <td align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode == 'ADJUSTED_WEIGHT'"><b>Adjusted weight required</b></td>
+                                    <td align="center"><b>Adjusted weighted hosts traffic</b></td>
+                                    <td align="center"><b>Default weighted hosts traffic</b></td>
+                                </tr>
+
+                                <tbody>
+                                <tr>
+                                    <td ng-bind="vm.traffic.defaultServer.title" align="left" style="word-break: break-all"/>
+
+                                    <td ng-bind="vm.traffic.defaultServer.numberConnections | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.totalConnectionLimit | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.connectionsHostRatio | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.adjustedWeightedHostPossibleTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.defaultWeightedHostPossibleTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.adjustedThreshold" align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode !== 'ADJUSTED_WEIGHT'"/>
+                                    <td ng-bind="vm.traffic.defaultServer.adjustedWeight" align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode == 'ADJUSTED_WEIGHT'"/>
+                                    <td ng-bind="vm.traffic.defaultServer.adjustedWeightedHostsTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="vm.traffic.defaultServer.defaultWeightedHostsTraffic | numeraljs" align="center"/>
+                                </tr>
+                                <tr ng-repeat="distribution in vm.traffic.distributions" style="word-break: break-all">
+                                    <td ng-bind="distribution.title" align="left"/>
+                                    <td ng-bind="distribution.numberConnections | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.totalConnectionLimit | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.connectionsHostRatio | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.adjustedWeightedHostPossibleTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.defaultWeightedHostPossibleTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.adjustedThreshold" align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode !== 'ADJUSTED_WEIGHT'"/>
+                                    <td ng-bind="distribution.adjustedWeight" align="center" ng-show="vm.trafficInputParams.adjustedTrafficInputParams.adjustedTrafficCalculationMode == 'ADJUSTED_WEIGHT'"/>
+                                    <td ng-bind="distribution.adjustedWeightedHostsTraffic | numeraljs" align="center"/>
+                                    <td ng-bind="distribution.defaultWeightedHostsTraffic | numeraljs" align="center"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+
+                <!--Reset button-->
+                <div>
+                    <progress-button id="reload"
+                                     look="'btn-primary'"
+                                     on-click="vm.reloadTraffic()"
+                                     disabled="trafficForm.totalNumberConnections.$invalid || trafficForm.connectionThreshold.$invalid"
+                                     progress-condition="false"
+                                     title="'Reload'">
+                    </progress-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

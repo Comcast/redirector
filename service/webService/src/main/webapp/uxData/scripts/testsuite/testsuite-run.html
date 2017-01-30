@@ -1,0 +1,100 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="form-group">
+    <h1>Show rule test cases
+        <small ng-bind="$root.currentApplication"></small>
+    </h1>
+    <p>
+        <button class="btn btn-primary" ng-click="vm.goToShowPage()">Back</button>
+    </p>
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <div ng-show="vm.testCases.length === 0">
+                <div class="jumbotron">
+                    <p class="text-center">{{vm.loading ? "Loading" : "Empty"}}</p>
+                </div>
+            </div>
+            <table ng-table="vm.tableParams" class="table testsuite-table-run" show-filter="false">
+                <colgroup>
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="50%">
+                    <col width="15%">
+                </colgroup>
+                <tbody ng-repeat="testCase in $data">
+                    <tr>
+                        <td data-title="'Version'"
+                            ng-bind="vm.testNamesToRunNext.indexOf(testCase.testName) >= 0 ? 'NEXT' : 'CURRENT'">
+                        </td>
+                        <td data-title="'Status'" sortable="'status'">
+                            <div class="col-xs-1" ng-show="testCase.error">
+                                <span ng-bind="'Running error'"
+                                    class="label-warning">
+                                </span>
+                            </div>
+                            <div class="col-xs-1" ng-hide="testCase.actual !== undefined || (testCase.error)">
+                                <span ng-bind="'Running...'"
+                                      class="label-primary">
+                                </span>
+                            </div>
+                            <div class="col-xs-1" ng-show="testCase.actual !== undefined">
+                                <span ng-bind="(testCase.status == 'FAILED') ? 'Failed' : 'Passed'"
+                                    ng-class="(testCase.status == 'FAILED') ? 'label-danger' : 'label-success'">
+                                </span>
+                            </div>
+                        </td>
+                        <td data-title="'Name'" sortable="'testName'">
+                            <p
+                                    ng-bind="testCase.testName" class="testcasename"></p>
+                        </td>
+                        <td data-title="'Description'">
+                            <div ng-show="testCase.actual !== undefined">
+                                <pre class="cursor-pointer testcaselog" ng-click="vm.changeExpanded(testCase)" ng-bind="vm.generateDiffStringForTestResult(testCase)"></pre>
+                            </div>
+                        </td>
+                        <td data-title="'Action'">
+                            <!-- Split button -->
+                            <div class="btn-group pull-left">
+                                <button type="button" class="btn btn-primary fa fa-play"
+                                        ng-click="vm.reRun(testCase, vm.testNamesToRunNext.indexOf(testCase.testName) >= 0 ? 'NEXT' : 'CURRENT')"> Rerun
+                                </button>
+                                <button type="button" class="btn btn-primary fa dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" class="fa fa-caret-left"
+                                           ng-click="vm.changeExpanded(testCase)"> {{testCase.expanded === true ?
+                                            "Simple" : "Diff"}} view</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </tr>
+                    <tr class="expanded-view" ng-show="testCase.expanded">
+                        <td colspan="5">
+                        <diff base-head-title="'Expected'"
+                              base-text="testCase.expectedText"
+                              changed-head-title="'Actual'"
+                              changed-text="testCase.actualText"
+                              type="'testSuite'"></diff>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

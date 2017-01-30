@@ -1,0 +1,154 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1>Namespaced list (<span id="editNamespacedListTypeSpan" ng-bind="vm.namespace.type"></span>) </h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="add_namespace" role="form" novalidate>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group" ng-class="{'has-error': add_namespace.namespacedListName.$invalid}">
+                            <label for="namespacedListName">Namespaced list name</label>
+                            <input type="text" class="form-control" id="namespacedListName" name="namespacedListName"
+                                   ng-model="vm.namespace.name"
+                                   placeholder="Enter name"
+                                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                                   ng-class="{'has-error': add_namespace.namespacedListName.$invalid}"
+                                   ng-change="vm.name = vm.namespace.name"
+                                   ng-disabled="!vm.isAddState || parent.isSaving">
+
+                            <div class="form-group has-error"
+                                 ng-show="add_namespace.namespacedListName.$invalid && !add_namespace.namespacedListName.$pristine">
+                                <label class="control-label">Namespaced list name is required and must contain only word
+                                    characters, i.e. letters, numbers and _</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="namespacedListDescription">Description</label>
+                            <textarea class="form-control" rows="3" id="namespacedListDescription" name="namespacedListDescription"
+                                      placeholder="Enter description"
+                                      ng-disabled="add_namespace.namespacedListName.$invalid || parent.isSaving"
+                                      ng-model="vm.namespace.description"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="valueToAdd">Add value</label>
+                        <span class="input-group" ng-class="{'has-error': add_namespace.valueToAdd.$invalid}">
+                            <input
+                                    name="valueToAdd"
+                                    id="valueToAdd"
+                                    ng-model="vm.uiModelHolder.value "
+                                    ng-disabled="add_namespace.namespacedListName.$invalid || parent.isSaving"
+                                    type="text"
+                                    ui-validate="{duplicate: 'vm.isValueUnique($value)' }"
+                                    class="form-control"
+                                    aria-describedby="errorBlock"
+                                    placeholder="Input new value">
+                            <span class="input-group-btn">
+                                <button type="button" id="addValueButton" class="btn btn-primary"
+                                        ng-disabled="add_namespace.namespacedListName.$invalid
+                                       || add_namespace.namespacedListDescription.$invalid
+                                       || add_namespace.valueToAdd.$invalid
+                                       || vm.uiModelHolder.value.length === 0
+                                       || parent.isSaving"
+                                        ng-click="vm.addValue(vm.name, vm.uiModelHolder.value )"><span class="fa fa-plus"></span>
+                                </button>
+                            </span>
+                        </span>
+
+                        <div class="form-group has-error" ng-show="add_namespace.valueToAdd.$error.duplicate">
+                            <label id="errorBlock" class="error-block control-label">Duplicate item</label>
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+
+
+                <!--UPLOAD SECTION -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Or select the file with newline-separated paths</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <file-select on-change="vm.getFile"></file-select>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div id="alertContainer"></div>
+
+                <br/>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-success">
+                            <div class="panel-heading clearfix">
+                                <h4 class="top7_5 panel-title pull-left margin-bottom-sm">Namespaced list values</h4>
+                            </div>
+                            <div class="panel-body">
+                                <table ng-table="vm.tableParams" class="table" show-filter="true">
+                                    <colgroup ng-if="vm.namespace.type!='ENCODED'">
+                                        <col width="80%">
+                                        <col width="10%">
+                                    </colgroup>
+                                    <colgroup ng-if="vm.namespace.type=='ENCODED'">
+                                        <col width="40%">
+                                        <col width="40%">
+                                        <col width="10%">
+                                    </colgroup>
+                                    <tr ng-repeat="value in $data">
+                                        <td ng-show="vm.namespace.type=='ENCODED'" data-title="'Encoded value'" sortable="'encodedValue'" filter="{ 'encodedValue': 'text' }">
+                                            <h5 ng-bind="value.encodedValue"></h5>
+                                        </td>
+                                        <td data-title="'Value'" sortable="'value'" filter="{ 'value': 'text' }">
+                                            <h5 ng-bind="value.value != undefined ? value.value : 'Not yet encrypted'"></h5>
+                                        </td>
+                                        <td data-title="'Remove'">
+                                            <button type="button" class="btn btn-default"
+                                                    ng-disabled="parent.isSaving"
+                                                    ng-click="vm.delValue(vm.name, value)">
+                                                <span class="fa"> Remove</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <progress-button id="saveEntity"
+                                 look="'btn-primary'"
+                                 disabled="add_namespace.namespacedListName.$invalid
+                             || add_namespace.namespacedListDescription.$invalid
+                             || vm.namespace.name.length < 1
+                             || $root.isSaving"
+                                 progress-condition="$root.isSaving"
+                                 on-click="vm.saveNamespace(vm.name)"
+                                 title="'Save'">
+                </progress-button>
+            </form>
+        </div>
+    </div>
+</div>

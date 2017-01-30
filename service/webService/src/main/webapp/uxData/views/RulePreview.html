@@ -1,0 +1,76 @@
+<div class="panel"
+     ng-class="{'focus': focus === true, 'focusError': error.showError, 'panel-success': data.changeType == 'ADD',  'panel-danger': data.changeType == 'DELETE' , 'panel-info': data.changeType == 'UPDATE', 'panel-default': true}"
+     id="{{ruleId}}">
+    <div class="panel-heading">
+        <label ng-bind="'Name:' + ruleId"></label>
+        <label ng-if='data.rule.templateName' ng-bind="' (Depends on template: ' + data.rule.templateName + ')'"></label>
+        <label ng-if='data.dependentRules' ng-bind="data.dependentRules"></label>
+        <div class="pull-right">
+            <pending-changes-icon changeType=data.changeType></pending-changes-icon>
+            <span ng-if="isImporting && !(ruleType == 'deciderRule')">
+                <label>Import as template
+                    <input ng-init="data.asTemplate = false"  type="checkbox"
+                    ng-model="data.asTemplate">
+                </label>
+            </span>
+        </div>
+    </div>
+    <div class="panel-body">
+    <div ng-repeat="path in data.path track by $index">
+        <div style="font-size: 13px" ng-class="{'bg-success': path.nodes > 0, 'bg-danger': (path.nodes == 0 && (isSimpleMode(data, $index))), 'bg-info': !isSimpleMode(data, $index)}" class="container-padding-sm-v monospaces">
+            <label ng-if="isSimpleMode(data, $index)" ng-bind="path.value"></label>
+            <label ng-if="path.nodes && isSimpleMode(data, $index)" ng-bind="'(Nodes: ' + path.nodes +')'"></label>
+            <label ng-if="((path.nodes == 0) && isSimpleMode(data, $index))">Inactive</label>
+            <label ng-if="path.isNonWhitelisted">Non-Whitelisted</label>
+        </div>
+    </div>
+    <div ng-if="hasAdvancedServers()" class="advanced-servers-label container-padding-sm-v bg-info">
+        <label ng-bind="'Server Group: ' + advancedServersCount + ' more advanced server(s)'"></label>
+    </div>
+    <div class="container-padding" style="background-color: #eee">
+        <div id="collapse_{{data.id}}" class="panel-collapse collapse in" ng-if="data.changeType && viewMode == VIEW_MODES.DIFF_XML">
+            <diff base-text="data.diffRuleCurrentText" changed-text="data.diffRuleChangedText"></diff>
+        </div>
+        <div  class="rule-simple-view" ng-if="viewMode == VIEW_MODES.SIMPLE" ng-bind="data.simpleRuleCurrent"></div>
+        <rule-xml-view ng-if="viewMode == VIEW_MODES.XML" data=data.xmlRuleCurrent></rule-xml-view>
+    </div>
+    <button ng-click="onShowSimple()" ng-if="viewMode !== VIEW_MODES.SIMPLE" class="btn btn-link btn-xs">Simple View</button>
+    <button ng-click="onShowXML()" ng-if="viewMode !== VIEW_MODES.XML" class="btn btn-link btn-xs">XML View</button>
+    <button ng-click="onShowDiff()" ng-if="!hideDiffButton()" class="btn btn-link btn-xs diff-view-button">Diff View</button>
+    <button ng-click="onEditRule()" id="editRule_{{data.id}}" class="btn btn-primary btn-xs edit-rule-button" ng-if="isEditable()"
+            ng-disabled="(data.hasChanges && data.changeType == 'DELETE')
+                        || (ruleType == 'rule' && !authService.isAuthorized(USER_PERMISSIONS().writeRules))
+                        || (ruleType == 'urlRule' && !authService.isAuthorized(USER_PERMISSIONS().writeUrlRules))
+                        || (ruleType == 'deciderRule' && !authService.isAuthorized(USER_PERMISSIONS().readDeciderRules))">Edit</button>
+    <progress-button size="'btn-xs'"
+                     ng-if="!isImporting"
+                     look="'btn-default  delete-rule-button'"
+                     disabled="data.isDeleting
+                        || (data.hasChanges && data.changeType == 'DELETE')
+                        || (ruleType == 'rule' && !authService.isAuthorized(USER_PERMISSIONS().writeRules))
+                        || (ruleType == 'urlRule' && !authService.isAuthorized(USER_PERMISSIONS().writeUrlRules))
+                        || (ruleType == 'deciderRule' && !authService.isAuthorized(USER_PERMISSIONS().writeDeciderRules))"
+                     progress-condition="data.isDeleting"
+                     on-click="onDeleteRule()"
+                     id="deleteRule_{{data.id}}"
+                     title="'Delete'"></progress-button>
+    <progress-button size="'btn-xs'"
+                     look="'btn-default'"
+                     ng-if="!(data.changeType === 'ADD' || isImporting || $root.redirectorOfflineMode)"
+                     disabled="data.isDeleting"
+                     progress-condition="false"
+                     on-click="exportRule(ruleId, ruleType)"
+                     id="exportRule_{{data.id}}"
+                     title="'Export'"></progress-button>
+
+        <progress-button
+                         look="'btn-default'"
+                         ng-if="isImporting"
+                         progress-condition="false"
+                         on-click="onRuleImport(ruleId, data.asTemplate, ruleType)"
+                         title="'Import'"></progress-button>
+        <h6 ng-if="error.showError" class="error-label">
+            <span ng-bind="error.message"></span>
+        </h6>
+        </div>
+</div>

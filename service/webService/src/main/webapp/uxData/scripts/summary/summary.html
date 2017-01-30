@@ -1,0 +1,107 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1>Summary
+        <small ng-bind="$root.currentApplication"></small>
+    </h1>
+    <div id="alertContainer"></div>
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <div class="row">
+                <div class="col-sm-10">
+                    <div class="break-word">
+                        <b>Selected namespaced lists:</b>
+                        <a ng-repeat="selectedNamespacedListName in vm.selectedNamespaces"
+                           ng-click="vm.editNamespaces(selectedNamespacedListName)"
+                           class="cursor-pointer">
+                            {{selectedNamespacedListName}}{{$last ? '' : ', '}}
+                        </a>
+                     </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="group pull-right">
+                        <div class="marging-summary">
+                            <multiselect class="input-xlarge" multiple="true"
+                                         ng-model="vm.selectedNamespaces"
+                                         options="nameNamespace for nameNamespace in  vm.namespaces.namespace"></multiselect>
+                            <button type="button" class="btn btn-primary btn-md dropdown-toggle"
+                                    ng-click="vm.reloadSummary()"
+                                    ng-disabled="vm.hasReloadSummary()">
+                                Reload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form role="form">
+            <div class="panel-body">
+                <div ng-show="vm.loading">
+                    <div class="jumbotron">
+                        <p class="text-center"> Loading... </p>
+                    </div>
+                </div>
+                <table ng-table="vm.tableParams" class="table" show-filter="false" ng-show="!vm.loading">
+                    <colgroup>
+                        <col width="2%">
+                        <col width="35%">
+                        <col width="12%">
+                        <col width="38%">
+                        <col width="10%">
+                    </colgroup>
+
+                    <tbody ng-repeat="value in $data">
+                    <tr>
+                        <td data-title="'#'">1</td>
+                        <td data-title="'Release'" ng-bind="value.defaultServer.release"></td>
+                        <td data-title="'Distribution'"
+                            ng-bind="value.defaultServer.distribution"></td>
+                        <td data-title="'Traffic'">
+                            <a ng-bind="value.defaultServer.traffic"
+                               ng-click="vm.distributionPage()"
+                               class="cursor-pointer"> </a>
+                        </td>
+                        </td>
+                        <td data-title="'Nodes'" ng-bind="value.defaultServer.node"></td>
+                    </tr>
+                    <tr ng-repeat="distribution in value.distributions">
+                        <td data-title="'#'" ng-bind="distribution.pos"></td>
+                        <td data-title="'Release'" ng-bind="distribution.release"></td>
+                        <td data-title="'Distribution'" ng-bind="distribution.distribution"></td>
+                        <td data-title="'Traffic'">
+                            <a ng-bind="distribution.traffic"
+                               ng-click="vm.distributionPage()"
+                               class="cursor-pointer"> </a>
+                        </td>
+                        <td data-title="'Nodes'" ng-bind="distribution.node"></td>
+                    </tr>
+                    <tr ng-repeat="rule in value.rules">
+                        <td data-title="'#'" ng-bind="rule.pos"></td>
+                        <td data-title="'Release'" ng-bind="rule.release"></td>
+                        <td data-title="'Distribution'"></td>
+                        <td data-title="'Traffic'">
+                            <a ng-repeat="namespacedListName in rule.namespacedListNames"
+                               ng-click="vm.editNamespaces(namespacedListName)"
+                               class="cursor-pointer">
+                                {{namespacedListName}}{{$last ? '' : ', '}}
+                            </a>
+                        </td>
+                        <td data-title="'Nodes'" ng-bind="rule.node"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

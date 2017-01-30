@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+    <beans>
+        <bean id="daoFactory" class="com.comcast.redirector.dataaccess.dao.DAOFactory">
+            <constructor-arg name="connector" ref="connector"/>
+            <constructor-arg name="serializer" ref="xmlSerializer"/>
+        </bean>
+
+    <bean id="whitelistUpdatesDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+        <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="WHITELIST_UPDATES" />
+        <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.whitelisted.WhitelistedStackUpdates" />
+        <constructor-arg name="isCompressed" value="false" />
+    </bean>
+
+        <bean id="applicationsDAO" factory-bean="daoFactory" factory-method="getListDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="APPLICATIONS"/>
+            <constructor-arg name="modelClass" type="java.lang.Class" value="java.lang.String"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="nodeVersionDao" factory-bean="daoFactory" factory-method="getNodeVersionDAO"></bean>
+        <bean id="whitelistDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="WHITELIST"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.whitelisted.Whitelisted"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="stackCommentsDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="STACK_COMMENTS" />
+            <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.StackComment" />
+            <constructor-arg name="isCompressed" value="false" />
+        </bean>
+        <bean id="flavorRulesDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="RULE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.IfExpression"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="templateFlavorRulesDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="TEMPLATE_RULE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.IfExpression"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="urlRulesDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="URL_RULE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.IfExpression"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="templateUrlRulesDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="TEMPLATE_URL_RULE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.IfExpression"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="serverDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="SERVER"/>
+            <constructor-arg name="modelClass" type="java.lang.Class" value="com.comcast.redirector.api.model.Server"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="urlParamsDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="URL_PARAMS"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.url.rule.UrlRule"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="distributionDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="DISTRIBUTION"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.distribution.Distribution"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="testSuiteDAO" factory-bean="daoFactory" factory-method="getListServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="TEST_CASE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.testsuite.RedirectorTestCase"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="coreBackupPendingChangeDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="CORE_BACKUP_PENDING_CHANGES_STATUS"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.pending.PendingChangesStatus"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+
+        <bean id="coreBackupNamespaceChangesDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="CORE_BACKUP_NAMESPACES_CHANGES_STATUS" />
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.namespaced.NamespaceChangesStatus" />
+            <constructor-arg name="isCompressed" value="true" />
+        </bean>
+
+        <bean id="namespacedListDAO" factory-bean="daoFactory" factory-method="getNamespacedListsDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="NAMESPACED_LIST"/>
+            <constructor-arg name="isCompressed" value="true"/>
+        </bean>
+        <bean id="triggerModelReloadDAO" factory-bean="daoFactory" factory-method="getEmptyObjectDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="MODEL_CHANGED"/>
+        </bean>
+
+        <bean id="triggerStacksReloadDAO" factory-bean="daoFactory" factory-method="getEmptyObjectDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="STACKS_RELOAD" />
+        </bean>
+        <bean id="servicesChangesNotificationDAO" factory-bean="daoFactory" factory-method="getEmptyObjectDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="SERVICES_CHANGED" />
+        </bean>
+        <bean id="namespacedListVersionReloadDAO" factory-bean="daoFactory" factory-method="getEmptyObjectDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="NAMESPACED_LIST" />
+        </bean>
+        <bean id="triggerBackupDAO" factory-bean="daoFactory" factory-method="getEmptyObjectDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="BACKUP"/>
+        </bean>
+        <bean id="backupUsageScheduleDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="BACKUP"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.BackupUsageSchedule"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="deciderRulesDAO" factory-bean="daoFactory" factory-method="getListDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="DECIDER_RULE"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.IfExpression"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="partnersDAO" factory-bean="daoFactory" factory-method="getListDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="PARTNERS"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.appDecider.Partner"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="stacksDAO" factory-bean="daoFactory" factory-method="createStacksDAO">
+        </bean>
+        <bean id="transactionalDAO" class="com.comcast.redirector.dataaccess.dao.TransactionalDAO">
+            <constructor-arg name="connector" ref="connector"/>
+            <constructor-arg name="serializer" ref="xmlSerializer"/>
+            <constructor-arg name="daoFactory" ref="daoFactory"/>
+        </bean>
+        <bean id="redirectorConfigDAO" factory-bean="daoFactory" factory-method="getSimpleDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType" value="CONFIG"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.RedirectorConfig"/>
+            <constructor-arg name="isCompressed" value="false"/>
+        </bean>
+        <bean id="pendingChangeDAO" factory-bean="daoFactory" factory-method="getSimpleServiceDAO">
+            <constructor-arg name="entityType" type="com.comcast.redirector.dataaccess.EntityType"
+                             value="PENDING_CHANGES_STATUS"/>
+            <constructor-arg name="modelClass" type="java.lang.Class"
+                             value="com.comcast.redirector.api.model.pending.PendingChangesStatus"/>
+            <constructor-arg name="isCompressed" value="false"/>
+            <constructor-arg name="useCache" value="false"/>
+            <constructor-arg name="useCacheWhenNotConnectedToDataSource" value="true"/>
+        </bean>
+    </beans>
+</beans>

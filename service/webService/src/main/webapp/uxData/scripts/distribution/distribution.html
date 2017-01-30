@@ -1,0 +1,156 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1>Distribution control
+        <small>{{$root.currentApplication}}</small>
+    </h1>
+
+    <div id="alertContainer"></div>
+    <form name="distribution_list" role="form" novalidate ng-submit="vm.saveDistributions()">
+        <div class="panel" ng-class="vm.hasDiffChanges() ? 'panel-danger' :' panel-warning'">
+            <div class="panel-heading clearfix">
+                Distributions ( Current: <strong>{{(!vm.inputs.isSomeCurrentPercentOutOfRange) ?
+                (vm.calculateAndGetCurrentTotalPercentage().toFixed(2) + '%') : ('some percent(s) out of range!')}}</strong>
+                <span ng-if="vm.hasDiffChanges()"> / Pending: <strong>{{(!vm.inputs.isSomeChangedPercentOutOfRange) ?
+                    (vm.calculateAndGetTotalPercentage().toFixed(2) + '%') : ('some percent(s) out of range!')}}</strong></span>
+                <span> ):</span>
+
+                <div class="pull-right">
+                    <span ng-show="vm.hasDiffChanges()">{{(vm.hasDiffChanges() && vm.inputs.saved) ? "APPROVE CHANGES" : "SAVE DATA"}}</span>
+                    <button id="addItem"
+                            type="button" ng-show="vm.allowAddDistributions" class="btn btn-primary fa"
+                            ng-click="vm.addItem()"
+                            >
+                        Add
+                        Item
+                    </button>
+                    <span ng-hide="vm.allowAddDistributions" class="text-uppercase text-info">All paths are already distributed</span>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <default-server server-holder="vm"></default-server>
+                <table class="table">
+                    <colgroup>
+                        <col width="2%">
+                        <col width="5%">
+                        <col width="12%">
+                        <col width="20%">
+                        <col width="38%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th>Percent</th>
+                        <th>Flavor</th>
+                        <th>Query Parameters</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="rule in vm.distribution.displayableRules" class="distribution-row"
+                        ng-class="{'danger':vm.distribution_list['percent_' + $index].$dirty && !vm.validationMap[$index].isPercentageValid,
+                               'active': vm.distribution_list['percent_' + $index].$valid,
+                               'deleted-distribution-rule': rule.hasChanges && rule.changeType == 'DELETE',
+                               'added-distribution-rule': rule.hasChanges && rule.changeType == 'ADD',
+                               'changed-distribution-rule': vm.isRuleUpdated(rule)}">
+                        <td>
+                            <pending-changes-icon changeType=vm.getChangeType(rule)></pending-changes-icon>
+                        </td>
+                        <td>
+                            <span ng-bind="$index + 1"></span>
+                        </td>
+                        <td>
+                    <span class="input-group">
+
+                                <span ng-bind="vm.distribution.displayableRules[$index].percent"></span>
+                        <span>%</span>
+                     </span>
+                        </td>
+                        <td>
+                            <div>
+                                <span id="rule_{{vm.distribution.displayableRules[$index].server.path}}" class="pull-left fa label monospaces" ng-class="vm.returnOnlyActivePaths().indexOf(vm.distribution.displayableRules[$index].server.path) >= 0?'label-success': 'label-danger'"
+                                      ng-bind="vm.distribution.displayableRules[$index].server.path"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div ng-repeat="pair in rule.server.query.entry track by $index">
+                                <div id="pair_[$index]" class="pull-left fa label monospaces label-success">
+                                    <span ng-bind="pair.key"></span>=<span ng-bind="pair.value"></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button"
+                                        class="btn btn-default"
+                                        ng-click="vm.editDistribution($index)"
+                                        ng-disabled="rule.hasChanges && rule.changeType == 'DELETE'">
+                                <span
+                                        class="fa fa-pencil-square-o">Edit</span>
+                                </button>
+                                <button type="button"
+                                        class="btn btn-default"
+                                        id="{{'deleteDistribution_' + $index}}"
+                                        ng-click="vm.deleteDistribution($index)"
+                                        ng-disabled="rule.hasChanges && rule.changeType == 'DELETE'"><span
+                                        class="fa fa-times-circle">Delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-show="vm.isLoaded()">
+                        <td colspan="4"><p class="text-center">Loading...<i class="fa fa-refresh fa-spin"></i></p></td>
+                    </tr>
+                    <tr ng-hide="vm.isLoaded()">
+                        <td ng-class="{'error-label': !vm.inputs.isValidCurrentTotalPercentage
+                                                   || !vm.inputs.isValidTotalPercentage
+                                                   || vm.inputs.isSomeCurrentPercentOutOfRange
+                                                   || vm.inputs.isSomeChangedPercentOutOfRange}" colspan="4">
+                            Total Current: <strong>{{(!vm.inputs.isSomeCurrentPercentOutOfRange) ?
+                            (vm.calculateAndGetCurrentTotalPercentage().toFixed(2) + '%') : ('some percent(s) out of range!')}}</strong>
+                        <span ng-if="vm.hasDiffChanges()"> / Pending: <strong>{{(!vm.inputs.isSomeChangedPercentOutOfRange)
+                            ?
+                            (vm.calculateAndGetTotalPercentage().toFixed(2) + '%') : ('some percent(s) out of range!')}}</strong></span>
+                        </td>
+                    </tr>
+                    <tr ng-hide="vm.isLoaded()">
+                        <td style="border-top: 0px" ng-hide="vm.inputs.isValidCurrentTotalPercentage"
+                            class="error-label invalid-current-total" colspan="4"><strong>Error: total
+                            percentage is more than 99.99%</strong></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+    <diff base-head-title="'Current default server'" base-text="vm.defaultCurrentText" changed-head-title="'Pending default server'" changed-text="vm.defaultPendingText"></diff>
+
+    <diff-distributions ng-show="vm.hasDiffChanges()" base-distributions="vm.distribution.rulesFromDataSource"
+                        changed-distributions="vm.distribution.changedRules">
+    </diff-distributions>
+    <progress-button id="saveEntity"
+                     look="'btn btn-primary'"
+                     disabled="distribution_list.$invalid || vm.isSaving  || vm.inputs.saved || !authService.isAuthorized(vm.USER_PERMISSIONS().writeDistributions)"
+                     progress-condition="vm.isSaving"
+                     on-click="vm.saveDistributions()"
+                     title="'Save'"></progress-button>
+</div>
+<footer ng-hide="!authService.isAuthorized(vm.USER_PERMISSIONS().readWhitelist)">
+    </br>
+    <traffic-white-list ng-if= "!$root.redirectorOfflineMode"> </traffic-white-list>
+    <active-white-list></active-white-list>
+</footer>

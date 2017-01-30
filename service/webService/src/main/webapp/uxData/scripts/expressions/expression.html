@@ -1,0 +1,170 @@
+<div class="form-group well well-sm expression-main">
+    <div>
+        <div class="expression-group-display">
+            <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.left.nameErrorMsg)}">
+                <input type="text"
+                       ng-hide="vm.expr.left.expOperator==vm.expCONST.OPERATOR_TYPE.RANDOM || vm.expr.left.expOperator==vm.expCONST.OPERATOR_TYPE.PERCENT"
+                       ng-model="vm.expr.left.expName"
+                       ng-disabled="vm.expr.disabled"
+                       class="form-control expression-name-1"
+                       ng-change="vm.nameChanged('left')"
+                       placeholder="Parameter name">
+            </div>
+            <label class="negation" ng-show="allowNegation && vm.isNegationApplicable('left')">
+                <input
+                    type="checkbox"
+                    ng-model="vm.expr.left.negation"
+                    ng-change="vm.negationChanged('left')"
+                    ng-disabled="vm.expr.disabled">Not
+            </label>
+            <select
+                    name='operators'
+                    ng-model='vm.expr.left.expOperator'
+                    ng-disabled="vm.expr.disabled"
+                    ng-options='operator.value as operator.name for (operatorName, operator) in vm.operators'
+                    ng-selected='0'
+                    ng-change="vm.operatorChanged('left')"
+                    class="form-control op-shift expression-condition">
+            </select>
+            <div class="required-warning">
+                <h6 ng-show="vm.hasError(vm.validationData.left.nameErrorMsg)" class="error-label"><span ng-bind="vm.validationData.left.nameErrorMsg"></span></h6>
+            </div>
+        </div>
+
+        <div class="expression-group-display" ng-hide="vm.expr.left.expOperator==vm.expCONST.OPERATOR_TYPE.ISEMPTY">
+            <div ng-repeat="value in vm.expr.left.expValues track by $index">
+
+                <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.left.valueErrorMsg[$index])}">
+                    <input type="text"
+                           ng-model="vm.expr.left.expValues[$index]"
+                           class="form-control expression-value"
+                           ng-change="vm.valueChanged('left', $index)"
+                           ng-disabled="vm.expr.disabled"
+                           placeholder="Parameter value"
+                           ng-hide ="vm.isValueTypeNamespace('left') || expr.left.expOperator=='isEmpty'">
+                    <select
+                            class="form-control expression-value-2"
+                            name="path"
+                            ng-model="vm.expr.left.expValues[$index]"
+                            ng-disabled="vm.expr.disabled"
+                            ng-change="vm.onNamespaceChanged('left', $index)"
+                            ng-options="namespace.name for namespace in vm.namespaces.left track by namespace.name"
+                            options-disabled="(namespace.alreadySelected == true) for namespace in vm.namespaces.left"
+                            ng-show ="vm.isValueTypeNamespace('left')">
+                    </select>
+                </div>
+                <select
+                        class="form-control expression-value-type"
+                        name="valueType"
+                        ng-init="vm.expr.left.valueType = vm.expr.left.valueType || 'none'"
+                        ng-model="vm.expr.left.valueType"
+                        ng-disabled="vm.expr.disabled"
+                        ng-options="type.value as type.name for (typeName, type) in vm.valueType"
+                        ng-selected='1'
+                        ng-show = "vm.isRelationalOperator(vm.expr.left)"
+                        ng-change = "vm.valueTypeChanged('left', $index)">
+                </select>
+                <button type="button"
+                        ng-show="vm.expr.left.isMultivalueOperatorSelected && $index == 0"
+                        ng-click="vm.addNewValue('left', $index)"
+                        ng-disabled="vm.expr.disabled"
+                        class="btn btn-default btn-sm btn-plusminus">+</button>
+                <button type="button"
+                        ng-show="vm.expr.left.isMultivalueOperatorSelected && $index > 0"
+                        ng-click="vm.removeValue('left', $index)"
+                        ng-disabled="vm.expr.disabled"
+                        class="btn btn-default btn-sm btn-plusminus">-</button>
+                <h6 ng-show="vm.hasError(vm.validationData.left.valueErrorMsg[$index])" class="error-label"><span ng-bind="vm.validationData.left.valueErrorMsg[$index]"></span></h6>
+            </div>
+        </div>
+    </div>
+    <h6 ng-show="vm.hasError(vm.validationData.left.generalErrorMsg)" class="error-label"><span ng-bind="vm.validationData.left.generalErrorMsg"></span></h6>
+
+    <div ng-show='vm.expr.isBinary'>
+        <span ng-bind="vm.expr.Type"></span>
+    </div>
+
+    <div ng-show="vm.expr.isBinary">
+        <div  class="expression-group-display">
+            <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.right.nameErrorMsg)}">
+                <input type="text"
+                       ng-hide="vm.expr.right.expOperator==vm.expCONST.OPERATOR_TYPE.RANDOM || vm.expr.right.expOperator==vm.expCONST.OPERATOR_TYPE.PERCENT"
+                       ng-model="vm.expr.right.expName"
+                       class="form-control expression-name-xor"
+                       ng-disabled="vm.expr.disabled"
+                       ng-change="vm.nameChanged('right')"
+                       placeholder="Parameter name">
+            </div>
+            <label class="negation" ng-show="allowNegation && vm.isNegationApplicable('right')">
+                <input
+                    type="checkbox"
+                    ng-model="vm.expr.right.negation"
+                    ng-change="vm.negationChanged('right')"
+                    ng-disabled="vm.expr.disabled">Not
+            </label>
+            <select
+                    name='operators'
+                    ng-model='vm.expr.right.expOperator'
+                    ng-options='operator.value as operator.name for (operatorName, operator) in vm.operators'
+                    ng-selected='0'
+                    ng-disabled="vm.expr.disabled"
+                    ng-change='vm.operatorChanged("right")'
+                    placeholder="Parameter name"
+                    class="form-control op-shift expression-condition-binary">
+            </select>
+            <div class="required-warning">
+                <h6 ng-show="vm.hasError(vm.validationData.right.nameErrorMsg)" class="error-label"><span ng-bind="vm.validationData.right.nameErrorMsg"></span></h6>
+            </div>
+        </div>
+
+        <div class="expression-group-display" ng-hide="vm.expr.right.expOperator==vm.expCONST.OPERATOR_TYPE.ISEMPTY">
+            <div ng-repeat="value in vm.expr.right.expValues track by $index">
+
+                <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.right.valueErrorMsg[$index])}">
+                    <input
+                            type="text"
+                            ng-model="vm.expr.right.expValues[$index]"
+                            class="form-control expression-value-xor"
+                            ng-disabled="vm.expr.disabled"
+                            ng-change="vm.valueChanged('right', $index)"
+                            placeholder="Parameter value"
+                            ng-hide ="vm.isValueTypeNamespace('right') || expr.right.expOperator === vm.expCONST.OPERATOR_TYPE.ISEMPTY">
+                    <select
+                            class="form-control expression-value-list-xor"
+                            name="path"
+                            ng-disabled="vm.expr.disabled"
+                            ng-model="vm.expr.right.expValues[$index]"
+                            ng-change="vm.onNamespaceChanged('right', $index)"
+                            ng-options="namespace.name for namespace in vm.namespaces.right track by namespace.name"
+                            options-disabled="(namespace.alreadySelected == true) for namespace in vm.namespaces.right"
+                            ng-show = "vm.isValueTypeNamespace('right')">
+                    </select>
+                </div>
+                <select
+                        class="form-control expression-value-type"
+                        name="valueType"
+                        ng-model="vm.expr.right.valueType"
+                        ng-disabled="vm.expr.disabled"
+                        ng-init="vm.expr.right.valueType=vm.expr.right.valueType||'none'"
+                        ng-options="type.value as type.name for (typeName, type) in vm.valueType"
+                        ng-show = "vm.isRelationalOperator(vm.expr.right)"
+                        ng-change = "vm.valueTypeChanged('right', $index)">
+                </select>
+
+                <button type="button" ng-show="vm.expr.right.isMultivalueOperatorSelected && $index == 0"
+                        ng-click="vm.addNewValue('right', $index)"
+                        ng-disabled="vm.expr.disabled"
+                        class="btn btn-default btn-sm btn-plusminus">+</button>
+
+                <button type="button" ng-show="vm.expr.right.isMultivalueOperatorSelected && $index > 0"
+                        ng-click="vm.removeValue('right', $index)"
+                        ng-disabled="vm.expr.disabled"
+                        class="btn btn-default btn-sm btn-plusminus">-</button>
+                <div>
+                    <h6 ng-show="vm.hasError(vm.validationData.right.valueErrorMsg[$index])" class="error-label"><span ng-bind="vm.validationData.right.valueErrorMsg[$index]"></span></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h6 ng-show="vm.hasError(vm.validationData.right.generalErrorMsg)" class="error-label"><span ng-bind="vm.validationData.right.generalErrorMsg"></span></h6>
+</div>

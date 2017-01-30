@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<urlRules>
+    <if id="UrlRule">
+        <equals>
+            <param>paramTest</param>
+            <value>valueTest</value>
+        </equals>
+        <return>
+            <urlRule>
+                <protocol>xre</protocol>
+                <port>6567</port>
+                <ipProtocolVersion>4</ipProtocolVersion>
+            </urlRule>
+        </return>
+    </if>
+    <default>
+        <urlRule>
+            <urn>appTest</urn>
+            <protocol>xre</protocol>
+            <port>8081</port>
+            <ipProtocolVersion>4</ipProtocolVersion>
+        </urlRule>
+    </default>
+</urlRules>

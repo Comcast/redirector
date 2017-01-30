@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<urlRules>
+    <if>
+        <equals>
+            <param>receiverId</param>
+            <value>123-abc</value>
+        </equals>
+        <return>
+            <urlRule>
+                <urn>www.urn</urn>
+                <port></port>
+                <protocol></protocol>
+            </urlRule>
+        </return>
+    </if>
+    <if>
+        <equals>
+            <param>receiverId</param>
+            <value>123-abc</value>
+        </equals>
+        <return>
+            <urlRule>
+                <urn></urn>
+                <port>9090</port>
+                <protocol></protocol>
+            </urlRule>
+        </return>
+    </if>
+    <default>
+        <urlRule>
+            <urn></urn>
+            <port></port>
+            <protocol>xre</protocol>
+        </urlRule>
+    </default>
+</urlRules>

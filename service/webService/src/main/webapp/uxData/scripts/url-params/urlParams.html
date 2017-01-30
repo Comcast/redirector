@@ -1,0 +1,51 @@
+<div class="form-group" style="margin: 0px !important;">
+
+        <div class="row">
+            <div class="col-sm-2 text">
+                <label>Protocol</label>
+                <select ng-model="vm.server.protocol"
+                        class="form-control server_field_input url-params-protocol-dropdown"
+                        ng-disabled ="disabled"
+                        ng-change=vm.onProtocolChanged()>
+                    <option>xre</option>
+                    <option>xres</option>
+                    <option>ws</option>
+                    <option>wss</option>
+                    <option>http</option>
+                    <option>https</option>
+                    <option>xmpp</option>
+                </select >
+                <h6 ng-show="vm.hasError(validationData.protocolErrorMsg)" class="error-label"><span ng-bind="validationData.protocolErrorMsg"></span></h6>
+            </div>
+            <div class="col-sm-2 text">
+                <label>Port</label>
+                <input
+                        ng-model="vm.server.port"
+                        class="form-control server_field_input url-params-port-input"
+                        ng-disabled ="disabled"
+                        ng-change=vm.onPortChanged()>
+                <h6 ng-show="vm.hasError(validationData.portErrorMsg)" class="error-label"><span ng-bind="validationData.portErrorMsg"></span></h6>
+            </div>
+            <div class="col-sm-5 text">
+                <label>URN</label>
+                <input
+                        ng-model="vm.server.urn"
+                        class="form-control urlParams_urn_input"
+                        ng-disabled ="disabled"
+                        ng-change=vm.onUrnChanged()>
+                <h6 ng-show="vm.hasError(validationData.urnErrorMsg)" class="error-label"><span ng-bind="validationData.urnErrorMsg"></span></h6>
+            </div>
+            <div class="col-sm-3 text">
+                <label>IP protocol version</label>
+                <select
+                        ng-model="server.ipProtocolVersion"
+                        class="form-control server_field_input url-params-ip-version-dropdown"
+                        ng-disabled ="disabled"
+                        ng-options="value.id as value.name for (key, value) in vm.IP_PROTOCOL_VERSION_LIST"
+                        ng-change="vm.onIPProtocolVersionChanged()">
+                </select>
+                <h6 ng-show="vm.hasError(validationData.ipProtocolVersionErrorMsg)" class="error-label"><span ng-bind="validationData.ipProtocolVersionErrorMsg"></span></h6>
+            </div>
+        </div>
+        <h6 ng-show="vm.hasError(validationData.generalErrorMsg)" class="error-label"><span ng-bind="validationData.generalErrorMsg"></span></h6>
+</div>

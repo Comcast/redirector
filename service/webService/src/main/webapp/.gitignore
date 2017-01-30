@@ -1,0 +1,6 @@
+.DS_Store
+.agignore
+node_modules
+bower_components
+/coverage
+npn-debug.log

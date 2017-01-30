@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario xmlns="http://comcast.com/xre/test/receiver/scenario/model" name="guide example">
+    <sleep duration="10"/>
+    <control-command command="STOP_TIMER" value="app-startup-guide" timeout="6000000"/>
+    <sleep duration="2000"/>
+</scenario>

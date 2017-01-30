@@ -1,0 +1,97 @@
+<div class="form-group">
+
+    <fieldset ng-disabled="vm.isDisabled()">
+        <div class="row"
+             ng-show=vm.showWhitelistedOption>
+            <div class="col-md-2 text">
+                <label>Non-Whitelisted
+                    <input
+                            type="checkbox"
+                            ng-model="vm.isNonWhitelisted"
+                            ng-change="vm.whitelistedChanged()">
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 text server-row" ng-show="!vm.onlySimpleMode">
+                <label> Edit mode new</label>
+                <select
+                        class="form-control server-edit-mode"
+                        ng-model="vm.editMode"
+                        ng-init="vm.editMode = (vm.editMode === undefined) ? 'simple' : vm.editMode"
+                        ng-change="vm.editModeChanged()">
+                    <option value="simple">Simple</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="col-md-7 text server-row" ng-hide="vm.isSimpleMode()">
+                <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.urlError)}">
+                        <label ng-show="vm.showLabels">Url</label>
+                        <input
+                                ng-model="vm.url"
+                                class="form-control server-url-input"
+                                placeholder="Full url : 'protocol://host[:port][/urn]'"
+                                ng-change="vm.urlChanged()">
+                        <h6 ng-show="vm.hasError(vm.validationData.urlError)" class="error-label"><span ng-bind="vm.validationData.urlError"></span></h6>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 text server-row" ng-if="vm.isSimpleMode()">
+                <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.validationData.pathError)}">
+                     <label ng-show="vm.showLabels">Path</label>
+                    <select
+                            class="form-control server-path-input monospaces"
+                            name="path"
+                            ng-model="vm.path"
+                            ng-options="opt.VALUE group by opt.GROUP for opt in vm.getListOfPaths() track by opt.NAME"
+                            options-disabled="!opt.ACTIVE for opt in vm.getListOfPaths()"
+                            ng-change="vm.pathChanged()"
+                            required>
+                    </select>
+                    <h6 ng-if="vm.hasError(vm.validationData.pathError)" class="error-label"><span ng-bind="vm.validationData.pathError"></span></h6>
+                </div>
+            </div>
+
+            <div class="col-md-6 form-group well query-block server-row"
+                 ng-class="{'query-advanced-server' : !vm.isSimpleMode()}">
+                <label ng-show="vm.showLabels">Query Parameters</label>
+
+                <button id="addQueryPair"
+                        type="button"
+                        ng-click="vm.addNewQueryPair()"
+                        ng-disabled="vm.expr.disabled"
+                        class="btn btn-primary btn-sm add-query-pair">Add Query Pair</button>
+
+                <div ng-repeat="pair in vm.query.entry" class="query-block-entry">
+                    <div class="form-group">
+                        <span ng-bind="$index + 1"></span>
+                    </div>
+                    <div class="form-group">
+                        <input ng-model="pair.key"
+                               class="form-control query-key"
+                               placeholder="key" ng-change="vm.queryChanged()" />
+                    </div>
+                    <div class="form-group">
+                        <input
+                            ng-model="pair.value"
+                            class="form-control query-value"
+                            placeholder="value" ng-change="vm.queryChanged()" />
+                    </div>
+                    <button type="button"
+                            ng-click="vm.removeQueryPair($index)"
+                            ng-disabled="vm.expr.disabled"
+                            class="btn btn-default btn-sm btn-plusminus remove-query-pair">-</button>
+                    <div>
+                        <h6 ng-if="vm.validationData.queryError.length > 0 && vm.hasError(vm.validationData.queryError[$index])"
+                            class="error-label"><span ng-bind="vm.validationData.queryError[$index]"></span></h6>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <h6 ng-if="vm.hasError(vm.validationData.generalErrorMsg)" class="error-label"><span ng-bind="vm.validationData.generalErrorMsg"></span></h6>
+
+    </fieldset>
+</div>

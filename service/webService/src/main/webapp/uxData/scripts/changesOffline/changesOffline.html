@@ -1,0 +1,676 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1>OFFLINE Pending Changes
+        <small ng-bind="$root.currentApplication"></small>
+    </h1>
+
+    <form class="dropzone" id="dzform"></form>
+
+    <div class="btn-group pull-right" dropdown
+         ng-show="!$root.redirectorOfflineMode &&
+                  vm.changes.pathRules.entry.length > 0 ||
+                  vm.changes.urlRules.entry.length > 0 ||
+                  vm.changes.urlParams.entry.length > 0 ||
+                  vm.changes.distributions.entry.length > 0 ||
+                  vm.changes.servers.entry.length > 0 ||
+                  vm.changes.templatePathRules.entry.length > 0||
+                  vm.changes.templateUrlPathRules.entry.length > 0||
+                  vm.changes.whitelisted.entry.length > 0">
+        <button ng-hide="$root.redirectorOfflineMode" type="button" class="btn btn-primary btn-sm dropdown-toggle fa fa-cog" data-toggle="dropdown">
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li>
+                <a class="fa fa-floppy-o" ng-click="vm.exportAllPending()"> Export all changes</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div ng-show="vm.changes.pathRules.entry.length > 0 ||
+              vm.changes.urlRules.entry.length > 0 ||
+              vm.changes.urlParams.entry.length > 0 ||
+              vm.changes.distributions.entry.length > 0 ||
+              vm.changes.servers.entry.length > 0 ||
+              vm.changes.templatePathRules.entry.length ||
+              vm.changes.templateUrlPathRules.entry.length > 0||
+              vm.changes.whitelisted.entry.length > 0 ||
+              vm.namespacesChanges.entry.length > 0">
+    <button id="approveAllChanges"
+            type="button"
+            class="btn btn-default"
+            ng-click="!$root.redirectorOfflineMode ? vm.confirmValidateAndApprovePendingChanges() : vm.confirmApprovePendingChanges()">
+        Approve All Changes
+    </button>
+
+    <button id="cancelAllChanges"
+            type="button" class="btn btn-default" ng-click="vm.confirmCancelPendingChanges()"
+            ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)
+                            || (!vm.changes.pathRules && !vm.changes.urlRules && !vm.changes.urlParams && !vm.changes.distributions && !vm.changes.servers) || !vm.namespacesChanges.entry ">
+        Cancel All Changes
+    </button>
+    <button id="triggerModelReload"
+            type="button" class="btn btn-danger" ng-click="vm.triggerModelReload()"
+            ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)"
+            ng-hide="$root.redirectorOfflineMode">
+        Trigger Reload Model
+    </button>
+    <button id="downloadCoreBackup"
+            type="button" class="btn btn-default" ng-click="vm.downloadCoreBackup()"
+            ng-show="$root.redirectorOfflineMode">
+        Download Core Backup
+    </button>
+    <br/>
+    <br/>
+</div>
+<div class="jumbotron"
+     ng-show="vm.changes.pathRules.entry.length === 0 &&
+              vm.changes.urlRules.entry.length === 0 &&
+              vm.changes.urlParams.entry.length === 0 &&
+              vm.changes.distributions.entry.length === 0 &&
+              vm.changes.servers.entry.length === 0 &&
+              vm.changes.templatePathRules.entry.length === 0 &&
+              vm.changes.templateUrlPathRules.entry.length === 0 &&
+              vm.changes.whitelisted.entry.length === 0 &&
+              vm.namespacesChanges.entry.length === 0">
+    <p class="text-center">When you have approved changes, new updated model sent to all xreRedirector hosts. If you still want trigger manual push - Click on this button now.</p>
+    <p class="text-center">
+        <button type="button" class="btn btn-danger" ng-click="vm.triggerModelReload()"
+                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)"
+                ng-hide="$root.redirectorOfflineMode">
+            Trigger Model Update
+        </button>
+        <button type="button" class="btn btn-danger" ng-click="vm.downloadCoreBackup()"
+                ng-show="$root.redirectorOfflineMode">
+            Download Core Backup
+        </button>
+    </p>
+</div>
+<br/>
+<br/>
+
+<div ng-show="vm.changes.whitelisted.entry.length > 0" class="panel panel-info">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Stack Management</h4>
+        </div>
+        <div class="pull-right">
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="!$root.redirectorOfflineMode ? vm.validateAndApprovePendingWhitelisted() : vm.approvePendingWhitelisted()">
+                Approve Changes
+            </button>
+
+            <button type="button" class="btn btn-default" ng-click="vm.cancelPendingWhitelisted()"
+                    ng-disabled="!vm.authService.isAuthorized(USER_PERMISSIONS().writeChanges)">
+                Cancel Changes
+            </button>
+            <button
+                    ng-hide="$root.redirectorOfflineMode"
+                    type="button"
+                    class="btn btn-default"
+                    ng-click="vm.exportPendingStackManagement()"
+                    ng-disabled="!vm.authService.isAuthorized(USER_PERMISSIONS().writeChanges)">
+                Export Changes
+            </button>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="panel-group" id="whitelistedAccordion">
+            <diff base-text="vm.whitelistCurrentDiff"
+                  changed-text="vm.whitelistChangedDiff"
+                  ignoreLeadingWS = "'true'"
+                  showAllContent = "'true'">
+
+            </diff>
+
+            <div ng-repeat="entry in vm.changes.whitelisted.entry" class="panel panel-default"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#whitelistedAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.WHITELISTED)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            <span ng-show="entry.value.changedExpression.value">Pending Path: <strong ng-bind="entry.value.changedExpression.value"></strong></span>
+                            <span ng-show="entry.value.currentExpression.value">Current Path: <strong ng-bind="entry.value.currentExpression.value"></strong></span>
+                        </a>
+                    </h4>
+                </div>
+                <div class="panel-collapse collapse in" ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.value"
+                          changed-text="entry.value.changedExpression.value">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="vm.changes.pathRules.entry.length > 0" class="panel panel-warning">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Rules</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-group" id="ruleAccordion">
+            <div ng-repeat="entry in vm.changes.pathRules.entry" class="panel"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#ruleAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.RULE)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            Rule Name: <strong ng-bind="entry.value.id"></strong>
+                            URL: <strong ng-show="entry.value.changedExpression" ng-bind="entry.value.changedExpression.return.servers[0].url"></strong>
+                            <strong ng-hide="entry.value.changedExpression" ng-bind="entry.value.currentExpression.return.servers[0].url"></strong>
+                            <span ng-show="entry.value.changedExpression">
+                                <span ng-show="entry.value.changedExpression.return.servers.length == 1">
+                                    <span ng-show="entry.value.changedExpression.return.servers[0].path">Path: <strong ng-bind="entry.value.changedExpression.return.servers[0].path"></strong></span>
+                                </span>
+                                <span ng-hide="entry.value.changedExpression.return.servers.length == 1">
+                                    Server Group
+                                </span>
+                            </span>
+                            <span ng-hide="entry.value.changedExpression">
+                                <span ng-show="entry.value.currentExpression.return.servers.length == 1">
+                                    <span ng-show="entry.value.currentExpression.return.servers[0].path">Path: <strong ng-bind="entry.value.currentExpression.return.servers[0].path"></strong></span>
+                                </span>
+                                <span ng-hide="entry.value.currentExpression.return.servers.length == 1">
+                                    Server Group
+                                </span>
+                            </span>
+                        </a>
+
+                        <button id="approveRule_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.approvePendingRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Approve
+                        </button>
+
+                        <button id="cancelRule_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.cancelPendingRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Cancel
+                        </button>
+                        <button id="exportRule_{{entry.value.id}}"
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('pathRules', entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="collapse_{{entry.value.id}}" class="panel-collapse collapse in" ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.ruleText"
+                          changed-text="entry.value.changedExpression.ruleText">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="vm.changes.templatePathRules.entry.length > 0" class="panel panel-warning">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Template Rules</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-group" id="templateRuleAccordion">
+            <div ng-repeat="entry in vm.changes.templatePathRules.entry" class="panel"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#templateRuleAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.TEMPLATE_RULE)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            Rule Name: <strong ng-bind="entry.value.id"></strong>
+                            URL: <strong ng-show="entry.value.changedExpression" ng-bind="entry.value.changedExpression.return.servers[0].url"></strong>
+                            <strong ng-hide="entry.value.changedExpression" ng-bind="entry.value.currentExpression.return.servers[0].url"></strong>
+                            <span ng-show="entry.value.changedExpression">
+                                <span ng-show="entry.value.changedExpression.return.servers.length == 1">
+                                    <span ng-show="entry.value.changedExpression.return.servers[0].path">Path: <strong ng-bind="entry.value.changedExpression.return.servers[0].path"></strong></span>
+                                </span>
+                                <span ng-hide="entry.value.changedExpression.return.servers.length == 1">
+                                    Server Group
+                                </span>
+                            </span>
+                            <span ng-hide="entry.value.changedExpression">
+                                <span ng-show="entry.value.currentExpression.return.servers.length == 1">
+                                    <span ng-show="entry.value.currentExpression.return.servers[0].path">Path: <strong ng-bind="entry.value.currentExpression.return.servers[0].path"></strong></span>
+                                </span>
+                                <span ng-hide="entry.value.currentExpression.return.servers.length == 1">
+                                    Server Group
+                                </span>
+                            </span>
+                        </a>
+
+                        <button id="approveRuleTemplate_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.approveTemplatePendingRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Approve
+                        </button>
+
+                        <button id="cancelRuleTemplate_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.cancelTemplatePendingRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Cancel
+                        </button>
+                        <button id="exportRuleTemplate_{{entry.value.id}}"
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('templatePathRules', entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="collapse_template_{{entry.value.id}}" class="panel-collapse collapse in" ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.ruleText"
+                          changed-text="entry.value.changedExpression.ruleText">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div ng-show="vm.changes.urlRules.entry.length > 0" class="panel panel-warning">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>URL Rules</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-group" id="urlRuleAccordion">
+            <div ng-repeat="entry in vm.changes.urlRules.entry" class="panel panel-default"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#urlRuleAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.URLRULE)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            URLRule: <strong ng-bind="entry.value.id"></strong>
+                            URL: <strong ng-show="entry.value.changedExpression" ng-bind="entry.value.changedExpression.returnUrlRule.servers[0].url"></strong>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.protocol">
+                                protocol: <strong ng-bind="entry.value.changedExpression.returnUrlRule.protocol"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.port">
+                                port: <strong ng-bind="entry.value.changedExpression.returnUrlRule.port"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.urn">
+                                urn: <strong ng-bind="entry.value.changedExpression.returnUrlRule.urn"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.ipProtocolVersion">
+                                ipProtocolVersion: <strong ng-bind="entry.value.changedExpression.returnUrlRule.ipProtocolVersion"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                protocol: <strong ng-bind="entry.value.currentExpression.returnUrlRule.protocol"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                port: <strong ng-bind="entry.value.currentExpression.returnUrlRule.port"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                urn: <strong ng-bind="entry.value.currentExpression.returnUrlRule.urn"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression && entry.value.currentExpression.returnUrlRule.ipProtocolVersion">
+                                ipProtocolVersion: <strong ng-bind="entry.value.currentExpression.returnUrlRule.ipProtocolVersion"></strong>
+                            </span>
+                        </a>
+
+                        <button id="approveUrlRule_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.approvePendingUrlRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Approve
+                        </button>
+
+                        <button id="cancelUrlRule_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.cancelPendingUrlRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Cancel
+                        </button>
+                        <button id="exportUrlRule_{{entry.value.id}}"
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('urlRules', entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="url_collapse_{{entry.value.id}}" class="panel-collapse collapse in"
+                     ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.ruleText"
+                          changed-text="entry.value.changedExpression.ruleText">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="vm.changes.templateUrlPathRules.entry.length > 0" class="panel panel-warning">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Template URL Rules</h4>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <div class="panel-group" id="urlRuleTemplateAccordion">
+            <div ng-repeat="entry in vm.changes.templateUrlPathRules.entry" class="panel panel-default"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#urlRuleTemplateAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.TEMPLATE_URLRULE)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            URLRule: <strong ng-bind="entry.value.id"></strong>
+                            URL: <strong ng-show="entry.value.changedExpression" ng-bind="entry.value.changedExpression.returnUrlRule.servers[0].url"></strong>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.protocol">
+                                protocol: <strong ng-bind="entry.value.changedExpression.returnUrlRule.protocol"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.port">
+                                port: <strong ng-bind="entry.value.changedExpression.returnUrlRule.port"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.urn">
+                                urn: <strong ng-bind="entry.value.changedExpression.returnUrlRule.urn"></strong>
+                            </span>
+                            <span ng-show="entry.value.changedExpression.returnUrlRule.ipProtocolVersion">
+                                ipProtocolVersion: <strong ng-bind="entry.value.changedExpression.returnUrlRule.ipProtocolVersion"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                protocol: <strong ng-bind="entry.value.currentExpression.returnUrlRule.protocol"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                port: <strong ng-bind="entry.value.currentExpression.returnUrlRule.port"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression">
+                                urn: <strong ng-bind="entry.value.currentExpression.returnUrlRule.urn"></strong>
+                            </span>
+                            <span ng-show="!entry.value.changedExpression && entry.value.currentExpression.returnUrlRule.ipProtocolVersion">
+                                ipProtocolVersion: <strong ng-bind="entry.value.currentExpression.returnUrlRule.ipProtocolVersion"></strong>
+                            </span>
+                        </a>
+
+                        <button id="approveUrlRuleTemplate_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.approveTemplatePendingUrlRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Approve
+                        </button>
+
+                        <button id="cancelUrlRuleTemplate_{{entry.value.id}}"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.cancelTemplatePendingUrlRule(entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Cancel
+                        </button>
+                        <button id="exportUrlRuleTemplate_{{entry.value.id}}"
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('templateUrlPathRules', entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="template_url_collapse_{{entry.value.id}}" class="panel-collapse collapse in"
+                     ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.ruleText"
+                          changed-text="entry.value.changedExpression.ruleText">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="vm.changes.urlParams.entry.length > 0" class="panel panel-warning">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Default URL Parameters</h4>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="panel-group" id="urlParamsAccordion">
+            <div class="panel panel-default"
+                 ng-class="vm.changes.urlParams.entry.value[0].changeType == 'ADD' ? 'panel-success'
+                     : vm.changes.urlParams.entry[0].value.changeType == 'DELETE' ? 'panel-danger'
+                     : vm.changes.urlParams.entry[0].value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#urlParamsAccordion"
+                           ng-click="vm.changes.urlParams.entry[0].value.open = !vm.changes.urlParams.entry[0].value.open">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            Default URL Params: <strong ng-bind="vm.changes.urlParams.entry[0].value.id"></strong>
+                                <span ng-show="vm.changes.urlParams.entry[0].value.changedExpression.protocol">
+                                    Pending Protocol: <strong ng-bind="vm.changes.urlParams.entry[0].value.changedExpression.protocol"></strong>
+                                </span>
+                                <span ng-show="vm.changes.urlParams.entry[0].value.changedExpression.port">
+                                    Pending Port: <strong ng-bind="vm.changes.urlParams.entry[0].value.changedExpression.port"></strong>
+                                </span>
+                                <span ng-show="vm.changes.urlParams.entry[0].value.changedExpression.urn">
+                                    Pending Urn: <strong ng-bind="vm.changes.urlParams.entry[0].value.changedExpression.urn"></strong>
+                                </span>
+                                <span ng-show="vm.changes.urlParams.entry[0].value.changedExpression.ipProtocolVersion">
+                                    Pending IP Protocol Version: <strong ng-bind="vm.changes.urlParams.entry[0].value.changedExpression.ipProtocolVersion"></strong>
+                                </span>
+                        </a>
+
+                        <button
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.approvePendingUrlParams()"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Approve
+                        </button>
+
+                        <button
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.cancelPendingUrlParams()"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Cancel
+                        </button>
+                        <button
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('urlParams', vm.changes.urlParams.entry[0].value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="urlParams_collapse_{{vm.changes.urlParams.entry[0].value.id}}" class="panel-collapse collapse in"
+                     ng-show="vm.changes.urlParams.entry[0].value.open">
+                    <diff base-text="vm.getUrlParamsViewText(vm.changes.urlParams.entry[0].value.currentExpression)"
+                          changed-text="vm.getUrlParamsViewText(vm.changes.urlParams.entry[0].value.changedExpression)">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="vm.changes.distributions.entry.length > 0 || vm.changes.servers.entry.length > 0" class="panel panel-info">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>Distributions</h4>
+        </div>
+
+        <div class="pull-right">
+            <button id="approveDistributionChanges"
+                    type="button" class="btn btn-default" ng-click="vm.approveAllPendingDistributionChanges()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)
+                            || pendingDistribution.totalPercentage >= 100
+                            || (!vm.changes.distributions)">
+                Approve Changes
+            </button>
+            <button id="cancelDistributionChanges"
+                    type="button" class="btn btn-default" ng-click="vm.cancelAllPendingDistribution()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)
+                            || (!vm.changes.distributions)">
+                Cancel Changes
+            </button>
+            <button id="exportDistributionChanges"
+                    ng-hide="$root.redirectorOfflineMode"
+                    type="button"
+                    class="btn btn-default"
+                    ng-click="vm.exportPendingDistributions()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                Export Changes
+            </button>
+        </div>
+    </div>
+    <diff-distributions ng-hide="vm.changes.distributions.entry.length == 0" base-distributions="vm.currentDistribution.rule"
+                        changed-distributions="vm.pendingDistribution.rule">
+    </diff-distributions>
+    <h5>Review Changes</h5>
+    <div ng-show="vm.changes.servers.entry.length > 0" class="">
+        <div class="panel-group" id="serverAccordion">
+            <div ng-repeat="entry in vm.changes.servers.entry" class="panel panel-default"
+                 ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#serverAccordion"
+                           ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.SERVER)">
+                            <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+                            Server: <strong ng-bind="entry.value.id"></strong>
+                            <span ng-show="entry.value.changedExpression.path">Pending Path: <strong ng-bind="entry.value.changedExpression.path"></strong></span>
+                            <span ng-show="entry.value.currentExpression.path">Current Path: <strong ng-bind="entry.value.currentExpression.path"></strong></span>
+                        </a>
+                        <button id="exportDistributionChange_{{entry.value.id}}"
+                                ng-hide="$root.redirectorOfflineMode"
+                                type="button"
+                                class="btn btn-default"
+                                ng-click="vm.exportPending('servers', entry.value.id)"
+                                ng-disabled="!vm.authService.isAuthorized(USER_PERMISSIONS().writeChanges)">
+                            Export
+                        </button>
+                    </h4>
+                </div>
+                <div id="servers_collapse_{{entry.value.id}}" class="panel-collapse collapse in"
+                     ng-show="entry.value.open">
+                    <diff base-text="entry.value.currentExpression.path"
+                          changed-text="entry.value.changedExpression.path">
+                    </diff>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-group" id="distributionAccordion">
+        <div ng-repeat="entry in vm.changes.distributions.entry" class="panel panel-default"
+             ng-class="entry.value.changeType == 'ADD' ? 'panel-success' : entry.value.changeType == 'DELETE' ? 'panel-danger': entry.value.changeType == 'UPDATE' ? 'panel-info' : 'panel-default'">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#distributionAccordion"
+                       ng-click="vm.toggleItem(entry.value.id, vm.ITEM_TYPES.DISTRIBUTION)">
+                            <span ng-show="entry.value.changedExpression">
+                                <strong>{{vm.parseInt(entry.value.changedExpression.id) + 1}})</strong>
+                                <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+
+                                <strong>{{entry.value.changedExpression.percent}}%</strong>
+                                -
+                                <span ng-show="entry.value.changedExpression.server.path">Path: <strong>{{entry.value.changedExpression.server.path}}</strong></span>
+                            </span>
+                            <span ng-hide="entry.value.changedExpression">
+                                <strong>{{vm.parseInt(entry.value.currentExpression.id) + 1}})</strong>
+                                <pending-changes-icon changeType=entry.value.changeType></pending-changes-icon>
+
+                                <strong>{{entry.value.currentExpression.percent}}%</strong>
+                                -
+                                <span ng-show="entry.value.currentExpression.server.path">Path: <strong ng-bind="entry.value.currentExpression.server.path"></strong></span>
+                            </span>
+                    </a>
+                    <button
+                            ng-hide="$root.redirectorOfflineMode"
+                            type="button"
+                            class="btn btn-default"
+                            ng-click="vm.exportPending('distributions', entry.value.changedExpression.id)"
+                            ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                        Export
+                    </button>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in" ng-show="entry.value.open">
+                <diff base-text="vm.getDistributionViewText(entry.value.currentExpression)"
+                      changed-text="vm.getDistributionViewText(entry.value.changedExpression)">
+                </diff>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------  NamespacedList -->
+
+<div ng-show="vm.namespacesChanges.entry.length > 0" class="panel panel-info">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <h4>NamespacedLists</h4>
+        </div>
+
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" ng-click="vm.approveAllNamespacesChanges()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                Approve Changes
+            </button>
+            <button type="button" class="btn btn-default" ng-click="vm.cancelAllNamespacesChanges()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeChanges)">
+                Cancel Changes
+            </button>
+        </div>
+
+    </div>
+    <div class="panel-group" id="namespacesAccordion">
+        <div ng-repeat="entry in vm.namespacesChanges.entry" class="panel panel-default"
+             ng-class="entry.value == 'ADD' ? 'panel-success' : entry.value == 'DELETE' ? 'panel-danger': entry.value == 'UPDATE' ? 'panel-info' : 'panel-default'">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <pending-changes-icon changeType=entry.value></pending-changes-icon>
+                    Name:  <strong ng-bind="entry.key.name"></strong>
+                    <span class="tab-label">
+                    Description: <strong ng-bind="entry.key.description"></strong>
+                    Values: <strong ng-bind="entry.key.valueSet.length"></strong>
+                        </span>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <span>Whitelisted Stacks (Total active nodes count: <b ng-bind="directiveCtrl.whitelistedCount"></b>)</span>
+    </div>
+
+    <div class="row" ng-hide="directiveCtrl.whitelistedCount === 0">
+        <div class="col-xs-10 text-center">Active WL Flavors</div>
+        <div class="col-xs-2 text-center">Flavors Nodes count</div>
+    </div>
+    <div class="row">
+        <div ng-repeat="flavor in directiveCtrl.flavors"
+             class="whitelisted-margin-between-flavors">
+            <span class="col-xs-10 label label-success monospaces xlabel" ng-bind="flavor.name"></span>
+            <span class="col-xs-2 text-center" ng-bind="flavor.nodes"></span>
+        </div>
+    </div>
+
+    <div class="row" ng-hide="directiveCtrl.whitelistedCount === 0">
+        <div class="col-xs-10 text-center">Active WL Stacks</div>
+        <div class="col-xs-2 text-center">Flavors Nodes count</div>
+    </div>
+    <div class="row" ng-repeat="path in directiveCtrl.whitelistedStacks track by $index">
+        <div ng-show="flavor.active" ng-repeat="flavor in directiveCtrl.stacksAndFlavors[path].flavors"
+             class="whitelisted-margin-between-flavors">
+            <span class="col-xs-10 label label-{{flavor.active === true ? 'success' : 'danger'}} monospaces xlabel">{{path + "/" + flavor.name}}</span>
+            <span class="col-xs-2 text-center" ng-bind="flavor.nodes"></span>
+        </div>
+    </div>
+    <br/>
+</div>

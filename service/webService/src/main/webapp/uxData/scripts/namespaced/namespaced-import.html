@@ -1,0 +1,110 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1 ng-bind="vm.title"></h1>
+
+    <div>
+        <div class="row">
+            <div class="col-lg-3">
+                <file-select on-change="vm.getFile"></file-select>
+            </div>
+            <div class="col-lg-9">
+                <label class="pull-right"> Auto resolve duplicates (for text type only)
+                    <div class="form-control" btn-switch ng-model="vm.autoResolveText"> </div>
+                    </label>
+            </div>
+
+
+            <button
+                    class="btn btn-success pull-right"
+                    ng-hide="vm.namespacesFromFile.namespace.length === undefined || vm.namespacesFromFile.namespace.length == 0"
+                    ng-click="vm.importAllNamespaces()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeNamespacedLists)">
+                <span class="fa fa-floppy-o"></span> Import all
+            </button>
+        </div>
+        <br/>
+
+        <div class="progress" ng-show="vm.isImportInProgress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="1"
+                 aria-valuemax="100" ng-style="{'width': vm.progress+'%'}">
+                <span>Importing</span>
+            </div>
+        </div>
+        <hr/>
+    </div>
+    <table class="table center-table" id="center-table"
+           ng-hide="vm.namespacesFromFile.namespace.length === undefined || vm.namespacesFromFile.namespace.length == 0">
+        <thead>
+        <tr>
+            <th class="text-center">Name</th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Values count</th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Values</th>
+            <th class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody class=".table-hover">
+        <tr ng-show="vm.namespacesFromFile.namespace.length == 0">
+            <td colspan="5">
+                <div class="jumbotron">
+                    <p class="text-center">Empty</p>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="import-namespaces-namespaces-container"
+            ng-repeat="nmsp in vm.namespacesFromFile.namespace track by $index">
+            <td class="td-ellipsis"><p><b ng-bind="nmsp.name"></b></p></td>
+            <td class="td-ellipsis" ng-bind="nmsp.description"></td>
+            <td ng-bind="nmsp.valueSet.length"></td>
+            <td ng-bind="nmsp.type"></td>
+            <td class="import-namespaces-show-values">
+                <div class="panel panel-default import-namespaces-show-values"
+                     ng-init="collapse = true" ng-click="collapse=!collapse">
+                    <!-- Default panel contents -->
+                    <div ng-if="nmsp.valueSet.length < 1000" class="btn btn-default import-namespaces-show-values"
+                         ng-class="collapse == true ? '' : 'btn-primary'"
+                         ng-bind="collapse == true ? 'Show values' : 'Hide values'">
+                    </div>
+                    <div ng-if="nmsp.valueSet.length >= 1000" class="btn btn-default import-namespaces-show-values"
+                         ng-bind="'Too many values to show'">
+                    </div>
+                    <!-- List group -->
+                    <ul ng-if="nmsp.valueSet.length < 1000" class="list-group collapse" ng-class="collapse == true ? 'collapse' : 'collapse in'"
+                        id="{{'test'+nmsp.name}}">
+                        <li class="list-group-item import-namespaces-show-values-value"
+                            ng-repeat="val in vm.namespacesFromFile.namespace[$index].valueSet track by [$index]">
+                            <p class="import-namespaces-show-values-value"
+                               ng-bind="val.value"></p>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <button type="button" class="btn btn-default"
+                        ng-click="vm.importNamespace(nmsp, nmsp.name)"
+                        ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeNamespacedLists)">
+                    <span class="fa fa-floppy-o"></span> Save
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <h2 class="" ng-show="vm.namespacesFromFile.namespace.length == 0">All namespaces are imported. You can select
+            another file.</h2>
+    </div>
+</div>

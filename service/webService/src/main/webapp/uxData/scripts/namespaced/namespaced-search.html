@@ -1,0 +1,160 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1>Find Namespaced lists</h1>
+    <form name="partners_list" role="form" novalidate ng-submit="vm.goToSearchPage()">
+        <div class="row has-margin">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading clearfix">
+                        <span class="input-group pull-left">
+                            <input placeholder="Enter Item"
+                                   id="searchInput"
+                                   name="searchInput"
+                                   ng-model="vm.search"
+                                   type="text"
+                                   class="form-control wide-input"/>
+                            <button type="button" class="btn btn-default op-shift" id="searchButton"
+                                    ng-click="vm.goToSearchPage()">Search
+                            </button>
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-show="vm.isSearchResultExists()">
+                            <h4>Search results for "{{vm.searchResult.searchItem}}"</h4>
+                            <table class="table table-condensed">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="25%">
+                                    <col width="55%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>List Name</th>
+                                        <th>List Description</th>
+                                        <th>Depending Rules</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="search-namespaced-lists-container"
+                                    ng-repeat="namespace in vm.searchResult.namespacedLists track by $index">
+                                    <td class="namespaced-list-name"><a ng-click="vm.goToEditPage(namespace.name)" class="cursor-pointer">{{namespace.name}}</a></td>
+                                    <td class="namespaced-list-description">{{namespace.description}}</td>
+                                    <td>
+                                        <div class="panel panel-default search-namespaced-lists-show-values"
+                                             ng-show="vm.searchResult.namespacedLists[$index].dependingFlavorRules && vm.searchResult.namespacedLists[$index].dependingFlavorRules.length > 0"
+                                             ng-init="collapseFlavor = true" ng-click="collapseFlavor=!collapseFlavor">
+                                            <!-- Default panel contents -->
+                                            <div id="show-flavor-rules" class="btn btn-default search-namespaced-lists-show-values"
+                                                 ng-class="collapseFlavor == true ? '' : 'btn-primary'"
+                                                 ng-bind="'Flavor rules (' + vm.searchResult.namespacedLists[$index].dependingFlavorRules.length + ')'">
+                                            </div>
+                                            <!-- Collapsed group -->
+                                            <div class="list-group collapse " ng-class="collapseFlavor == true ? 'collapse' : 'collapse in'"
+                                                 id="{{'Flavors_'+$index}}">
+                                                <li class="list-group-item search-namespaced-lists-show-values-value"
+                                                    ng-repeat="rule in vm.searchResult.namespacedLists[$index].dependingFlavorRules">
+                                                    <a ng-click="vm.goToFlavorRulePage(rule.name, rule.serviceName)" class="cursor-pointer rule-name">{{rule.name}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default search-namespaced-lists-show-values"
+                                             ng-show="vm.searchResult.namespacedLists[$index].dependingTemplateFlavorRules && vm.searchResult.namespacedLists[$index].dependingTemplateFlavorRules.length > 0"
+                                             ng-init="collapseTemplateFlavors = true" ng-click="collapseTemplateFlavors=!collapseTemplateFlavors">
+                                            <!-- Default panel contents -->
+                                            <div class="btn btn-default search-namespaced-lists-show-values"
+                                                 ng-class="collapseTemplateFlavors == true ? '' : 'btn-primary'"
+                                                 ng-bind="'Template Flavor rules (' + vm.searchResult.namespacedLists[$index].dependingTemplateFlavorRules.length + ')'">
+                                            </div>
+                                            <!-- Collapsed group -->
+                                            <div class="list-group collapse "
+                                                 ng-class="collapseTemplateFlavors == true ? 'collapse' : 'collapse in'"
+                                                 id="{{'TemplateFlavors_'+$index}}">
+                                                <li class="list-group-item search-namespaced-lists-show-values-value"
+                                                    ng-repeat="rule in vm.searchResult.namespacedLists[$index].dependingTemplateFlavorRules">
+                                                    <a ng-click="vm.goToTemplateFlavorRulePage(rule.name, rule.serviceName)" class="cursor-pointer">{{rule.name}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default search-namespaced-lists-show-values"
+                                             ng-show="vm.searchResult.namespacedLists[$index].dependingUrlRules && vm.searchResult.namespacedLists[$index].dependingUrlRules.length > 0"
+                                             ng-init="collapseUrlRules = true" ng-click="collapseUrlRules=!collapseUrlRules">
+                                            <!-- Default panel contents -->
+                                            <div class="btn btn-default search-namespaced-lists-show-values"
+                                                 ng-class="collapseUrlRules == true ? '' : 'btn-primary'"
+                                                 ng-bind="'Url rules (' + vm.searchResult.namespacedLists[$index].dependingUrlRules.length + ')'">
+                                            </div>
+                                            <!-- Collapsed group -->
+                                            <div class="list-group collapse "
+                                                 ng-class="collapseUrlRules == true ? 'collapse' : 'collapse in'"
+                                                 id="{{'UrlRules_'+$index}}">
+                                                <li class="list-group-item search-namespaced-lists-show-values-value"
+                                                    ng-repeat="rule in vm.searchResult.namespacedLists[$index].dependingUrlRules">
+                                                    <a ng-click="vm.goToUrlRulePage(rule.name, rule.serviceName)" class="cursor-pointer">{{rule.name}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default search-namespaced-lists-show-values"
+                                             ng-show="vm.searchResult.namespacedLists[$index].dependingTemplateUrlRules && vm.searchResult.namespacedLists[$index].dependingTemplateUrlRules.length > 0"
+                                             ng-init="collapseTemplateUrlRules = true" ng-click="collapseTemplateUrlRules=!collapseTemplateUrlRules">
+                                            <!-- Default panel contents -->
+                                            <div class="btn btn-default search-namespaced-lists-show-values"
+                                                 ng-class="collapseTemplateUrlRules == true ? '' : 'btn-primary'"
+                                                 ng-bind="'Template Url rules (' + vm.searchResult.namespacedLists[$index].dependingTemplateUrlRules.length + ')'">
+                                            </div>
+                                            <!-- Collapsed group -->
+                                            <div class="list-group collapse "
+                                                 ng-class="collapseTemplateUrlRules == true ? 'collapse' : 'collapse in'"
+                                                 id="{{'TemplateUrlRules_'+$index}}">
+                                                <li class="list-group-item search-namespaced-lists-show-values-value"
+                                                    ng-repeat="rule in vm.searchResult.namespacedLists[$index].dependingTemplateUrlRules">
+                                                    <a ng-click="vm.goToTemplateUrlRulePage(rule.name, rule.serviceName)" class="cursor-pointer">{{rule.name}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default search-namespaced-lists-show-values"
+                                             ng-show="vm.searchResult.namespacedLists[$index].dependingDeciderRules && vm.searchResult.namespacedLists[$index].dependingDeciderRules.length > 0"
+                                             ng-init="collapseDeciderRules = true" ng-click="collapseDeciderRules=!collapseDeciderRules">
+                                            <!-- Default panel contents -->
+                                            <div class="btn btn-default search-namespaced-lists-show-values"
+                                                 ng-class="collapseDeciderRules == true ? '' : 'btn-primary'"
+                                                 ng-bind="'Decider rules (' + vm.searchResult.namespacedLists[$index].dependingDeciderRules.length + ')'">
+                                            </div>
+                                            <!-- Collapsed group -->
+                                            <div class="list-group collapse "
+                                                 ng-class="collapseDeciderRules == true ? 'collapse' : 'collapse in'"
+                                                 id="{{'DeciderRules_'+$index}}">
+                                                <li class="list-group-item search-namespaced-lists-show-values-value"
+                                                    ng-repeat="rule in vm.searchResult.namespacedLists[$index].dependingDeciderRules">
+                                                    <a ng-click="vm.goToDeciderRulePage(rule.name, rule.serviceName)" class="cursor-pointer">{{rule.name}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="vm.isSearchResultsEmpty()">
+                            No Data found
+                        </div>
+                        <div ng-show="vm.isSearchDataBlank()">
+                            Type namespaced list item value or part of namespaced list name or description to find namespaced lists and rules depending on them
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

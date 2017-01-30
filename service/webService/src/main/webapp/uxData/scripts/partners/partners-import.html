@@ -1,0 +1,111 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="modal-header dialog-header-confirm">
+    <h4 class="modal-title">Import Partners</h4>
+</div>
+<div class="modal-body" tabindex="-1">
+    <h3 ng-bind="vm.title"></h3>
+
+    <div class="row form-group-padding-sm">
+        <div class="col-md-6 ">
+            <file-select on-change="vm.getFile"></file-select>
+        </div>
+        <div class="col-md-5 form-group-padding-narrow import-partners-buttons-group">
+            <button class="btn btn-warning"
+                    ng-hide="vm.partnersFromFile.length === undefined || vm.partnersFromFile.length == 0"
+                    ng-click="vm.importAllPartners()"
+                    ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writePartners)">
+                <span class="fa fa-floppy-o"></span> Import all
+            </button>
+            <div class="btn btn-default import-partners-preview"
+                 ng-hide="vm.partnersFromFile.length === undefined || vm.partnersFromFile.length == 0 || vm.wasImport"
+                 data-toggle="collapse"
+                 data-target="#preview">preview
+            </div>
+        </div>
+    </div>
+
+    <div class="progress" ng-show="vm.isImportInProgress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="1"
+             aria-valuemax="100" ng-style="{'width': progress}">
+            <span>Importing</span>
+        </div>
+    </div>
+
+    <div ng-show="vm.partnersFromFile.length > 0">
+        <pre ng-hide="vm.partnersFromFile.length === undefined || vm.partnersFromFile.length == 0 || vm.wasImport"
+             class="collapse import-partners-preview-content"
+             id="preview" ng-bind="vm.importContentForPreview">
+        </pre>
+
+        <div class="panel panel-default">
+            <table ng-table="vm.tableParams" class="table" show-filter="true">
+                <colgroup>
+                    <col width="5%">
+                    <col width="30%">
+                    <col width="5%">
+                    <col width="50%">
+                    <col width="10%">
+                </colgroup>
+                <tr ng-repeat="partner in $data">
+                    <td data-title="'#'">{{(vm.tableParams.page()-1)*vm.tableParams.count() + $index + 1}}</td>
+                    <td data-title="'Partner Id'" sortable="'id'" filter="{ 'id': 'text' }">
+                        <a a-disabled="$rootScope.isSaving" ng-click="vm.editPartner(partner.id)"
+                           class="cursor-pointer"
+                           ng-bind="partner.id"></a>
+                    </td>
+                    <td data-title="'# props'" sortable="'propCount'" ng-bind="partner.propCount">
+                    <td class="import-partners-props-group" data-title="'Properties'" filter="{ 'properties': 'text' }">
+                        <div class="panel panel-default import-partners-props-group"
+                             ng-init="collapse = true" ng-click="collapse=!collapse">
+                            <!-- Default panel contents -->
+                            <div class="btn btn-default import-partners-props-group"
+                                 ng-class="collapse == true ? '' : 'btn-primary'"
+                                 ng-bind="collapse == true ? 'Show properties' : 'Hide properties'">
+                            </div>
+                            <!-- Collapsed group -->
+                            <div class="list-group collapse " ng-class="collapse == true ? 'collapse' : 'collapse in'"
+                                 id="{{'id_'+partner.id}}">
+                                <pre class="import-partners-show-props" ng-bind="partner.properties"></pre>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-title="'Action'">
+                        <button type="button" class="btn btn-default"
+                                ng-click="vm.importPartnerById(partner.id)"
+                                ng-disabled="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writePartners)">
+                            <span class="fa fa-floppy-o"></span> Save
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" ng-show="vm.partnersFromFile.length == 0 && vm.wasImport">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <p class="text-center">All partners are imported. You can select another file.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button pull-right" class="btn btn-primary" ng-click="vm.closeForm()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

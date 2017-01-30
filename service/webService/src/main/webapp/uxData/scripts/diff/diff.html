@@ -1,0 +1,18 @@
+<table class="table changes-diff-view-table">
+    <thead>
+    <tr ng-show="diffCtrl.isUpdateStatus()">
+        <th ng-bind="diffCtrl.baseHeadTitle"></th>
+        <th ng-bind="diffCtrl.changedHeadTitle"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="changes-diff-view-column" ng-show="!diffCtrl.isAddStatus()">
+            <pre ng-bind-html="diffCtrl.getDiffs(baseText, changedText, 'left', type)"></pre>
+        </td>
+        <td class="changes-diff-view-column" ng-hide="diffCtrl.isDeleteStatus() || !diffCtrl.hasDiffChanges()">
+            <pre ng-bind-html="diffCtrl.getDiffs(baseText, changedText, 'right', type)"></pre>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,11 @@
+*.iml
+.idea
+target/
+
+#Eclipse specific files
+.project
+.classpath
+.settings
+
+# log files
+xre-redirector/logXRERedirector.log

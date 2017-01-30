@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<selectServer>
+    <if id="test247_lessThan_NONE">
+        <lessThan type="none">
+            <param>test27_lessThan_NONE</param>
+            <value>test</value>
+        </lessThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test247_lessThan_NONE</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test27_lessThan_NONE server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test32_NOT_Matches">
+        <matches negation="true">
+            <param>test32_NOT_Matches</param>
+            <pattern>test_not_matches</pattern>
+        </matches>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test32_NOT_Matches</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test32_NOT_Matches server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test5_greaterThanOrEqualTo_NONE">
+        <greaterOrEqual type="none">
+            <param>test5_greaterThanOrEqualTo_NONE</param>
+            <value>test</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test5_greaterThanOrEqualTo_NONE</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test5_greaterThanOrEqualTo_NONE server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test16_InIpRangeNamespaced">
+        <inIpRange type="namespacedList" negation="false">
+            <param>test16_InIpRangeNamespaced</param>
+            <namespacedList>
+                <value>test_ip</value>
+            </namespacedList>
+        </inIpRange>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test16_InIpRangeNamespaced</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test16_InIpRangeNamespaced server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test17_NOT_InIpRangeNamespaced">
+        <inIpRange type="namespacedList" negation="true">
+            <param>test17_NOT_InIpRangeNamespaced</param>
+            <namespacedList>
+                <value>test_ip</value>
+            </namespacedList>
+        </inIpRange>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test17_NOT_InIpRangeNamespaced</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test17_NOT_InIpRangeNamespaced server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test1_containsNamespacedList">
+        <contains type="namespacedList" negation="false">
+            <param>test1_containsNamespacedList</param>
+            <namespacedList>
+                <value>rttt</value>
+            </namespacedList>
+        </contains>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test1_containsNamespacedList</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test1_containsNamespacedList server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test31_Matches">
+        <matches negation="false">
+            <param>test31_Matches</param>
+            <pattern>test_matches</pattern>
+        </matches>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test31_Matches</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test31_Matches server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test15_NOT_InIpRange">
+        <inIpRange type="" negation="true">
+            <param>test15_NOT_InIpRange</param>
+            <values>
+                <value>1.1.1.1</value>
+                <value>100.100.100.100</value>
+            </values>
+        </inIpRange>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test15_NOT_InIpRange</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test15_NOT_InIpRange server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test10_greaterThan_NONE">
+        <greaterThan type="none">
+            <param>test10_greaterThan_NONE</param>
+            <value>test</value>
+        </greaterThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test10_greaterThan_NONE</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test10_greaterThan_NONE server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test12_greaterThan_String">
+        <greaterThan type="string">
+            <param>test12_greaterThan_String</param>
+            <value>test_string</value>
+        </greaterThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test12_greaterThan_String</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test12_greaterThan_String server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test4_greaterThanOrEqualTo_IPv6">
+        <greaterOrEqual type="ipv6">
+            <param>test4_greaterThanOrEqualTo_IPv6</param>
+            <value>2001:DB0:0:123A:0:0:0:30</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test4_greaterThanOrEqualTo_IPv6</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test4_greaterThanOrEqualTo_IPv6 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test3_equals">
+        <equals>
+            <param>test3_equals</param>
+            <value>1.1.1.1</value>
+        </equals>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test3_equals</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test3_equals server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test20_lessThanOrEqual_IPv6">
+        <lessOrEqual type="ipv6">
+            <param>test20_lessThanOrEqual_IPv6</param>
+            <value>2001:DB0:0:123A:0:0:0:30</value>
+        </lessOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test20_lessThanOrEqual_IPv6</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test20_lessThanOrEqual_IPv6 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test9_greaterThan_IPv6">
+        <greaterOrEqual type="none">
+            <param>test9_greaterThan_IPv6</param>
+            <value>0000:0000:0000:0000:0000:0000:0000:0001</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test9_greaterThan_IPv6</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test9_greaterThan_IPv6 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test8_greaterThanOrEqualTo_Version_IPv4">
+        <greaterOrEqual type="version">
+            <param>test8_greaterThanOrEqualTo_Version_IPv4</param>
+            <value>2.2.2.2</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test8_greaterThanOrEqualTo_Version_IPv4</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test8_greaterThanOrEqualTo_Version_IPv4 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test33_Equals">
+        <notEqual>
+            <param>test33_Equals</param>
+            <value>test_not_equals</value>
+        </notEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test33_Equals</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test33_Equals server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test28_lessThan_Numeric">
+        <lessThan type="numeric">
+            <param>test28_lessThan_Numeric</param>
+            <value>2</value>
+        </lessThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test28_lessThan_Numeric</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test28_lessThan_Numeric server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test14_InIpRange">
+        <inIpRange type="" negation="false">
+            <param>test14_InIpRange</param>
+            <values>
+                <value>1.1.1.1</value>
+                <value>100.100.100.100</value>
+            </values>
+        </inIpRange>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test14_InIpRange</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test14_InIpRange server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test21_lessThanOrEqual_NONE">
+        <lessOrEqual type="none">
+            <param>test21_lessThanOrEqual_NONE</param>
+            <value>test</value>
+        </lessOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test21_lessThanOrEqual_NONE</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test21_lessThanOrEqual_NONE server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test7_greaterThanOrEqualTo_String">
+        <greaterOrEqual type="string">
+            <param>test7_greaterThanOrEqualTo_String</param>
+            <value>test_string</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test7_greaterThanOrEqualTo_String</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test7_greaterThanOrEqualTo_String server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test30_lessThan_version_IPv4">
+        <lessThan type="version">
+            <param>test30_lessThan_version_IPv4</param>
+            <value>1.1.1.1</value>
+        </lessThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test30_lessThan_version_IPv4</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test30_lessThan_version_IPv4 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test11_greaterThan_Numeric">
+        <greaterThan type="numeric">
+            <param>test11_greaterThan_Numeric</param>
+            <value>1</value>
+        </greaterThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test11_greaterThan_Numeric</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test11_greaterThan_Numeric server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test29_lessThan_String">
+        <lessThan type="string">
+            <param>test29_lessThan_String</param>
+            <value>test_string</value>
+        </lessThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test29_lessThan_String</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test29_lessThan_String server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test23_lessThanOrEqual_String">
+        <lessOrEqual type="string">
+            <param>test23_lessThanOrEqual_String</param>
+            <value>test_string</value>
+        </lessOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test23_lessThanOrEqual_String</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test23_lessThanOrEqual_String server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="Ip_range_02">
+        <and>
+            <greaterOrEqual type="version">
+                <param>clientAddressx</param>
+                <value>76.26.10.111</value>
+            </greaterOrEqual>
+            <lessOrEqual type="version">
+                <param>clientAddressx</param>
+                <value>79.27.15.223</value>
+            </lessOrEqual>
+        </and>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>Ip_range_02</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>Ip_range_02 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="neg_IPrangeNSlist">
+        <inIpRange type="namespacedList" negation="true">
+            <param>clientAddress</param>
+            <namespacedList>
+                <value>00_aaa_ipRange</value>
+            </namespacedList>
+        </inIpRange>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>neg_IPrangeNSlist</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>neg_IPrangeNSlist server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test26_lessThan_IPv6">
+        <lessThan type="ipv6">
+            <param>test26_lessThan_IPv6</param>
+            <value>0000:0000:0000:0000:0000:0000:0000:0002</value>
+        </lessThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test26_lessThan_IPv6</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test26_lessThan_IPv6 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test13_greaterThan_Version_IPv4">
+        <greaterThan type="version">
+            <param>test13_greaterThan_Version_IPv4</param>
+            <value>1.1.1.1</value>
+        </greaterThan>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test13_greaterThan_Version_IPv4</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test13_greaterThan_Version_IPv4 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="ip_range_04">
+        <and>
+            <greaterThan type="string">
+                <param>clientAddresx</param>
+                <value>76.26.10.96</value>
+            </greaterThan>
+            <lessThan type="string">
+                <param>clientAddresx</param>
+                <value>76.26.115.223</value>
+            </lessThan>
+        </and>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>ip_range_04</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>ip_range_04 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test6_greaterThanOrEqualTo_Numeric">
+        <greaterOrEqual type="numeric">
+            <param>test6_greaterThanOrEqualTo_Numeric</param>
+            <value>1</value>
+        </greaterOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test6_greaterThanOrEqualTo_Numeric</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test6_greaterThanOrEqualTo_Numeric server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="ip_range_05">
+        <and>
+            <greaterThan type="version">
+                <param>clientAddress</param>
+                <value>76.26.10.111</value>
+            </greaterThan>
+            <lessThan type="version">
+                <param>clientAddress</param>
+                <value>79.26.115.225</value>
+            </lessThan>
+        </and>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>ip_range_05</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>ip_range_05 server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test22_lessThanOrEqual_Numeric">
+        <lessOrEqual type="numeric">
+            <param>test22_lessThanOrEqual_Numeric</param>
+            <value>5</value>
+        </lessOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test22_lessThanOrEqual_Numeric</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test22_lessThanOrEqual_Numeric server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test2_NOTcontainsNamespacedList">
+        <contains type="namespacedList" negation="true">
+            <param>test2_NOTcontainsNamespacedList</param>
+            <namespacedList>
+                <value>test_ip</value>
+            </namespacedList>
+        </contains>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test2_NOTcontainsNamespacedList</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test2_NOTcontainsNamespacedList server route</description>
+            </server>
+        </return>
+    </if>
+    <if id="test25_lessThanOrEqual_Version_IPv4">
+        <lessOrEqual type="version">
+            <param>test25_lessThanOrEqual_Version_IPv4</param>
+            <value>1.1.1.1</value>
+        </lessOrEqual>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>test25_lessThanOrEqual_Version_IPv4</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.52.rc-SNAPSHOT</path>
+                <description>test25_lessThanOrEqual_Version_IPv4 server route</description>
+            </server>
+        </return>
+    </if>
+    <distribution>
+        <rule>
+            <id>0</id>
+            <percent>52.0</percent>
+            <server>
+                <name>distribution server 1</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.41</path>
+                <description>52.0% distribution server</description>
+            </server>
+        </rule>
+        <server>
+            <name>Default Server</name>
+            <url>{protocol}://{host}:{port}/{urn}</url>
+            <secureUrl></secureUrl>
+            <path>1.44</path>
+            <description>Default Server route</description>
+        </server>
+    </distribution>
+</selectServer>

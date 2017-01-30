@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<selectServer>
+    <distribution>
+        <server>
+            <name>Default Server</name>
+            <url>{protocol}://{host}:{port}/{urn}</url>
+            <secureUrl></secureUrl>
+            <path>1.41</path>
+            <description>Default Server route</description>
+        </server>
+    </distribution>
+</selectServer>

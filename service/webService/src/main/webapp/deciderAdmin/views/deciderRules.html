@@ -1,0 +1,87 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="bs-docs-section">
+    <h1 id="dropdowns" class="page-header">Rules Management
+    </h1>
+    <div class="container jumbotron">
+        <form name="rulesForm" role="form" novalidate=""  class="form-inline" ng-submit="submitForm()">
+            <h2 ng-hide="editMode">Add New Rule</h2>
+            <h2 ng-show="editMode">Editing {{currentRuleName}}</h2>
+
+            <label for="ruleName">Rule Name:</label>
+            <input type="text" class="form-control" id="ruleName"
+                   ng-model="currentRuleName"
+                   ng-disabled="editMode"
+                   name="ruleName"
+                   ng-pattern="/^[a-zA-Z0-9_]*$/"
+                   placeholder="Rule name"
+                   ng-change="ruleNameChanged()"
+                   required/>
+            <h6 ng-show="rulesForm.ruleName.$invalid && (!rulesForm.ruleName.$pristine || submitted) " class="error-label">Rule name is required and must contain only word characters, i.e. letters, numbers and _</h6>
+            <h6 ng-show="ruleNameAlreadyExists" class="error-label">Rule {{currentRuleName}} already exists. Select and edit it.</h6>
+
+            <div class="form-group-padding-narrow">
+                <h4>Rule conditions:</h4>
+                <button type="button" ng-click="addExpression('')" class="btn btn-primary btn-sm">Add condition</button>
+                <button type="button" ng-click="addExpression('OR')" class="btn btn-primary btn-sm">Add OR condition</button>
+                <button type="button" ng-click="addExpression('XOR')" class="btn btn-primary btn-sm">Add XOR condition</button>
+            </div>
+
+            <div ng-repeat="expr in rawExpressions track by $id(expr)">
+                <expressionold data=expr></expressionold>
+                <button type="button" class="btn btn-default btn-sm" ng-click="removeExpression($index)">Remove expression</button>
+            </div>
+            <div>
+                <h4>Partner parameters:</h4>
+                <label for="rulePartner">Partner Name:</label>
+                <div class="inline-table">
+                    <select
+                            id="rulePartner"
+                            class="form-control"
+                            name="partner"
+                            ng-model="currentPartner"
+                            ng-init="currentPartner = {id: partnerModel}"
+                            ng-change="partnerModel = currentPartner.id"
+                            ng-options="operator.id for operator in partners track by operator.id"
+                            style="width: 197px;"
+                            required>
+                    </select>
+                    <h6 ng-show="isCurrentPartnerDirty && !isCurrentPartnerValid()" class="error-label">Partner is required</h6>
+                </div>
+            </div>
+            <br />
+            <div class="form-group-padding-narrow">
+                <progress-button id="cancelEditEntity"
+                                 look="'btn-success'"
+                                 progress-condition="isSaving"
+                                 disabled="!authService.isAuthorized(USER_PERMISSIONS().writeDeciderRules)"
+                                 on-click="saveRule()"
+                                 title="'Save'"></progress-button>
+                <button type="button" class="btn btn-default" ng-click="cancelEditRule()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="bs-docs-section">
+    <h1 class="page-header">Rules
+    </h1>
+
+    <div ng-repeat="preview in rulesMap | orderRuleObjectBy:'id':false">
+        <rulepreview rule-type="deciderRule" data=preview></rulepreview>
+    </div>
+
+</div>

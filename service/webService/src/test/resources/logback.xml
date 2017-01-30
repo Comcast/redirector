@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds" debug="true">
+    <logger name="org.apache.zookeeper.server.NIOServerCnxn" level="ERROR"/>
+    <logger name="org.apache.curator.ConnectionState" level="OFF"/>
+    <logger name="org.apache.curator.framework.imps.CuratorFrameworkImpl" level="OFF"/>
+    <logger name="org.apache.zookeeper.server.PrepRequestProcessor" level="ERROR"/>
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR"/>
+
+    <appender name = "STDOUT" class = "ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{ISO8601} [%t] %-5p %c{0} [User=%X{username}] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

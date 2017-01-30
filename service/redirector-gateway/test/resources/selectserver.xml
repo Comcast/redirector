@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<selectServer>
+    <return>
+        <server>
+            <name>1.40 default BOM</name>
+            <url>xre://{host}:10004/shell</url>
+            <path>1.40</path>
+            <description>1.40 - production</description>
+        </server>
+    </return>
+</selectServer>

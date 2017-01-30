@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<urlRules>
+    <if id="testId">
+        <if templateName="templateName" id="testId">
+            <equals>
+                <param>paramTest</param>
+                <value>valueTest</value>
+            </equals>
+            <return>
+                <urlRule>
+                    <urn>urnTest</urn>
+                    <protocol>xre</protocol>
+                    <port>8088</port>
+                    <ipProtocolVersion>4</ipProtocolVersion>
+                </urlRule>
+            </return>
+        </if>
+    </if>
+    <default>
+        <urlRule>
+            <urn>shell</urn>
+            <protocol>xre</protocol>
+            <port>8081</port>
+            <ipProtocolVersion>4</ipProtocolVersion>
+        </urlRule>
+    </default>
+</urlRules>

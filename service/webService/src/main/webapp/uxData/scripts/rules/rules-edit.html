@@ -1,0 +1,197 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <div>
+        <h1>Rules Management
+            <small><span ng-bind="$root.currentApplication"></span></small>
+        </h1>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h5 ng-hide="vm.uiModelHolder.editMode">Add New Rule</h5>
+            <div ng-show="vm.uiModelHolder.editMode">Editing <span ng-bind="vm.ruleName"></span></div>
+        </div>
+        <div class="panel-body">
+            <form name="rulesForm" role="form" novalidate class="form-inline">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group" ng-class="{'has-error' : vm.hasError(vm.ruleNameError)}">
+                            <label for="ruleName">Rule Name:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="ruleName"
+                                   ng-model="vm.uiModelHolder.ruleName"
+                                   ng-change="vm.validateRuleName()"
+                                   ng-disabled="vm.uiModelHolder.editMode == true"
+                                   name="ruleName"
+                                   placeholder="Rule name">
+
+                            <h6 ng-show="vm.hasError(vm.ruleNameError)" class="error-label">
+                                <span ng-bind="vm.ruleNameError"></span></h6>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group pull-right">
+                            <label for="ruleTemplateName">Template:</label>
+                            <select class="form-control template-input-size"
+                                    name="ruleTemplateName"
+                                    id="ruleTemplateName"
+                                    ng-model="vm.uiModelHolder.currentTemplateName"
+                                    ng-options="key as key for (key, value) in vm.templateRules"
+                                    ng-change="vm.onTemplateChanged()"
+                                    >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group-padding-narrow">
+                            <h4>Rule conditions:</h4>
+                            <button id="addCondition"
+                                    type="button" ng-click="vm.addEmptyExpression('')" class="btn btn-primary btn-sm">Add
+                                condition
+                            </button>
+                            <button id="addOrCondition"
+                                    type="button" ng-click="vm.addEmptyExpression('OR')" class="btn btn-primary btn-sm">
+                                Add OR condition
+                            </button>
+                            <button id="addXorCondition"
+                                    type="button" ng-click="vm.addEmptyExpression('XOR')" class="btn btn-primary btn-sm">
+                                Add XOR condition
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-repeat="expr in vm.uiModelHolder.rawExpressions track by $id(expr)">
+
+                    <span ng-bind="$index + 1"></span>
+
+                    <expression
+                            data=expr
+                            validation-data=vm.exprValidationData[$index]
+                            allow-negation="true"
+                            on-expression-changed="vm.updateExpressions($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Name-Changed="vm.onExprNameChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Operator-Changed="vm.onExprOperatorChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Changed="vm.onExprValueChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Added="vm.onExprValueAdded($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Removed="vm.onExprValueRemoved($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Value-Type-Changed="vm.onExprValueTypeChanged($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)"
+                            on-Negation-Changed="vm.updateExpressions($index, side, newName, newOperator, newValues, changedValueIndex, newValueType, newNegationValue)">
+                    </expression>
+
+                    <button ng-disabled=expr.disabled type="button" class="btn btn-default btn-sm" ng-click="vm.removeExpression($index)">
+                        Remove expression
+                    </button>
+                </div>
+
+                <!--=========================================== Return server ===========================================-->
+                <h4>Server parameters:</h4>
+                <button id="addServer"
+                        type="button"  class="btn btn-primary btn-sm" ng-click="vm.addEmptyServer()">Add server</button>
+
+                <div style="padding-top: 10px">
+                    <label ng-show="vm.uiModelHolder.servers.length > 1">Server group:</label>
+                </div>
+
+                <div ng-class="{'well well-sm': vm.uiModelHolder.servers.length > 1}">
+
+                    <div ng-show="vm.uiModelHolder.servers.length > 1">
+                        <label>
+                            <input
+                                type="number"
+                                ng-model="vm.uiModelHolder.countDownTime"
+                                name="countDownTime"
+                                ng-pattern="/^[-]*[0-9]*$/"
+                                value="{{inputs.countDownTime}}"
+                                min="-1"
+                                required> Count down time
+                        </label>
+                    </div>
+                    <div ng-show="vm.uiModelHolder.servers.length > 1">
+                        <label><input
+                                type="checkbox"
+                                ng-model="vm.uiModelHolder.enablePrivate"
+                                value="vm.uiModelHolder.enablePrivate"> Enable private
+                        </label>
+                    </div>
+
+
+                    <div ng-repeat="server in vm.uiModelHolder.servers track by $id(server)">
+                        <div class="well well-sm">
+                            <div class="row">
+                                <server class="col-md-11"
+                                        disabled="vm.uiModelHolder.servers[$index].disabled"
+                                        edit-mode='server.editMode'
+                                        show-whitelisted-option=true
+                                        validation-data = vm.serverValidationData[$index]
+                                        server-values=vm.uiModelHolder.servers[$index]
+                                        service-paths=vm.servicePaths
+                                        show-stacks=server.isNonWhitelisted
+                                        show-whitelisted-only=!server.isNonWhitelisted
+                                        on-path-changed="vm.onServerPathChanged($index, path)"
+                                        on-url-changed="vm.onServerUrlChanged($index, url)"
+                                        on-query-changed="vm.onServerQueryChanged($index, query)"
+                                        on-edit-mode-changed="vm.onServerEditModeChanged($index, mode)"
+                                        on-whitelisted-changed="vm.onServerWhitelistedChanged($index, isNonWhitelisted)">
+                                </server>
+                                <div class="col-md-1">
+                                    <button type="button"
+                                            class="btn-server-delete pull-right"
+                                            ng-hide="vm.uiModelHolder.servers.length < 2"
+                                            ng-click="vm.removeServer($index)"
+                                            ng-disabled="vm.uiModelHolder.servers[$index].disabled"
+                                            >
+                                        <span class="fa fa-times-circle icon-delete-size"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="form-group-padding-narrow" id="mainButtonBar">
+                    <progress-button id="saveEntity"
+                                     look="'btn-success'"
+                                     on-click="vm.saveRule()"
+                                     disabled="!vm.hasPermissions(vm.authService, vm.USER_PERMISSIONS().writeRules)"
+                                     progress-condition="vm.isSaving"
+                                     title="'Save'">
+                    </progress-button>
+                    <progress-button id="saveEntityAsTemplate"
+                                     look="'btn-success'"
+                                     on-click="vm.saveAsTemplate()"
+                                     disabled="!vm.hasPermissions(vm.authService, vm.USER_PERMISSIONS().writeRules) || vm.uiModelHolder.editMode == true"
+                                     progress-condition="vm.isSaving"
+                                     title="'Save rule as template'">
+                    </progress-button>
+                    <button id="cancelEditEntity"
+                            type="button"
+                            class="btn btn-default"
+                            ng-click="vm.cancelEditRule()"
+                            title="'Cancel'">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

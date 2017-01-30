@@ -1,0 +1,85 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="form-group-padding-narrow">
+    <button id="addPartner" type="button" class="btn btn-success" ng-click="vm.addPartner()">Add Partner</button>
+    <button type="button" class="btn btn-warning" ng-click="vm.openImportForm()">Import From File</button>
+</div>
+
+<div class="row">
+    <div class="col-md-12" ng-show="vm.partners.length === 0">
+        <div class="jumbotron">
+            <p class="text-center">Hasn't any partners</p>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default" ng-show="vm.partners.length > 0">
+    <div class="panel-heading clearfix">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-inline pull-left">
+                    <h4>Partners</h4>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-inline pull-right">
+                    <button id="exportAll" ng-disabled="vm.partners.length == 0" type="button" class="btn btn-primary"
+                            ng-click="vm.exportAllPartners()">Export all
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table ng-table="vm.tableParams" class="table" show-filter="true">
+        <colgroup>
+            <col width="5%">
+            <col width="30%">
+            <col width="55%">
+            <col width="10%">
+        </colgroup>
+        <tr ng-repeat="partner in $data">
+            <td data-title="'#'">{{(vm.tableParams.page()-1)*vm.tableParams.count() + $index + 1}}</td>
+            <td data-title="'Partner Id'" sortable="'id'" filter="{ 'id': 'text' }">
+                <a a-disabled="$rootScope.isSaving" ng-click="vm.editPartner(partner.id)"
+                   class="cursor-pointer"
+                   ng-bind="partner.id"></a>
+            </td>
+            <td data-title="'Data'" filter="{ 'properties': 'text' }">
+                <pre class="partners-show-props" ng-bind="partner.properties"></pre>
+            </td>
+            <td data-title="'Action'">
+                <!-- Split button -->
+                <div class="btn-group pull-right">
+                    <button id="editPartner_{{partner.id}}" type="button" class="btn btn-default fa fa-pencil-square-o"
+                            ng-click="vm.editPartner(partner.id)"> Edit
+                    </button>
+                    <button id="actionsDropdown_{{partner.id}}" type="button" class="btn btn-default fa dropdown-toggle"
+                            data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="actions">
+                        <li ng-hide="$rootScope.isSaving || !vm.authService.isAuthorized(vm.USER_PERMISSIONS().writePartners)">
+                            <a id="deletePartner_{{partner.id}}" class="fa fa-times-circle" ng-click="vm.deletePartner(partner.id)"> Delete</a>
+                        </li>
+                        <li ng-class="$rootScope.isSaving">
+                            <a id="exportPartner_{{partner.id}}" class="fa fa-floppy-o" ng-click="vm.exportPartnerById(partner.id)"> Export</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

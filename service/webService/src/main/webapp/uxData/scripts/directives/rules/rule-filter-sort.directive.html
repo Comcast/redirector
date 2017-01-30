@@ -1,0 +1,24 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-2">
+            <h4 class="text-center sort-by-margin">Sort and search by:</h4>
+            </div>
+            <div ng-show="isPathRule" class="col-xs-2">
+                <select ng-model="searchSort.sortBy"  class="form-control gap-left-10 ">
+                    <option value="id"> Name</option>
+                    <option value="path"> Path</option>
+                </select>
+            </div>
+            <div class="col-xs-2">
+                <select ng-model="searchSort.sortType"  class="form-control gap-left-10 ">
+                    <option value="asc"> ASC</option>
+                    <option value="desc"> DESC</option>
+                </select>
+            </div>
+            <div class="pull-right col-xs-3">
+                <input class="form-control" placeholder="Input search text here" ng-model="searchSort.search">
+            </div>
+        </div>
+    </div>
+</div>

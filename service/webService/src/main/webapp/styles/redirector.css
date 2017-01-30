@@ -1,0 +1,1197 @@
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.input-params-col {
+    height: 59px;
+}
+
+.input-params-label {
+    font-size: 100%;
+    margin-top: 6px;
+    float: right;
+    white-space: pre-wrap;
+}
+
+.input-params-table {
+    margin-top: 20px;
+}
+
+.input-params-row-blue {
+    background-color: rgba(217, 237, 247, 0.15);
+}
+
+.input-params-row-yellow {
+    background-color: rgba(252, 248, 227, 0.16);
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.form-group-padding, .container-padding {
+    padding: 10px
+}
+
+.form-group-padding-sm {
+    padding: 10px 5px
+}
+
+.container-padding-sm-v {
+    padding: 5px 10px
+}
+
+.form-group-padding-narrow {
+    padding: 10px 0px
+}
+
+.time-label {
+    width: 190px
+}
+
+.btn-plusminus {
+    width: 30px
+}
+
+.xml-view {
+    border: none;
+    resize: none;
+    width: 500px
+}
+
+.td-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.login-form {
+    width: 400px;
+    margin: 200px auto
+}
+
+.ip-volume-cell {
+    width: 260px;
+}
+
+.ip-volume-ip-cell {
+    width: 120px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+#center-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.error-label {
+    color: red
+}
+
+.required-warning {
+    width: 200px;
+}
+
+.op-shift {
+    margin-left: 5px;
+}
+
+.alerts-container {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+}
+
+.alert.top-right {
+    position: relative !important;
+    margin: 8px !important;
+}
+
+.table-fixed-header {
+    width: 100%;
+}
+
+.table-fixed-header.thead, table-fixed-header.tbody, table-fixed-header.tr, table-fixed-header.td, table-fixed-header.th {
+    display: block;
+}
+
+.table-fixed-header.tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.table-fixed-header.thead table-fixed-header.th {
+    height: 30px;
+
+    /*text-align: left;*/
+}
+
+.table-fixed-header.tbody {
+    height: 120px;
+    overflow-y: auto;
+}
+
+.table-fixed-header.thead {
+    /* fallback */
+}
+
+.table-fixed-header.tbody td, table-fixed-header.thead th {
+    width: 19.2%;
+    float: left;
+}
+
+.inline-table {
+    display: inline-table;
+}
+
+.top-right-absolute {
+    position: absolute;
+    right: 0px;
+}
+
+.top7_5 {
+    padding-top: 7.5px;
+}
+
+.fileUpload {
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.height111 {
+    height: 35px;
+}
+
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.fontSize18px {
+    font-size: 18px;
+}
+
+.fontSize18px {
+    font-size: 18px;
+}
+
+.wide-input {
+    width: 300px !important;
+}
+
+.has-margin {
+    margin-top: 20px;
+}
+
+.action-separator {
+    display: inline-block;
+    width: 20px;
+}
+
+.nowrap {
+    white-space: nowrap
+}
+
+.pending, .pending > td {
+    background-color: #E8EDCC !important
+}
+
+.fontSize14px {
+    font-size: 14px;
+}
+
+.height35px {
+    height: 35px;
+}
+
+.width56p {
+    width: 56%;
+}
+
+.inlineblock {
+    display: inline-block;
+}
+
+.gap-left-10 {
+    margin-left: 10px;
+}
+
+.pending-status-icon-view {
+    font-size: 20px
+}
+
+.pending-status-icon {
+    width: 30px;
+    margin-top: 30px
+}
+
+tr.distribution-row > td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.server-form {
+    padding-left: 10px;
+    padding-bottom: 10px
+}
+
+.panel-group > .panel > .panel-heading > .panel-title > .pull-right > i:hover {
+    opacity: 0.6;
+    text-decoration: none;
+    transition: all 0.1s ease-in-out 0s;
+}
+
+.panel-group > .panel > .panel-heading > .panel-title > .pull-right > a {
+    display: inline-block;
+    height: 16px;
+    margin-left: 5px;
+}
+
+.dropdown-menu > .custom {
+    clear: both;
+    color: #333;
+    display: block;
+    font-weight: 400;
+    line-height: 1.42857;
+    padding: 3px 20px;
+    white-space: nowrap;
+    width: 240px;
+}
+
+.template-input-size {
+    min-width : 150px;
+}
+
+.panel.focus {
+    border-color: #66AFE9 !important;
+    border-width: 2px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6) !important;
+    outline: 0 none !important;
+}
+
+.panel.focusError {
+    border-color: #e9460b !important;
+    border-width: 2px;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(255, 0, 23, 0.60) !important;
+    outline: 0 none !important;
+}
+
+.monospaces {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.xlabel {
+    font-size:110%;
+}
+
+.ui-match {
+    background-color: transparent !important;
+    font-weight: bold !important;
+}
+
+.dont-break-out {
+
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+
+}
+
+    /* add bootstrap submenu */
+
+    .dropdown-submenu {
+        position:relative;
+    }
+    .dropdown-submenu>.dropdown-menu {
+        top:0;
+        left:100%;
+        margin-top:-6px;
+        margin-left:-1px;
+        -webkit-border-radius:0 6px 6px 6px;
+        -moz-border-radius:0 6px 6px 6px;
+        border-radius:0 6px 6px 6px;
+    }
+    .dropdown-submenu:hover>.dropdown-menu {
+        display:block;
+    }
+    .dropdown-submenu>a:after {
+        display:block;
+        content:" ";
+        float:right;
+        width:0;
+        height:0;
+        border-color:transparent;
+        border-style:solid;
+        border-width:5px 0 5px 5px;
+        border-left-color:#cccccc;
+        margin-top:5px;
+        margin-right:-10px;
+    }
+    .dropdown-submenu:hover>a:after {
+        border-left-color:#ffffff;
+    }
+    .dropdown-submenu.pull-left {
+        float:none;
+    }
+    .dropdown-submenu.pull-left>.dropdown-menu {
+        left:-100%;
+        margin-left:10px;
+        -webkit-border-radius:6px 0 6px 6px;
+        -moz-border-radius:6px 0 6px 6px;
+        border-radius:6px 0 6px 6px;
+    }
+
+p.editable-click {
+    border-bottom:none;
+}
+
+p.editable-empty {
+    color: #888888;
+}
+p.editable-empty:hover {
+    color: #303030;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.default-server-pending-status-icon{
+    margin-top: 9px;
+}
+
+.default-server-row {
+    padding-top: 10px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.delete-duplicate-label {
+    margin-top:6px;
+}
+
+.delete-duplicate-row {
+    margin-bottom:5px;
+}
+
+.delete-duplicate-value-header {
+    padding: 0 0 0 0;
+}
+
+.delete-duplicate-value-body {
+    padding: 8px;
+}
+
+.delete-duplicate-panel-default {
+    margin-bottom: 0px;
+}
+
+.delete-duplicate-modal-body {
+    height:600px; overflow:auto;
+}
+
+.delete-duplicates-red-border {
+    border-color: red;
+}
+
+.delete-duplicates-button {
+    height: 30px;
+    padding: 3px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.changes-diff-view-table {
+    table-layout: fixed;
+    margin: 0px;
+}
+
+.changes-diff-view-column {
+    width: 50%;
+}
+.changes-diff-view-column pre {
+    white-space: pre;
+    margin: 0px;
+}
+
+.inserted {
+    background-color: #9E9;
+    min-width: 100%;
+    display: inline-block;
+}
+
+.deleted {
+    background-color: #E99;
+    min-width: 100%;
+    display: inline-block;
+}
+
+.modified {
+    background-color: #FD8;
+    min-width: 100%;
+    display: inline-block;
+}
+
+.modified-light {
+    background-color: #fcffb6;
+    /*min-width: 100%;*/
+    /*display: inline-block;*/
+}
+
+.padding {
+    background-color: lightgray;
+    min-width: 100%;
+    display: inline-block;
+}
+
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.diff-distr-panel {
+    margin: 0px;
+}
+
+.diff-distr-panel-body {
+    padding: 5px;
+}
+
+.diff-distr-footer-body {
+    padding: 5px;
+    height: 30px;
+}
+
+.diff-distr-footer-body-extended {
+    padding: 5px;
+    height: 50px;
+}
+
+.diff-distr-column-panel {
+    padding: 9.5px;
+    margin: 0px;
+    background-color: #f5f5f5;
+}
+
+.diff-distr-column-row {
+    white-space: pre;
+    word-wrap:break-word;
+    overflow:auto;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+.general-rule-error {color: red; vertical-align: text-bottom}
+.new-rule {text-align: center; vertical-align: top !important;}
+.invalid-current-total {border-top: 0px;}
+
+.table>tbody>tr.deleted-distribution-rule>td {
+    background-color: #E99!important;
+    opacity: 0.3;
+    filter: alpha(opacity=30); /* For IE8 and earlier */
+}
+
+.table>tbody>tr.added-distribution-rule>td {
+    background-color: #9E9!important;
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
+
+.table>tbody>tr.changed-distribution-rule>td {
+    background-color: #FD8!important;
+    opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+}
+
+.edit-distribution-modal-window .modal-dialog {
+    width: 40%;
+    min-width: 500px;
+}
+
+.query-pair-number {
+    padding-top: 6px;
+    padding-left: 20px;
+}
+
+.query-pair-button {
+    padding-top: 6px;
+    padding-left: 10px;
+    padding-bottom: 6px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.expression-main {
+    margin: 0px !important;
+}
+
+.expression-group-display {
+    display: inline-table;
+}
+.expression-name {
+    min-width: 280px;
+}
+.negation {
+    padding-left: 8px;
+}
+
+.expression-value {
+    width: 177px !important;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.import-namespaces-preview-content {
+    margin-top:20px;
+}
+
+.import-namespaces-preview {
+    margin-left: 10px;
+}
+
+.import-namespaces-namespaces-container{
+    width: 100%;
+}
+
+.import-namespaces-show-values{
+    width: 100%;
+}
+
+div.import-namespaces-show-values {
+    margin-bottom: 0px;
+    display: inline-block;
+}
+
+td.import-namespaces-show-values {
+    width: 20%;
+}
+
+li.import-namespaces-show-values-value {
+    margin: 0 0 0 0px;
+    padding: 5px 7px;
+}
+
+p.import-namespaces-show-values-value {
+    margin-bottom: 0px;
+}
+
+.import-namespaces-choose-file {
+    height: 35px;
+    display: inline-block;
+    width: 56%;
+}
+
+
+
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.mol-int-btn {
+    cursor: default;
+    width: 12em;
+}
+
+.jumpButton {
+    color: #777;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.jumpButton:visited {
+    color: #777;
+}
+
+.jumpButton:hover {
+    color: #07F;
+}
+.jumpButton:active {
+    color: #07F;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+pre.partners-show-props {
+    margin-bottom: 0px;
+}
+
+.edit-partners-modal-window .modal-dialog {
+    width: 50%;
+    min-width: 600px;
+}
+
+input.edit-partners-input-name {
+    width: 30%;
+}
+
+.import-partners-modal-window .modal-dialog {
+    width: 50%;
+    min-width: 600px;
+}
+
+.import-partners-choose-file {
+    height: 35px;
+    display: inline-block;
+    width: 100%;
+}
+
+.import-partners-buttons-group {
+    padding: 0px;
+}
+
+.import-partners-preview {
+    margin-left: 10px;
+}
+
+.import-partners-preview-content {
+    margin-top: 20px;
+}
+
+.import-partners-props-group{
+    width: 100%;
+}
+
+td.import-partners-props-group {
+    width: 20%;
+}
+
+div.import-partners-props-group {
+    margin-bottom: 0px;
+    display: inline-block;
+}
+
+pre.import-partners-show-props {
+    margin-bottom: 0px;
+}
+
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.advanced-servers-label {padding: 0px 0px; font-size: 13px}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+.btn-server-delete {
+    width: 34px;
+    height: 34px;
+    margin-top: 25px;
+}
+
+.icon-delete-size {
+    font-size: 18px;
+}
+
+.sort-by-margin {
+    margin-top: 8px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+.search-namespaced-lists-container {
+    width: 100%;
+}
+
+.search-namespaced-lists-show-values {
+    width: 100%;
+}
+
+div.search-namespaced-lists-show-values {
+    margin-bottom: 0px;
+    display: inline-block;
+}
+
+td.search-namespaced-lists-show-values {
+    width: 20%;
+}
+
+li.search-namespaced-lists-show-values-value {
+    margin: 0 0 0 0px;
+    padding: 5px 7px;
+}
+
+p.search-namespaced-lists-show-values-value {
+    margin-bottom: 0px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+.text label {
+    display:block;
+}
+
+.server_field_input {
+    display: inline!important;
+    width: 100px!important;
+}
+
+.server_path_input {
+    display: inline!important;
+    width: 300px!important;
+}
+
+.server_url_input {
+    width: 600px!important;
+}
+
+.query-block {
+    background-color: #eaeaea;
+}
+
+.query-block-entry {
+    margin-top:5px;
+}
+
+.query-advanced-server {
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.server-row {
+    padding-right: 0;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+.btn-wl-actions {
+    height: 34px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+.whitelisted-margin-between-flavors {
+    margin-bottom: 2px;
+    height:24px;
+}
+
+.whitelisted-h {
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+multiselect .dropdown-menu {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+multiselect .dropdown-menu > li > a {
+    padding: 3px 10px;
+    cursor: pointer;
+}
+
+multiselect .dropdown-menu > li > a:hover, multiselect .dropdown-menu > li > a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    background-color: #428bca;;
+}
+
+.break-word {
+    word-wrap: break-word;
+    margin-left: -10px;
+}
+
+.marging-summary {
+    margin-right: -10px;
+    margin-left: -20px;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+span.boolean {
+    width: 6em;
+    /*height: 29px;*/
+    /*line-height: 29px;*/
+    padding: 0;
+    background-color: #f5f5f5;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+
+}
+
+span.boolean > .show {
+    display: block;
+}
+
+span.boolean > .hide {
+    display: none;
+}
+
+span.boolean > .on, span.boolean > .off {
+    border-radius: 3px 3px 3px 3px;
+    /*font-weight: 700;*/
+    text-align: center;
+    width: 3em;
+}
+
+span.boolean > .on {
+    float: left;
+}
+
+span.boolean > .off {
+    background-color: #CCCCCC;
+    color: #666666;
+    float: right;
+}
+
+span.boolean, span.boolean > .on, span.boolean > .off {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+div .sort {
+    margin-left: 5px;
+    width: 15px;
+    display: inline;
+    cursor: pointer
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+td.testsuite-import-expanded-td {
+    border-top: 0 !important;
+}
+
+.select-all {
+    right: 10px;
+    bottom: 3px;
+}
+
+.testsuite-table.odd {
+    background-color: rgb(255, 255, 255);
+}
+.testsuite-table.even {
+    background-color: rgb(230, 230, 230);
+}
+
+.testsuite-table-run {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.testcaselog {
+    white-space: pre-wrap
+}
+
+.testcasename {
+    word-wrap: break-word;
+}
+
+
+/**
+ * Copyright 2016 Comcast Cable Communications Management, LLC 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+.urlParams_urn_input {
+    display: inline!important;
+    width: 100%!important;
+}

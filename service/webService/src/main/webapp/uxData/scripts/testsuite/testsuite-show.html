@@ -1,0 +1,99 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div class="form-group">
+    <h1>Show rule test cases
+        <small>{{$root.currentApplication}}</small>
+    </h1>
+    <p>
+        <div class="button-checkbox inlineblock" ng-hide="vm.testCases.length === 0" ng-click="vm.allSelected ? vm.deselectAll() : vm.selectAll()">
+            <button type="button" ng-class="vm.allSelected ? 'fa fa-check-square-o' : 'fa fa-square-o'" class="btn" data-color="primary">  Select All</button>
+            <input class="hidden" type="checkbox" ng-model="vm.allSelected"  ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 100, 'blur': 0 } }" ng-change="!vm.allSelected ? vm.deselectAll() : vm.selectAll()">
+        </div>
+
+        <button class="btn fa pull-right btn-primary" ng-hide="vm.testCases.length === 0" ng-class="vm.testNamesToRun.length === 0 ? 'disabled' : '' " ng-class="(vm.testCases.length === 0)?'disabled':''" ng-click="vm.runAll()">Run Selected</button>
+        <button class="btn fa pull-right btn-primary" ng-hide="vm.testCases.length === 0" ng-class="(vm.testCases.length === 0)?'disabled':''" ng-click="vm.exportTestCases($root.currentApplication)">Export All</button>
+    </p>
+    <div class="pull-right">
+        <input ng-hide="vm.testCases.length === 0" class="form-control" placeholder="Input search text here" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 100, 'blur': 0 } }" ng-model="vm.search.$" ng-change="vm.filterSuiteData(); vm.allSelected ?  vm.selectAll() : '' ">
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-body">
+            <div ng-show="vm.testCases.length === 0">
+                <div class="jumbotron">
+                    <p class="text-center">{{vm.loading ? "Loading..." : "Empty"}}</p>
+                </div>
+            </div>
+            <table ng-table="vm.tableParams" class="table testsuite-table" show-filter="false"  ng-hide="vm.testCases.length === 0">
+                <colgroup>
+                    <col width="5%">
+                    <col width="5%">
+                    <col width="25%">
+                    <col width="50%">
+                    <col width="15%">
+                </colgroup>
+
+                <tr ng-class="$even?'testsuite-table odd':'testsuite-table even'"  ng-repeat="testCase in vm.tableParams.data">
+                    <td data-title="'Run'" sortable="'run'">
+                        <input class="checkbox" type="checkbox" ng-model="testCase.run" ng-change="vm.toggleRunForTestCase(testCase.testName, testCase.run)">
+                    </td>
+                    <td data-title="'Next version'">
+                        <div btn-switch ng-click="vm.changeRunNextForTestCase(testCase.testName, testCase.runNext)"
+                             ng-model="testCase.runNext"></div>
+                    </td>
+                    <td data-title="'Name'" sortable="'testName'">
+                        <p ng-bind="testCase.testName"></p>
+                    </td>
+                    <td data-title="'Description'">
+                        {{testCase.showSimpleView ? vm.getSimpleViewForTestCase(testCase) : ""}}
+                        <pre class="prettyprint" ng-hide="testCase.showSimpleView " ng-bind="vm.getXmlViewForTestCase(testCase)"> </pre>
+                    </td>
+                    <td data-title="'Action'" id="{{testCase.testName}}">
+                        <!-- Split button -->
+                        <div class="btn-group pull-left">
+                            <button type="button" class="btn btn-primary fa fa-pencil-square-o test-suite-edit-button"
+                                    ng-click="vm.editTestCase(testCase)"> Edit
+                            </button>
+                            <button type="button" class="btn btn-primary fa dropdown-toggle test-suite-action-button"
+                                    data-toggle="dropdown">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" class="fa fa-floppy-o"
+                                       ng-click="vm.exportTestCase($root.currentApplication, testCase.testName)">Export</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" class="fa fa-play"
+                                       ng-click="vm.runOne(testCase)">Run</a>
+                                </li>
+                                <li role="presentation"
+                                    ng-hide="!vm.authService.isAuthorized(vm.USER_PERMISSIONS().writeTestSuite)">
+                                    <a role="menuitem" tabindex="-1" class="fa fa-times-circle test-suite-delete-button"
+                                       ng-click="vm.deleteTestCase(testCase.testName)"> Delete</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" class="fa fa-caret-left"
+                                       ng-click="vm.switchMode(testCase)"> {{testCase.showSimpleView != false ? "XML" :
+                                        "Simple"}} view</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

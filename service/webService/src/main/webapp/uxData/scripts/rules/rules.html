@@ -1,0 +1,63 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<h1>Flavor Rules
+    <small ng-bind="$root.currentApplication"></small>
+</h1>
+<rules-filter-sort search-sort="vm.searchSort" rules="vm.rules" is-path-rule="true"></rules-filter-sort>
+<div class="panel panel-default">
+    <div class="panel-heading clearfix">
+        <label></label>
+        <div class="pull-right">
+            <select name="filter" disabled class="hidden">
+                <option></option>
+                <option>Show all</option>
+                <option>Show pending</option>
+            </select>
+        </div>
+        <div class="pull-right row">
+        <span class="text-danger" ng-hide="vm.searchSort.search === ''">
+                    Filter applied: {{vm.searchSort.search}}
+                </span>
+
+            <div class="btn-group">
+                <button ng-hide="$root.redirectorOfflineMode" ng-disabled="vm.isMapEmpty(vm.rules)" type="button"
+                        class="btn btn-primary btn-sm dropdown-toggle fa fa-cog"
+                        data-toggle="dropdown">
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a class="fa fa-floppy-o" ng-click="vm.exportAllRules()"> Export all</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div ng-show="vm.loading || vm.isMapEmpty(vm.rules)">
+            <div class="jumbotron">
+                <p class="text-center" ng-bind="vm.loading ? 'Loading...' : vm.isMapEmpty(vm.rules) ? 'Empty' : ''"></p>
+            </div>
+        </div>
+
+        <div ng-repeat="preview in vm.rules | findObjectByFirstOrderPropertyOrPath:vm.searchSort.sortBy:vm.searchSort.search | orderRuleObjectBy:vm.searchSort.sortBy:(vm.searchSort.sortType == 'asc' ? false : true) track by preview.id">
+            <rulepreview
+                    rule-type="'rule'"
+                    data=preview
+                    focus="vm.focusedRule === preview.rule.id"
+                    on-rule-edit="vm.editRule(ruleId)"
+                    on-Rule-Delete="vm.confirmDeleteRule(ruleId)">
+            </rulepreview>
+        </div>
+    </div>
+</div>

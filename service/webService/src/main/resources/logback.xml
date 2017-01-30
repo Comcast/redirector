@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds" debug="true">
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR"/>
+    <logger name="org.apache.curator.ConnectionState" level="OFF"/>
+
+
+    <appender name = "STDOUT" class = "ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{ISO8601} [%t] %-5p %c{0} [%X{appName} User=%X{username}] - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>RedirectorWebService.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>RedirectorWebService.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>12</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5 MB</maxFileSize>
+        </triggeringPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{ISO8601} [%t] %-5p %c{0} [%X{appName} User=%X{username}] - %m%n</Pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

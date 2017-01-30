@@ -1,0 +1,100 @@
+.title-report {
+    display: inline-block;
+    background-color: #f7f7f7;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    border: 10px;
+    width: 100%;
+    position: relative;
+    margin: 2px;
+    padding: 10px;
+}
+
+.td-right {
+    text-align: right;
+}
+
+.report {
+    top: 0px;
+    margin: 0px;
+    padding: 4px 2px 2px 3px;
+    border-width: 1px;
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #111;
+    max-width: 45%;
+    overflow: hidden;
+    text-decoration: none;
+    padding: 1px 1px;
+    cursor: pointer;
+}
+
+.status {
+    background-color: #4cae4c;
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 15px;
+    width: 70px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.failed {
+    background-color: #A00;
+    width: 70px;
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logs {
+    margin: 0px;
+    padding: 0px;
+    color: #111;
+    text-decoration: none;
+    white-space: normal;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.inner-table {
+    margin-left: -20px;
+    font-size: .9em;
+    line-height: 1.1em;
+    border-top: none !important;
+}
+
+.parameters-left {
+    float: left;
+    height: 20px;
+    width: 400px;
+    color: #111;
+    text-decoration: none;
+}
+
+.parameters-right {
+    float: right;
+    height: 60px;
+    width: 400px;
+    color: #111;
+    text-decoration: none;
+}
+
+.parameters-left span {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.parameters-right span {
+    display: inline-block;
+    margin-right: 20px;
+}
+

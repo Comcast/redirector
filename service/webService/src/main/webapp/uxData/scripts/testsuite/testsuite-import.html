@@ -1,0 +1,118 @@
+<!--
+  ~ Copyright 2016 Comcast Cable Communications Management, LLC 
+  ~ 
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at 
+  ~ http://www.apache.org/licenses/LICENSE-2.0 
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<div>
+    <h1 ng-bind="vm.title"></h1>
+
+    <div>
+        <div class="row">
+            <div class="col-xs-3">
+                <file-select on-change="vm.getFile"></file-select>
+            </div>
+            <button
+                    class="btn btn-success pull-right"
+                    ng-hide="vm.testCasesFromFile.length === undefined || vm.testCasesFromFile.length == 0"
+                    ng-click="vm.importAll()">
+                <!-- toDo perms -->
+                <span class="fa fa-floppy-o"></span> Import all
+            </button>
+        </div>
+        <br/>
+
+        <div class="progress" ng-show="vm.isImportInProgress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="1"
+                 aria-valuemax="100" ng-style="{'width': progress}">
+                <span>Importing</span>
+            </div>
+        </div>
+        <pre ng-hide="vm.testCasesFromFile.length === undefined || vm.testCasesFromFile.length == 0 || vm.hidePreview"
+             class="collapse import-namespaces-preview-content"
+             id="preview" ng-bind="vm.importContentForPreview"></pre>
+        <hr/>
+    </div>
+    <table ng-table="vm.tableParams" class="table" show-filter="false" ng-show="vm.testCasesFromFile.length>0">
+        <colgroup>
+            <col width="30%">
+            <col width="56%">
+            <col width="14%">
+        </colgroup>
+        <tbody ng-repeat="testCase in $data">
+        <tr>
+
+            <td data-title="'Name'" sortable="'testName'">
+                <p
+                        ng-bind="testCase.testName"></p>
+            </td>
+            <td data-title="'Description'"
+                ng-bind="vm.getSimpleViewForTestCase(testCase)"></td>
+            <td data-title="'Action'">
+                <!-- Split button -->
+                <div class="btn-group pull-left">
+                    <button type="button" class="btn btn-primary fa fa-pencil-square-o"
+                            ng-click="vm.importOne(testCase)"> Import
+                    </button>
+                    <button type="button" class="btn btn-primary fa dropdown-toggle"
+                            data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">
+                            <a role="menuitem" tabindex="-1" class="fa fa-caret-left"
+                               ng-click="vm.changeExpanded(testCase)"> {{testCase.expanded != false ? "Simple" :
+                                "Expanded"}} view</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <tr ng-show="testCase.expanded">
+            <td colspan="5">
+                <div class="panel panel-info">
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr>
+                                <td class="testsuite-import-expanded-td">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <h4 ng-bind="'Parameter name'"></h4>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <h4 ng-bind="'Parameter values'"></h4>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="expanded-view jumbotron" ng-show="testCase.expanded"
+                                ng-repeat="parameter in testCase.parameters.parameter">
+                                <td>
+                                    <div class="row">
+                                        <div class="col-xs-6" ng-bind="parameter.name">
+                                        </div>
+                                        <div class="col-xs-6" ng-bind="parameter.values">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <h2 class="" ng-show="vm.showFooter">All test cases are imported. You can select
+            another file.</h2>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+e2e.basePath = ${project.basedir}/src/main/resources
+e2e.redirectorEndpoint = http://localhost:10601
+e2e.reportBaseUrl = http://localhost:10601
+e2e.redirectorWsBaseUrl = http://localhost:10540/redirectorWebService/data
+e2e.zooKeeperConnection =  localhost:2181
+e2e.zookeeperBasePath = /endtoend
+e2e.excludedAppsForStackAutoDiscovery = xreGuide
+e2e.testcasesRunner = HttpTestCasesRunner
+e2e.testResultsEndpoint = localhost:8000
+e2e.discoveryPullInterval = 1000
+e2e.extraTests =

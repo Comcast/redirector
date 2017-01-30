@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<selectServer>
+    <if id="Rule1">
+        <equals>
+            <param>param</param>
+            <value>23</value>
+        </equals>
+        <return>
+            <server isNonWhitelisted="false">
+                <name>Rule1</name>
+                <url>{protocol}://{host}:{port}/{urn}</url>
+                <path>1.41</path>
+                <description>Rule1 server route</description>
+            </server>
+        </return>
+    </if>
+    <distribution>
+        <server>
+            <name>Default Server</name>
+            <url>{protocol}://{host}:{port}/{urn}</url>
+            <secureUrl></secureUrl>
+            <path>1.41</path>
+            <description>Default Server route</description>
+        </server>
+    </distribution>
+</selectServer>

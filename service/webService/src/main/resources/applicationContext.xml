@@ -1,0 +1,56 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.comcast.redirector.dataaccess"/>
+    <context:component-scan base-package="com.comcast.redirector.api.auth"/>
+    <context:component-scan base-package="com.comcast.redirector.api.redirector"/>
+    <context:component-scan base-package="com.comcast.redirector.api.redirectorOffline"/>
+    <context:component-scan base-package="com.comcast.redirector.api.decider"/>
+
+    <context:mbean-export/>
+    <context:property-placeholder location="classpath:service.properties" ignore-unresolvable="true"/>
+
+    <bean id="redirectorConfig" class="com.comcast.redirector.api.config.RedirectorConfig">
+        <property name="connectionTimeoutMs" value="${redirector.connectionTimeoutMs}"/>
+        <property name="connectionUrl" value="${redirector.connectionUrl}"/>
+        <property name="retryCount" value="${redirector.retryCount}"/>
+        <property name="sleepsBetweenRetryMs" value="${redirector.sleepsBetweenRetryMs}"/>
+        <property name="zookeeperBasePath" value="${redirector.zookeeperBasePath}"/>
+        <property name="cacheHosts" value="${redirector.cacheHosts}" />
+        <property name="snapshotBasePath" value="${redirector.snapshotBasePath}" />
+        <property name="stacksSnapshotRateInSeconds" value="${redirector.stacksSnapshotRateInSeconds}" />
+    </bean>
+
+    <bean id="authService" class="com.comcast.redirector.api.auth.DefaultAuthService" />
+
+    <bean id="fileSystemHelper" class="com.comcast.redirector.api.redirectorOffline.FileSystemHelper"/>
+
+    <bean id="redirectorEngineFactory" class="com.comcast.redirector.api.redirector.service.redirectortestsuite.RedirectorFactory"
+          factory-method="getRedirectorEngineFactory" />
+
+    <bean id="jaxbContextBuilder" class="com.comcast.redirector.common.serializers.JAXBContextBuilder"/>
+
+    <bean id="jaxbContextXML" class="org.eclipse.persistence.jaxb.JAXBContext" factory-bean="jaxbContextBuilder" factory-method="createContextForXML">
+        <constructor-arg name="packages" type="java.lang.String[]" value="com.comcast"/>
+    </bean>
+
+    <bean id="jaxbContextJSON" class="org.eclipse.persistence.jaxb.JAXBContext" factory-bean="jaxbContextBuilder" factory-method="createContextForJSON">
+        <constructor-arg name="packages" type="java.lang.String[]" value="com.comcast"/>
+    </bean>
+
+    <bean id="xmlSerializer" class="com.comcast.redirector.common.serializers.XMLSerializer">
+        <property name="context" ref="jaxbContextXML"/>
+    </bean>
+
+    <bean id="jsonSerializer" class="com.comcast.redirector.common.serializers.JSONSerializer">
+        <property name="context" ref="jaxbContextJSON"/>
+    </bean>
+
+    <bean id="serviceChangeNotifier" class="com.comcast.redirector.api.notification.ServiceChangeNotifier"/>
+
+</beans>

@@ -1,0 +1,13 @@
+{
+  "version": 0,
+  "snapshotList": [
+    {
+      "path": "/BR/BRC9/1.41/appTest",
+      "hosts": [
+        {
+          "ipv4": "ccpapp-po-c534-p.po.ccp.cable3ff33.comcast.com"
+        }
+      ]
+    }
+  ]
+}

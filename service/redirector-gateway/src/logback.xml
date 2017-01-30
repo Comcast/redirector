@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="30 seconds" debug="false">
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR"/>
+
+    <appender name = "STDOUT" class = "ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{ISO8601} [%t] %-5p %c{0} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>xreRedirector.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>xreRedirector.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>12</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5 MB</maxFileSize>
+        </triggeringPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{ISO8601} [%t] %-5p %c{0} - %m%n</Pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.comcast.xre.metrics.app" level="ERROR"/>
+    <logger name="com.comcast.xre.host.core.XREPipeline" level="ERROR"/>
+    <logger name="com.comcast.xre.host.core" level="ERROR"/>
+
+    <root level="info">
+        <!--<appender-ref ref="FILE"/>-->
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
