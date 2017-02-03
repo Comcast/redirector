@@ -15,7 +15,9 @@ In order to quickly start Redirector infrastructure and play with it use this Do
 ## Installation
 
 1) from root module do `mvn clean install` 
+
 2) go to 'demo' module
+
 3) run `mvn docker:build` for Windows 7
   
    If you're using Mac OS run: 
