@@ -751,7 +751,7 @@
         <profile>
             <id>Docker-Linux</id>
             <properties>
-                <docker.host>unix://var/run/docker.sock</docker.host>
+                <docker.host>unix:///var/run/docker.sock</docker.host>
                 <cert.path />
             </properties>
         </profile>
@@ -766,6 +766,13 @@
             <id>Docker-HyperV</id>
             <properties>
                 <docker.host>tcp://localhost:2375</docker.host>
+                <cert.path />
+            </properties>
+        </profile>
+        <profile>
+            <id>Docker-MacOS-HyperV</id>
+            <properties>
+                <docker.host>unix:///var/run/docker.sock</docker.host>
                 <cert.path />
             </properties>
         </profile>
