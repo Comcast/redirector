@@ -18,7 +18,9 @@ In order to quickly start Redirector infrastructure and play with it use this Do
 
 2) go to 'demo' module
 
-3) run `mvn docker:build` for Windows 7
+3) make sure docker is up and running
+
+4) run `mvn docker:build` for Windows 7
   
    If you're using Mac OS run: 
   
@@ -36,7 +38,7 @@ In order to quickly start Redirector infrastructure and play with it use this Do
   
          `mvn docker:build -P Docker-HyperV`
          
-4) run `mvn docker:run` for Windows 7
+5) run `mvn docker:run` for Windows 7
   
    for Mac OS run:
   
@@ -54,7 +56,7 @@ In order to quickly start Redirector infrastructure and play with it use this Do
     
          `mvn docker:run -P Docker-HyperV`
          
-5) you can use `docker ps` command in your docker client to see that 3 containers are created
+6) you can use `docker ps` command in your docker client to see that 3 containers are created
    example for Mac OS (in macOS 10.10 Yosemite and higher) OR Linux:
         `docker ps`
         
@@ -64,9 +66,7 @@ In order to quickly start Redirector infrastructure and play with it use this Do
     | 93a4a6ee5892 | appds/redirector-admin-ux  | "/docker-entrypoin..." | 16 minutes ago | Up 16 minutes | 0.0.0.0:10540->8080/tcp |
     | 029665cbc84e | appds/redirector-zookeeper | "/opt/zookeeper/bi..." | 16 minutes ago | Up 16 minutes | 0.0.0.0:2181->2181/tcp |
     
-6) use [Discovery Client Registration utility](https://github.com/Comcast/discovery/blob/develop/discovery-client/src/main/java/com/comcast/tvx/cloud/RegistrationMain.java) 
-or [Redirector Host Registration Utility](https://github.comcast.com/appds-services/redirector-2.0/blob/next-sprint/testing/tools/host-registration/src/main/java/com/comcast/xre/common/redirector/v2/utils/HostRegistration.java) to register the hosts. 
-Use Docker Machine IP address (192.168.99.100 on windows by default) instead of localhost in ZooKeeper connection string. In order to use Client Registration you need to modify discovery client project to build jar or tar.gz with dependencies. We made that work for you in *testing/tools/host-registration* module. So simply go to testing/tools/host-registration/target folder and run command `
+7) go to testing/tools/host-registration/target folder and run command `
 java -cp lib/*;host-registration-<REDIRECTOR VERSION HERE>.jar com.comcast.xre.common.redirector.v2.utils.HostRegistration  -connection 192.168.99.100:2181 -stack /BR/BRC2 -flavor 1.67 -app xreGuide -hosts 5 -weight 2 -ip 192.168.201.97`
 
    for Mac OS (in macOS 10.10 Yosemite and higher) OR Linux
@@ -82,7 +82,7 @@ java -cp lib/*;host-registration-<REDIRECTOR VERSION HERE>.jar com.comcast.xre.c
         `java -cp lib/*;host-registration-<REDIRECTOR VERSION HERE>.jar com.comcast.xre.common.redirector.v2.utils.HostRegistration  -connection localhost:2181 -stack /BR/BRC2 -flavor 1.67 -app xreGuide -hosts 5 -weight 2 -ip 192.168.201.97`
 
 
-7) once hosts are registered open Admin UX in browser (Chrome and Firefox are supported), e.g. http://192.168.99.100:10540/redirectorWebService/admin .
+8) once hosts are registered open Admin UX in browser (Chrome and Firefox are supported), e.g. http://192.168.99.100:10540/redirectorWebService/admin .
 
    for Mac OS (in macOS 10.10 Yosemite and higher) OR Linux OR Windows 10
     
@@ -90,13 +90,13 @@ java -cp lib/*;host-registration-<REDIRECTOR VERSION HERE>.jar com.comcast.xre.c
  
    You should be brought to 'Deployed Applications' page and you should find application you registered in step 6. Once you press 'Start Redirection' and confirm Redirector Gateway is ready to process redirect requests
     
-8) perform 'GET http://192.168.99.100:10601/serviceDirect/{Your App Name}' and view json obtained
+9) perform 'GET http://192.168.99.100:10601/serviceDirect/{Your App Name}' and view json obtained
 
    for Mac OS (in macOS 10.10 Yosemite and higher) OR Linux OR Windows 10
     
         GET http://localhost:10601/serviceDirect/{Your App Name}
 
-9) To stop containers on Windows 7 use `mvn docker:stop`
+10) To stop containers on Windows 7 use `mvn docker:stop`
 
    for Mac OS run:
   
