@@ -1,3 +1,7 @@
+# Redirector
+
+The Redirector project is a collection of tools that facilitate redirection of incoming connections to a set of trusted backend servers based on a set of rules that operate on parameters in the incoming request. The current version of the project supports HTTP redirects, or the ability to specify the target backend in the body of the response. The frameworks are designed to be flexible/extensible and support any non-HTTP protocol (such as WebSockets) as well. The core premise of the tool is that there are stacks or groups of backend servers running a particular version of software and are validated and ready to take traffic. Groups are backend servers may be whitelisted to be able to handle any incoming request in a round-robin fashion. The tools are designed to be able to function during any systemic outages when the tools themselves may not be in a stable state.
+
 # Redirector Framework
 
 Redirector framework is a dynamic content-based gateway tool. Redirector is using service-discovery facility to find concrete IP address of particular application.
