@@ -4,19 +4,15 @@ The Redirector project is a collection of tools that facilitate redirection of i
 
 # Redirector Framework
 
-Redirector framework is a dynamic content-based gateway tool. Redirector is using service-discovery facility to find concrete IP address of particular application.
-Redirector is using rule engine in order to define which version of given application it should redirect to. 
+The Redirector framework is a dynamic content-based gateway tool. The Redirector uses service-discovery in combination with a rules engine to define the particular version of a given application that the client needs to be redirected to and returns an IP address of particular application.
 
 ## Redirector Gateway
 
-Core component of Redirector system is **Redirector Gateway**. It receives requests from clients and return information 
-about concrete host client should connect to. Redirector Gateway uses **distributed key/value store (Zookeeper)** as **source of truth** for 
-service discovery and **Redirector WS** for rule engine facilities. In case when the source of thruth is down Redirector Gateway is using local file system backup of 
-**Last Known Good** service discovery and rule engine data.
+The core component of Redirector system is **Redirector Gateway**. It receives requests from clients and returns information about a particular host that the client should connect to. Redirector Gateway uses **distributed key/value store (Zookeeper)** as **source of truth** for service discovery and **Redirector WS** for rule engine facilities. In situations when the source of thruth is down Redirector Gateway uses its local file system copy of **Last Known Good** service discovery and rule engine data.
 
 ### Redirector Model
 
-In order to let Redirector Gateway make right decisions it needs following constituents:
+The Redirector Gateway processes rules based on the following model:
 
 - Default Server (specifies default version of application which we redirect to)
 - Traffic Distribution Rules (specifies how many %% of traffic will be redirected to particular version of application)
@@ -26,30 +22,27 @@ In order to let Redirector Gateway make right decisions it needs following const
 - Whitelist. Gateway discovers application instances only from stacks included into Whitelist
 - NamespacedLists - value lists, e.g. list of mac addresses or ip addresses or service account ids which are used by Flavor and URL rules
 
-Redirector Gateway considers all these constituents as a single aggregate named Redirector Model. Redirector Gateway has separate model for each particular application.
-Redirector Gateway updates model on notification sent from Redirector Web Service through Zookeeper. Once Redirector Gateway receives notification it pulls the Model and uses it until next notification comes. 
-On each update model is being saved in local filesystem backup so it could be used as Last Known Good once Redirector Gateway is restarted.
+The Redirector Gateway considers all these constituents as a single aggregate called Redirector Model. Redirector Gateway uses separate model for each particular application.
+The Redirector Gateway updates the models on notification sent from Redirector Web Service through Zookeeper. When the Redirector Gateway receives a notification it pulls the Model and uses it until the next notification. 
+Every time the model is updated, it is also persisted in the local filesystem backup. Even if the Redirector Gateway is restarted, the persistant Last Known Good model facilitates the functioning of the Redirector Gateway with reasonable expectations even when the sources of truth may not be available to load the most recent models.
 
 ### Redirector Service Discovery
 
-In order to make Redirector Gateway find IP address for version of application returned by Flavor Rules service discovery pattern is used. 
-Redirector Core uses 2 approaches of service discovery: static and dynamic.
+The Redirector Gateway is designed to return IP address for any particular version of the application based on the rules using service discovery pattern. There are 2 modes currently supported for service discovery. One is static mode, and the other is dynamic mode.
 
 
-Static service discovery means that on Model update Redirector takes snapshot of all service discovery data from zookeeper, keeps it in-memory and uses until next model update.
-Dynamic service discovery means that once host is registered in zookeeper it becomes available to Redirector Gateway.
+In Static service discovery more, during model update the Redirector Gateway takes a snapshot of all service discovery data from zookeeper, keeps it in-memory and then uses it until next model update.
+In Dynamic service discovery mode, as long as the host is registered in zookeeper it is available to be returned back by the Redirector Gateway.If the host is not registered in zookeeper, it will not be returned back as a potential target host.
 
 ## Redirector Web Service
 
-Rules are being managed by **Redirector Web Service** (Redirector WS) mainly through **Admin UX**. 
-Redirector WS is saving rules in Zookeeper and then Redirector Gateway pulls new rules from there. 
+The Rules are  managed by **Redirector Web Service** (Redirector WS) through an **Admin UX**. 
+Redirector WS saves rules in Zookeeper and then Redirector Gateway loads new rules from there. 
 
 ### Model approval process in Redirector Web Service
 
-Once rule or whitelist is added or modified it's put into pending changes. After that Admin should approve the change and on approval new Model is saved in Zookeeper and Redirector Gateway nodes are notified about it.
+When a rule or whitelist is added or modified it is kept in pending changes. This allows an Administrator to verify the changes and then  either approve the changes or reject any of them. Upon approval, the new Model is saved in Zookeeper and Redirector Gateway nodes are notified about it.
 
 ### Redirector Admin UX Offline mode
 
-In order to let admin modify model when there is no connection to Zookeeper cluster Admin UX works in Offline Mode and keeps all information in
-browser index DB. Admin can download Redirector Core backup and scp it to Redirector Gateway servers and then restart Redirector Gateway, model produced by offline mode will be applied as Last Known Good and will be used until
-Zookeeper Cluster is restored.
+In order to support administrators to be able to modify model when there is loss in connectivity to Zookeeper cluster, the Admin UX works in Offline Mode and keeps all information in browser index DB. The Administrator can download Redirector Core backup and push it to Redirector Gateway servers (typically via scripts) and then restart Redirector Gateway. The model produced by offline mode will be applied as Last Known Good and will be used until connectivity to the Zookeeper Cluster is restored.
