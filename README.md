@@ -1,4 +1,4 @@
-![Redirector Logo](redirector-logo-dark.png)
+![Redirector Logo](redirector-logo-light.png)
 
 # Redirector
 
