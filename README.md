@@ -1,3 +1,5 @@
+![Redirector Logo](redirector-logo-dark.png)
+
 # Redirector
 
 The Redirector project is a collection of tools that facilitate redirection of incoming connections to a set of trusted backend servers based on a set of rules that operate on parameters in the incoming request.  Redirector can assist with load-balancing across the backend servers and traffic-shaping to two versions of an application.  Redirector is typically used to create "sticky" sessions to the backend servers, however, it could be called for each request to a service.
