@@ -30,11 +30,11 @@ Redirector GW uses service discovery to find the IP addresses of the backend ser
 
 Application service hosts or stacks register to zookeeper exhibiting their availability. They can publish their attributes such as IPv4 andIPv6 support. During the registration service hosts or stack can publish individual weight from 1 to 100 number to distribute more or less traffic from one another. Redirector GW sets default weight to 10 to balance traffic across all hosts.
 
-<code>
+```
 // Sample payload for registration:
 
 {"name”:"app1","id”:” cldapp-p5-kn1jnv.example.app.com:0","address":"cldapp-p5-kn1jnv.example.app.com","port":0,"sslPort":null,"payload":{"@class":"com.org.example.cloud.MetaData","workerId":"73ffc9a8-c392-4252-bfb6-62b1f6c8515b","listenAddress":"cldapp-p5-kn1jnv.example.app.com","listenPort":0,"serviceName":"app1","parameters":{"ipv6Address":"cldapp-p5-kn1jnv.example.app.com","ipv4Address":"cldapp-p5-kn1jnv.example.app.com","weight":"10.0"}},"registrationTimeUTC":1496432312046,"serviceType":"DYNAMIC","uriSpec":null}
-</code>
+```
 
 ## Redirector Web Service
 
