@@ -28,7 +28,7 @@ The Redirector model consists of the following items.
 
 Redirector GW uses service discovery to find the IP addresses of the backend servers in each stack.  There are two approaches to service discovery--static and dynamic.  With static service discovery, Redirector GW takes a snapshot of all service discovery information from Zookeeper when a Model Update is initiated by the user.  Redirector GW keeps the service discovery information in memory and uses until the next Model Update.  With dynamic service discovery, Redirector GW learns of a new server once it registers with Zookeeper.  This server is then available to take traffic.
 
-Application service hosts or stacks register to zookeeper exhibiting their availability. They can publish their attributes such as IPv4 andIPv6 support. During the registration service hosts or stack can publish individual weight from 1 to 100 number to distribute more or less traffic from one another. Redirector GW sets default weight to 10 to balance traffic across all hosts.
+Application service hosts register with Zookeeper exhibiting their availability. They can publish their attributes such as IPv4 and IPv6 support. The default mode of traffic distribution is Round-robin, where all the hosts get even distribution of traffic. The framework supports Weighted traffic shaping via controls defined by the application. During the registration process, service hosts can publish an individual weight that varies from 1 to 100 thereby controlling the amount of traffic being directed to the host. 
 
 ```
 // Sample payload for registration:
