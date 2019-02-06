@@ -109,12 +109,12 @@
         <guava.version>18.0</guava.version>
         <hamcrest.all.version>1.3</hamcrest.all.version>
         <httpcomponents.version>4.5.2</httpcomponents.version>
-        <jackson.core>2.6.1</jackson.core>
+        <jackson.core>2.9.8</jackson.core>
         <jacoco.maven.plugin.version>0.7.4.201502262128</jacoco.maven.plugin.version>
         <jersey.version>2.17</jersey.version>
         <jettison.version>1.3.6</jettison.version>
         <jetty.maven.plugin.version>9.2.0.v20140526</jetty.maven.plugin.version>
-        <jetty.version>9.2.13.v20150730</jetty.version>
+        <jetty.version>9.3.24.v20180605</jetty.version>
         <jimfs.version>1.0</jimfs.version>
         <joda.time.version>2.4</joda.time.version>
         <jsonassert.version>1.2.3</jsonassert.version>
@@ -157,7 +157,7 @@
         <snapshotRepositoryUrl>PleaseEnterYourSnapshotRepositoryUrl</snapshotRepositoryUrl>
         <sonar.maven.plugin.version>3.1.1</sonar.maven.plugin.version>
         <source>1.8</source>
-        <spring.version>4.3.15.RELEASE</spring.version>
+        <spring.version>4.3.18.RELEASE</spring.version>
         <surefire.plugin.version>2.18.1</surefire.plugin.version>
         <thucydides.version>0.9.268</thucydides.version>
         <urlrewritefilter.version>4.0.3</urlrewritefilter.version>
