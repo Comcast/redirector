@@ -109,7 +109,7 @@
         <guava.version>18.0</guava.version>
         <hamcrest.all.version>1.3</hamcrest.all.version>
         <httpcomponents.version>4.5.2</httpcomponents.version>
-        <jackson.core>2.9.8</jackson.core>
+        <jackson.core>2.10.0.pr3</jackson.core>
         <jacoco.maven.plugin.version>0.7.4.201502262128</jacoco.maven.plugin.version>
         <jersey.version>2.17</jersey.version>
         <jettison.version>1.3.6</jettison.version>
